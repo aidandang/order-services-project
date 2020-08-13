@@ -3,8 +3,22 @@ import React from 'react';
 // import dependencies
 import uuid from 'react-uuid';
 
+// import helpers
+import { currencyMask } from '../../../utils/helpers';
+
 // ui settings
 import { liClassName } from '../../../state/actions/uiSettings';
+
+const subTotal = (qty, price, saleTax, localCharge, shippingCost) => {
+  const total = (
+    qty.replace(/,/g, '')*100 
+    * (price.replace(/,/g, '')*100 + saleTax.replace(/,/g, '')*100 + localCharge.replace(/,/g, '')*100 + shippingCost.replace(/,/g, '')*100)
+    /100
+  );
+  const value = currencyMask(total.toString(), 60);
+
+  return value;
+}
 
 // MAIN COMPONENT
 export default function OrderDetails({
@@ -96,8 +110,8 @@ export default function OrderDetails({
               <tr>
                 <th scope="col">Style#/Color</th>
                 <th scope="col">Item/Description</th>
-                <th scope="col" className="text-right">Price</th>
                 <th scope="col" className="text-right">Qty</th>
+                <th scope="col" className="text-right">Price</th>
                 <th scope="col" className="text-right">Sale Tax</th>
                 <th scope="col" className="text-right">Local Charge</th>
                 <th scope="col" className="text-right">Shipping Cost</th>
@@ -110,12 +124,14 @@ export default function OrderDetails({
                   <tr key={uuid()} className="table-row-cs">
                     <td>{item.colorId}</td>
                     <td>{item.productId}</td>
-                    <td className="text-right">{item.price}</td>
                     <td className="text-right">{item.qty}</td>
+                    <td className="text-right">{item.price}</td>
                     <td className="text-right">{item.saleTax}</td>
                     <td className="text-right">{item.localCharge}</td>
                     <td className="text-right">{item.shippingCost}</td>
-                    <th scope="row" className="text-right">{item.qty * 1 * (item.price * 1 + item.saleTax * 1 + item.localCharge * 1 + item.shippingCost * 1)}</th>
+                    <th scope="row" className="text-right">
+                      {subTotal(item.qty, item.price, item.saleTax, item.localCharge, item.shippingCost)}
+                    </th>
                   </tr>
                 ) 
                 :

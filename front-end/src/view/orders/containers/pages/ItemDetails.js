@@ -5,7 +5,7 @@ import { connect, batch } from 'react-redux';
 import * as Yup from "yup";
 
 // import custom components as helpers
-import { useForm } from '../../../../hooks/useForm';
+import { useForm } from '../../../../utils/useForm';
 
 // import _shared components
 
@@ -86,6 +86,7 @@ const ItemDetails = ({
     buttonDisabled
   ] = useForm(page.itemId >= 0 
     ? 
+      // if this is edit state then assign the existing values
       {
         size: order.items[page.itemId].size,
         qty: order.items[page.itemId].qty,

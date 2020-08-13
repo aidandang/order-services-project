@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import * as Yup from "yup";
 
 // import components, actions, settings.
-import { useForm } from '../../../../hooks/useForm';
+import { useForm } from '../../../../utils/useForm';
 
 import BrandForm from '../../components/BrandForm';
 

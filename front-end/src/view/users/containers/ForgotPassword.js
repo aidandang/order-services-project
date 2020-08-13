@@ -1,7 +1,7 @@
 import React from 'react';
 
 // import hooks
-import { useForm } from '../../../hooks/useForm';
+import { useForm } from '../../../utils/useForm';
 
 // import redux dependencies
 import { connect } from 'react-redux';
