@@ -1,0 +1,30 @@
+[
+  {
+    "username": "aidandang",
+    "nickname": "Dân Cò",
+    "billingInfo": {
+      "firstname": "Aidan",
+      "lastname": "Dang",
+      "country": "United States",
+      "stressAddress1": "249 Turtle Crest Dr",
+      "stressAddress2": "",
+      "city": "Irvine",
+      "state": "California",
+      "zipcode": "92603",
+      "phone": "949-491-3617",
+      "ext": ""
+    },
+    "shippingInfo": {
+      "firstname": "Aidan",
+      "lastname": "Dang",
+      "country": "United States",
+      "stressAddress1": "249 Turtle Crest Dr",
+      "stressAddress2": "",
+      "city": "Irvine",
+      "state": "California",
+      "zipcode": "92603",
+      "phone": "949-491-3617",
+      "ext": ""
+    }
+  }
+]
