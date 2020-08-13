@@ -1,13 +1,144 @@
+/* color schema */
+#color-schema {
+  background-color: #BCBABF;
+  background-color: #83818C;
+  background-color: #565659;
+  background-color: #ECEBF2;
+  background-color: #5D8C87;
+}
+/* end of color schema */
+
+/* general settings */
 body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  font-family: 'Roboto Condensed', sans-serif !important;
+}
+/* end of general settings */
+
+/* wrapper settings */
+.main-wrapper {
+  min-height: 100vh;
+}
+.right-wrapper {
+  min-height: 100vh;
+  background-color: #ECEBF2;
+}
+/* end of wrapper settings */
+
+/* navbar */
+.navbar-bg {
+  background-color: rgba(188, 186, 191, 1);
+}
+.navbar-bg-landing {
+  background-color: rgba(188, 186, 191, .4);
+}
+.navbar-link:hover {
+  text-decoration: none;
+}
+/* end of navbar */
+
+/* sidebar */
+.sidebar {
+  min-height: 100vh;
+  background-color: #565659;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  overflow-x: hidden;
+}
+.sidebar-link:hover {
+  background-color: #5D8C87 !important;
+}
+/* end of sidebar */
+
+/* landing page background */
+.landing-bg {
+  background: url('https://firebasestorage.googleapis.com/v0/b/order-services-media.appspot.com/o/landing-page%2Fcover-logistics-01.jpg?alt=media&token=0b141ceb-510d-4b8c-bf51-1cd1bffb48ea');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+/* end of landing page background */
+
+/* login page background */
+.login-bg {
+  background-color: #ECEBF2;
+}
+/* end of login page background */
+
+/* footer */
+.footer {
+  background-color: #565659;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+.btn-custom {
+  border-radius: 20px;
+  background-color: #5D8C87;
+  border: 1px solid rgba(93, 140, 135, 1);
+}
+
+.btn-custom-disabled {
+  border-radius: 20px;
+  cursor: default;
+}
+
+.btn-outline-cs {
+  color: #5D8C87;
+  border-radius: 20px;
+  border: 1px solid rgba(93, 140, 135, 1);
+}
+
+.bg-card-cs {
+  background-color: #ECEBF2;
+}
+
+.tab-link-cs {
+  color: #5D8C87;
+  font-weight: bold;
+}
+
+.tab-active-cs {
+  font-weight: bold;
+}
+
+.a-link-cs {
+  color: #5D8C87;
+  text-decoration: underline;
+  font-weight: normal;
+}
+
+.stage-link-cs {
+  color: #5D8C87;
+  font-weight: normal;
+}
+
+.table-link-cs {
+  color: #5D8C87;
+  font-weight: normal;
+  text-decoration: none;
+}
+
+.a-pagination-cs {
+  color: #5D8C87;
+  text-decoration: none;
+  font-weight: normal;
+  background-color: #ECEBF2 !important;
+}
+
+.table-row-cs {
+  cursor: pointer !important;
+  background-color: #ffffff;
+}
+
+.table-row-cs:hover {
+  background-color: #f8f9fa !important;
+}
+
+.li-link-cs {
+  cursor: pointer !important;
+}
+
+.product-img {
+  width: 100%;
 }
