@@ -11,7 +11,7 @@ import Footer from '../../_shared/Footer';
 import Header from '../../_shared/Header';
 import Tabbar from '../../_shared/Tabbar';
 
-import { useForm } from '../../../hooks/useForm';
+import { useForm } from '../../../utils/useForm';
 
 import ResetPasswordForm from '../components/ResetPasswordForm';
 

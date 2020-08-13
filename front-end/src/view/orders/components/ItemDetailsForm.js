@@ -97,6 +97,7 @@ export default function ItemDetailsForm({
                         type="text" 
                         className="form-control" 
                         id="qty" 
+                        name="integerInput"
                         value={formData.qty}
                         onChange={onInputChange}
                       />
@@ -110,7 +111,8 @@ export default function ItemDetailsForm({
                       <input 
                         type="text" 
                         className="form-control" 
-                        id="price" 
+                        id="price"
+                        name="currencyInput"
                         value={formData.price}
                         onChange={onInputChange}
                       />
@@ -124,7 +126,8 @@ export default function ItemDetailsForm({
                       <input 
                         type="text" 
                         className="form-control" 
-                        id="saleTax" 
+                        id="saleTax"
+                        name="currencyInput" 
                         value={formData.saleTax}
                         onChange={onInputChange}
                       />
@@ -144,7 +147,8 @@ export default function ItemDetailsForm({
                       <input 
                         type="text" 
                         className="form-control" 
-                        id="localCharge" 
+                        id="localCharge"
+                        name="currencyInput" 
                         value={formData.localCharge}
                         onChange={onInputChange}
                       />
@@ -158,7 +162,8 @@ export default function ItemDetailsForm({
                       <input 
                         type="text" 
                         className="form-control" 
-                        id="shippingCost" 
+                        id="shippingCost"
+                        name="currencyInput" 
                         value={formData.shippingCost}
                         onChange={onInputChange}
                       />

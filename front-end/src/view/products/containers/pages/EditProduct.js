@@ -6,7 +6,7 @@ import { useParams, useLocation } from 'react-router-dom';
 import * as Yup from "yup";
 
 // import custom components as helpers
-import { useForm } from '../../../../hooks/useForm';
+import { useForm } from '../../../../utils/useForm';
 
 // import _shared components
 

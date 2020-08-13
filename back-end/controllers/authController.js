@@ -104,7 +104,7 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
   const resetToken = user.createPasswordResetToken();
   await user.save({ validateBeforeSave: false });
 
-  const resetURL = `${req.protocol}://${req.get('host')}/api/v1/users/resetpassword/${resetToken}`;
+  const resetURL = process.env.EMAIL_RESET_PASSWORD_URL + resetToken;
 
   const message = `Forgot your password? Submit a PATCH request your new password and passwordConfirm to: ${resetURL}.\nIf you didn't forget your password, please ignore this email.`;
   
