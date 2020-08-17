@@ -4,26 +4,29 @@ import React from 'react';
 import uuid from 'react-uuid';
 
 // import helpers
-import { currencyMask } from '../../../utils/helpers';
+import { sumAmounts, multipleAmounts } from '../../../utils/mathAmounts';
 
 // ui settings
 import { liClassName } from '../../../state/actions/uiSettings';
-
-const subTotal = (qty, price, saleTax, localCharge, shippingCost) => {
-  const total = (
-    qty.replace(/,/g, '')*100 
-    * (price.replace(/,/g, '')*100 + saleTax.replace(/,/g, '')*100 + localCharge.replace(/,/g, '')*100 + shippingCost.replace(/,/g, '')*100)
-    /100
-  );
-  const value = currencyMask(total.toString(), 60);
-
-  return value;
-}
 
 // MAIN COMPONENT
 export default function OrderDetails({
   order
 }) {
+
+  const discount = '.00';
+  let sum = 0;
+
+  function total() {
+    return (qty, price, saleTax, localCharge, shippingCost) => {
+      const value = multipleAmounts(qty, sumAmounts(price, saleTax, localCharge, shippingCost));
+      sum = sum + Number(value);
+      return value;
+    }
+  }
+
+  const subTotal = total();
+
   return <>
     <div className="row">
 
@@ -121,9 +124,9 @@ export default function OrderDetails({
             <tbody>
               {order.items 
                 ? order.items.map((item, index) => 
-                  <tr key={uuid()} className="table-row-cs">
-                    <td>{item.colorId}</td>
-                    <td>{item.productId}</td>
+                  <tr key={uuid()} className="table-row-no-link-cs">
+                    <td>{item.product.styleCode}/{item.color.color}</td>
+                    <td>{`${item.product.name}/Size:${item.size}${item.note && `/${item.note}`}`}</td>
                     <td className="text-right">{item.qty}</td>
                     <td className="text-right">{item.price}</td>
                     <td className="text-right">{item.saleTax}</td>
@@ -135,36 +138,39 @@ export default function OrderDetails({
                   </tr>
                 ) 
                 :
-                  <tr className="table-row-cs">
+                  <tr className="table-row-no-link-cs">
                     <td colSpan="8" className="text-center">No items. Add items for the order.</td>
                   </tr>
               }
               <tr>
                 <td colSpan="8" className="text-center"></td>
               </tr>
-              <tr className="table-row-cs">
-                <td colSpan="3">Subtotal</td>
-                <td className="text-right">0</td>
-                <td className="text-right">0</td>
-                <td className="text-right">0</td>
-                <td className="text-right">0</td>
-                <td className="text-right">0</td>
+              <tr className="table-row-no-link-cs">
+                <td className="text-right"></td>
+                <td className="text-right"></td>
+                <td className="text-right"></td>
+                <td className="text-right"></td>
+                <td colSpan="2" className="text-right">Subtotal</td>
+                <td className="text-right"></td>
+                <td className="text-right">{sum}</td>
               </tr>
-              <tr className="table-row-cs">
-                <td colSpan="3">Discount</td>
+              <tr className="table-row-no-link-cs">
                 <td className="text-right"></td>
                 <td className="text-right"></td>
                 <td className="text-right"></td>
                 <td className="text-right"></td>
-                <td className="text-right">0</td>
+                <td colSpan="2" className="text-right">Discount</td>
+                <td className="text-right"></td>
+                <td className="text-right">{sumAmounts(discount)}</td>
               </tr>
-              <tr className="table-row-cs">
-                <th scope="row" colSpan="3">Total</th>
+              <tr className="table-row-no-link-cs">
                 <td className="text-right"></td>
                 <td className="text-right"></td>
                 <td className="text-right"></td>
                 <td className="text-right"></td>
-                <th scope="row" className="text-right">0</th>
+                <th scope="row" colSpan="2" className="text-right">Total</th>
+                <td className="text-right"></td>
+                <th scope="row" className="text-right">{sum - sumAmounts(discount)}</th>
               </tr>
             </tbody>
           </table>
