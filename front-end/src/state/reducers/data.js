@@ -99,43 +99,13 @@ const fetchSuccessCustomer = (state, action) => ({
   message: fetchMessage(state.message)
 })
 
-const fetchSuccess = (state, action) => {
-  if (action.payload.message) return { 
-    ...state,
-    message: {
-      ...state.message,
-      style: "text-success",
-      text: action.payload.message
-    }
-  };
-  
-  if (action.payload.products) return fetchSuccessProducts(state, action)
-  if (action.payload.product) return fetchSuccessProduct(state, action)
-  if (action.payload.brands) return fetchSuccessBrands(state, action)
-  if (action.payload.brand) return fetchSuccessBrand(state, action)
-  if (action.payload.customers) return fetchSuccessCustomers(state, action)
-  if (action.payload.customer) return fetchSuccessCustomer(state, action)
-
-  return state
-}
-
-const fetchStart = (state, action) => ({
+const fetchSuccessOrder = (state, action) => ({
   ...state,
-  message: {
-    ...state.message,
-    style: "text-primary",
-    text: "...Fetching."
-  }
-})
-
-const fetchFail = (state, action) => ({
-  ...state,
-  message: {
-    ...state.message,
-    style: "text-danger",
-    status: action.payload ? action.payload.data.status : 'ERROR',
-    text: action.payload ? action.payload.data.message : 'ERROR: Connection to the server was refused.'
-  }
+  orders: {
+    ...state.orders, 
+    byId: {}
+  },
+  message: fetchMessage(state.message)
 })
 
 const customerToOrder = (state, action) => ({
@@ -190,6 +160,46 @@ const itemOrderRemove = (state, action) => {
       } 
     }
   }
+}
+
+const fetchStart = (state, action) => ({
+  ...state,
+  message: {
+    ...state.message,
+    style: "text-primary",
+    text: "...Fetching."
+  }
+})
+
+const fetchFail = (state, action) => ({
+  ...state,
+  message: {
+    ...state.message,
+    style: "text-danger",
+    status: action.payload ? action.payload.data.status : 'ERROR',
+    text: action.payload ? action.payload.data.message : 'ERROR: Connection to the server was refused.'
+  }
+})
+
+const fetchSuccess = (state, action) => {
+  if (action.payload.message) return { 
+    ...state,
+    message: {
+      ...state.message,
+      style: "text-success",
+      text: action.payload.message
+    }
+  };
+  
+  if (action.payload.products) return fetchSuccessProducts(state, action)
+  if (action.payload.product) return fetchSuccessProduct(state, action)
+  if (action.payload.brands) return fetchSuccessBrands(state, action)
+  if (action.payload.brand) return fetchSuccessBrand(state, action)
+  if (action.payload.customers) return fetchSuccessCustomers(state, action)
+  if (action.payload.customer) return fetchSuccessCustomer(state, action)
+  if (action.payload.order) return fetchSuccessOrder(state, action)
+
+  return state
 }
 
 const data = (state = {}, action) => {

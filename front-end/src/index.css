@@ -135,6 +135,14 @@ body {
   background-color: #f8f9fa !important;
 }
 
+.table-row-no-link-cs {
+  background-color: #ffffff;
+}
+
+.table-row-no-link-cs:hover {
+  background-color: #f8f9fa !important;
+}
+
 .li-link-cs {
   cursor: pointer !important;
 }

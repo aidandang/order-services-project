@@ -4,19 +4,15 @@ import React from 'react';
 import uuid from 'react-uuid';
 
 // import helpers
-import { currencyMask } from '../../../utils/helpers';
+import { acctNumber } from '../../../utils/acctNumber';
+import { acctToString } from '../../../utils/acctToString';
 
 const subTotal = (qty, price, saleTax, localCharge, shippingCost) => {
-  const total = (
-    qty.replace(/,/g, '')*100 
-    * (price.replace(/,/g, '')*100 + saleTax.replace(/,/g, '')*100 + localCharge.replace(/,/g, '')*100 + shippingCost.replace(/,/g, '')*100)
-    /100
-  );
-  const value = currencyMask(total.toString(), 60);
-
-  return value;
+  const value = acctNumber(price, saleTax, localCharge, shippingCost) * qty;
+  return acctToString(value);
 }
 
+// MAIN COMPONENT
 export default function ItemTable({ 
   order,
   pageActive,
@@ -55,7 +51,7 @@ export default function ItemTable({
                   })
                 }}
               >
-                <td>{item.product.styleCode}/{item.product.colors[index].color}</td>
+                <td>{item.product.styleCode}/{item.color.color}</td>
                 <td>{`${item.product.name}/Size:${item.size}${item.note && `/${item.note}`}`}</td>
                 <td className="text-right">{item.qty}</td>
                 <td className="text-right">{item.price}</td>

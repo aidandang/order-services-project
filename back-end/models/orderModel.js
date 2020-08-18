@@ -1,5 +1,8 @@
 const mongoose = require('mongoose'),
-  Schema = mongoose.Schema;
+  Schema = mongoose.Schema,
+  autoIncrement = require('mongoose-auto-increment');
+
+autoIncrement.initialize(mongoose);
 
 const itemSchema = new Schema({
   productId: {
@@ -11,11 +14,11 @@ const itemSchema = new Schema({
     required: true
   },
   note: {
-    type: String,
-    required: true
+    type: String
   },
   size: {
-    type: String
+    type: String,
+    required: true
   },
   qty: {
     type: Number,
@@ -26,13 +29,16 @@ const itemSchema = new Schema({
     required: true
   },
   discount: {
-    type: Number
+    type: Number,
+    default: 0
   },
   saleTax: {
-    type: Number
+    type: Number,
+    default: 0
   },
   localCharge: {
-    type: Number
+    type: Number,
+    default: 0
   },
   receivedDate: {
     type: Date
@@ -65,7 +71,8 @@ const orderSchema = new Schema({
   },
   items: [itemSchema],
   paidAmount: {
-    type: Number
+    type: Number,
+    default: 0
   },
   orderedDate: {
     type: Date
@@ -79,6 +86,13 @@ const orderSchema = new Schema({
     default: false
   },
   rev: [revSchema]
+});
+
+orderSchema.plugin(autoIncrement.plugin, {
+  model: 'Order',
+  field: 'orderNumber',
+  startAt: 1,
+  incrementBy: 1
 });
 
 const Order = mongoose.model('Order', orderSchema);
