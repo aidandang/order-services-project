@@ -3,26 +3,26 @@ import React from 'react';
 // import dependencies
 import uuid from 'react-uuid';
 
-// import helpers
-import { sumAmounts, multipleAmounts } from '../../../utils/mathAmounts';
-
 // ui settings
 import { liClassName } from '../../../state/actions/uiSettings';
 
+// import helpers
+import { acctNumber } from '../../../utils/acctNumber';
+import { acctToString } from '../../../utils/acctToString';
+
 // MAIN COMPONENT
 export default function OrderDetails({
-  order
+  order,
+  formSubmit,
+  buttonDisabled
 }) {
 
-  const discount = '.00';
   let sum = 0;
 
-  function total() {
-    return (qty, price, saleTax, localCharge, shippingCost) => {
-      const value = multipleAmounts(qty, sumAmounts(price, saleTax, localCharge, shippingCost));
-      sum = sum + Number(value);
-      return value;
-    }
+  const total = () => (qty, price, saleTax, localCharge, shippingCost) => {
+    const value = acctNumber(price, saleTax, localCharge, shippingCost) * qty;
+    sum = sum + value;
+    return acctToString(value);
   }
 
   const subTotal = total();
@@ -152,7 +152,7 @@ export default function OrderDetails({
                 <td className="text-right"></td>
                 <td colSpan="2" className="text-right">Subtotal</td>
                 <td className="text-right"></td>
-                <td className="text-right">{sum}</td>
+                <td className="text-right">{acctToString(sum)}</td>
               </tr>
               <tr className="table-row-no-link-cs">
                 <td className="text-right"></td>
@@ -161,7 +161,7 @@ export default function OrderDetails({
                 <td className="text-right"></td>
                 <td colSpan="2" className="text-right">Discount</td>
                 <td className="text-right"></td>
-                <td className="text-right">{sumAmounts(discount)}</td>
+                <td className="text-right">-</td>
               </tr>
               <tr className="table-row-no-link-cs">
                 <td className="text-right"></td>
@@ -170,13 +170,31 @@ export default function OrderDetails({
                 <td className="text-right"></td>
                 <th scope="row" colSpan="2" className="text-right">Total</th>
                 <td className="text-right"></td>
-                <th scope="row" className="text-right">{sum - sumAmounts(discount)}</th>
+                <th scope="row" className="text-right">{acctToString(sum)}</th>
               </tr>
             </tbody>
           </table>
         </div>
       </div>
     </div>
-    {/* End of Item Table */}                 
+    {/* End of Item Table */}
+
+    <form onSubmit={formSubmit}>
+      <div className="row">
+        <div className="col mt-3">
+          <div className="form-group">
+            {/* Submit button */}
+            <button 
+              type="submit" 
+              className={`btn btn-${buttonDisabled ? "secondary btn-custom-disabled" : "primary btn-custom"}`}
+              disabled={buttonDisabled}
+            >
+              Place Order
+            </button>
+            {/* End of submit button */}
+          </div>
+        </div>
+      </div>
+    </form>                 
   </>
 }

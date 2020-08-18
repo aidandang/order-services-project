@@ -66,7 +66,7 @@ const ItemDetails = ({
 }) => {
 
   const { page } = pageWrapper.tabbar.active;
-  const color = product.colors.find(element => element._id === page.colorId);
+  const color = page.itemId >= 0 ? order.items[page.itemId].color : product.colors.find(element => element._id === page.colorId);
 
   const formState = {
     size: "",

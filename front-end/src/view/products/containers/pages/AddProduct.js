@@ -21,7 +21,6 @@ import { setPageActive } from '../../../../state/actions/ui';
 // CONSTANCE DECLARATION //
 // redux state and dispatch map to props
 const mapStateToProps = (state) => ({
-  pageWrapper: state.ui.pageWrapper,
   brands: state.data.brands.allIds
 });
 const pageActive = page => dispatch => {
@@ -84,7 +83,6 @@ const formState = {
 const AddProduct = ({
   getData, 
   postData,
-  pageWrapper,
   brands,
   pageActive
 }) => {

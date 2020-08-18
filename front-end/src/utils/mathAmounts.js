@@ -10,6 +10,15 @@ export const multipleAmounts = (...items) => {
   return calculateAmounts('multiple', items);
 }
 
+export const toNumber = (string) => {
+  let str = ''
+  if (calculateAmounts('add', string) && calculateAmounts('add', string) !== '.00') {
+    str = string.split(',').join('');
+    str = string.split('.').join('');
+  }
+  return str ? Number(str) : 0
+}
+
 const calculateAmounts = (math, items) => {
   let str = ""
   let total = null;

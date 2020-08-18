@@ -4,11 +4,12 @@ import React from 'react';
 import uuid from 'react-uuid';
 
 // import helpers
-import { sumAmounts, multipleAmounts } from '../../../utils/mathAmounts';
+import { acctNumber } from '../../../utils/acctNumber';
+import { acctToString } from '../../../utils/acctToString';
 
 const subTotal = (qty, price, saleTax, localCharge, shippingCost) => {
-  const value = multipleAmounts(qty, sumAmounts(price, saleTax, localCharge, shippingCost));
-  return value;
+  const value = acctNumber(price, saleTax, localCharge, shippingCost) * qty;
+  return acctToString(value);
 }
 
 // MAIN COMPONENT

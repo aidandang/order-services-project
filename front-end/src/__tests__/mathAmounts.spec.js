@@ -45,6 +45,14 @@ describe('sum of amounts in accounting format.', () => {
     const value = '1,0.07'
     expect(sumAmounts(value)).toBe('10.07');
   })
+  it('passes "119.97999999999999", returns "119.98"', () => {
+    const value = '119.98'
+    expect(sumAmounts(value)).toBe('119.98');
+  })
+  it('passes 119.97999999999999, returns "0.00"', () => {
+    const value = 119.97999999999999
+    expect(sumAmounts(value)).toBe('.00');
+  })
   it('passes "10.07" and ".08", returns "10.15"', () => {
     const value1 = '10.07'
     const value2 = '.08'
