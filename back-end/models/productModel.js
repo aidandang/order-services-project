@@ -39,6 +39,10 @@ const productSchema = new Schema({
     type: String,
     required: true
   },
+  cat: {
+    type: String,
+    default: "N"
+  },
   sku: {
     type: String,
     default: ''

@@ -30,7 +30,12 @@ const createSendToken = (user, statusCode, res) => {
   res.status(statusCode).json({
     status: 'success',
     token,
-    user
+    user: {
+      id: user._id,
+      displayName: user.name,
+      email: user.email,
+      role: user.role
+    }
   });
 }
 
@@ -78,7 +83,12 @@ exports.protect = catchAsync(async (req, res, next) => {
     );
   }
 
-  req.user = currentUser;
+  req.user = {
+    id: currentUser._id,
+    displayName: currentUser.name,
+    email: currentUser.email,
+    role: currentUser.role
+  }
   next();
 })
 
@@ -166,3 +176,10 @@ exports.updatePassword = catchAsync(async (req, res, next) => {
 
   createSendToken(user, 200, res);
 })
+
+exports.authorizedUser = (req, res) => {
+  res.status(200).json({ 
+    status: 'success',
+    user: req.user
+  })
+}

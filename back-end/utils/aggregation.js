@@ -22,3 +22,28 @@ exports.productAggregate = (match) => ([
     }
   }
 ])
+
+exports.orderAggregate = (match) => ([
+  { 
+    $match: match
+  },
+  {
+    $addFields: {
+      convertedCustomerId: { $toObjectId: "$customerId" }
+    }
+  },
+  { 
+    $lookup: {
+      from: "customers",
+      localField: "convertedCustomerId",
+      foreignField: "_id",
+      as: "customer"
+    }
+  },
+  { 
+    $project: {
+      __v: 0,
+      convertedCustomerId: 0
+    }
+  }
+])
