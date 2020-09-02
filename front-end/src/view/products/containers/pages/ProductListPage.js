@@ -7,7 +7,7 @@ import * as Yup from "yup";
 
 // import custom components as helpers
 import { useForm } from '../../../../utils/useForm';
-import { searchFormValidation } from '../../../../utils/helpers';
+import { searchFormValidation } from '../../../../utils/searchFormValidation';
 
 // import _shared components
 import PaginationBar from '../../../_shared/PaginationBar';

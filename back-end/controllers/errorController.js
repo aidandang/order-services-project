@@ -35,12 +35,13 @@ const sendErrorProd = (err, res) => {
   } else {
     res.status(500).json({
       status: 'error',
-      message: 'Internal Server Error.'
+      message: 'Internal Server Error'
     })
   }
 }
 
 module.exports = (err, req, res, next) => {
+  console.log(err.message)
   err.statusCode = err.statusCode || 500;
   err.status = err.status || 'error';
 

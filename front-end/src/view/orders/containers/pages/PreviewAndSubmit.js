@@ -4,7 +4,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 // import custom components as helpers
-import { toNumber } from '../../../../utils/mathAmounts';
+import { acctNumber } from '../../../../utils/acctNumber';
 
 // import _shared components
 
@@ -43,10 +43,10 @@ const PreviewAndSubmit = ({
         note: item.note && item.note,
         size: item.size,
         qty: Number(item.qty),
-        price: toNumber(item.price),
-        saleTax: item.saleTax ? toNumber(item.saleTax) : 0,
-        localCharge: item.localCharge ? toNumber(item.localCharge) : 0,
-        shippingCost: item.shippingCost ? toNumber(item.shippingCost) : 0
+        price: acctNumber(item.price),
+        saleTax: item.saleTax ? acctNumber(item.saleTax) : 0,
+        localCharge: item.localCharge ? acctNumber(item.localCharge) : 0,
+        shippingCost: item.shippingCost ? acctNumber(item.shippingCost) : 0
       }
     });
 

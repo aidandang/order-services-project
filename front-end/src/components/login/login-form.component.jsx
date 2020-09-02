@@ -1,27 +1,26 @@
-import React from 'react'
+import React from 'react';
 
-// set some long classNames 
+// ui settings
+import './login-form.styles.css';
 const liClassName = "list-group-item list-group-item-action bg-item-list-cs";
 
-export default function LoginForm({ formData, formSubmit, errors, onInputChange, buttonDisabled }) {
+export default function LoginForm({ 
+  formData, 
+  formSubmit, 
+  errors, 
+  onInputChange, 
+  buttonDisabled 
+}) {
   return <>
-
     <form onSubmit={formSubmit}>
       <div className="row">
-        <div className="col-xl-4 col-lg-5 col-md-6 col-sm-7">
+        <div className="col-lg-6">
           {/* Account Information Card */}
           <div className="card mt-3">
-            <div className="card-header bg-card-cs">
-              <div className="row">
-                <div className="col text-uppercase font-weight-bold">Account Information</div>
-              </div>
-            </div>
             <ul className="list-group list-group-flush">
               <li className={liClassName}>
-                
                 <div className="row">
-                  
-                  <div className="col">
+                  <div className="col-sm-6">
                     <div className="form-group">
                       <label htmlFor="email">Email (*)</label>
                       <input 
@@ -34,12 +33,7 @@ export default function LoginForm({ formData, formSubmit, errors, onInputChange,
                       {errors.email.length > 0 ? <p className="mt-2 text-danger">{errors.email}</p> : null}
                     </div>
                   </div>
-                  
-                </div>
-              </li>
-              <li className={liClassName}>
-                <div className="row">
-                <div className="col">
+                  <div className="col-sm-6">
                     <div className="form-group">
                       <label htmlFor="password">Password (*)</label>
                       <input 
@@ -51,30 +45,41 @@ export default function LoginForm({ formData, formSubmit, errors, onInputChange,
                       />
                       {errors.password.length > 0 ? <p className="mt-2 text-danger">{errors.password}</p> : null}
                     </div>
-                  </div> 
+                  </div>
                 </div>
               </li>
+              <li className={liClassName}>
+                <div className="row">
+                  <div className="col-sm-6">
+                    <div className="form-group">
+                      <a className="a-link-cs" href='/'>Forgot Your Password?</a>
+                    </div>
+                  </div>
+                </div>
+              </li>
+              <li className={liClassName}>
+                <div className="row mt-3">
+                  <div className="col-md-4">
+                    <div className="form-group">
+                      {/* Submit button */}
+                      <button 
+                        type="submit" 
+                        className={`btn btn-${buttonDisabled ? "secondary btn-custom-disabled" : "primary btn-custom"}`}
+                        disabled={buttonDisabled}
+                      >
+                        Submit
+                      </button>
+                      {/* End of submit button */}
+                    </div>
+                  </div>
+                </div>
+              </li>  
 
             </ul>
           </div>
           {/* End of Account Information Card */}
         </div>
       </div>
-
-      <div className="row">
-        <div className="col my-4">
-          {/* Submit button */}
-          <button 
-            type="submit" 
-            className={`btn btn-${buttonDisabled ? "secondary btn-custom-disabled" : "primary btn-custom"}`}
-            disabled={buttonDisabled}
-          >
-            Login
-          </button>
-          {/* End of submit button */}
-        </div>
-      </div>
-
     </form>
 
   </>
