@@ -23,6 +23,9 @@ const mapStateToProps = (state) => ({
   order: state.data.orders.byId,
   pageWrapper: state.ui.pageWrapper
 });
+const pageActive = (page) => dispatch => {
+  dispatch(setPageActive(page));
+}
 const saveItem = (item, page) => dispatch => {
   batch(() => {
     dispatch(saveItemToOrder(item));
@@ -62,7 +65,8 @@ const ItemDetails = ({
   product,
   pageWrapper,
   saveItem,
-  updateItem
+  updateItem,
+  pageActive
 }) => {
 
   const { page } = pageWrapper.tabbar.active;
@@ -133,8 +137,10 @@ const ItemDetails = ({
       buttonDisabled={buttonDisabled}
       product={product}
       color={color}
+      pageActive={pageActive}
+      page={page}
     />
   </>
 }
 
-export default connect(mapStateToProps, { saveItem, updateItem })(ItemDetails);
+export default connect(mapStateToProps, { saveItem, updateItem, pageActive })(ItemDetails);

@@ -10,7 +10,9 @@ export default function ItemDetailsForm({
   onInputChange, 
   buttonDisabled,
   product,
-  color
+  color,
+  pageActive,
+  page
 }) {
 
   return <>
@@ -24,6 +26,19 @@ export default function ItemDetailsForm({
             <div className="card-header bg-card-cs">
               <div className="row">
                 <div className="col text-uppercase font-weight-bold">Item Description</div>
+                <div className="col text-right">
+                  <a 
+                    href="/" 
+                    className="a-link-cs" 
+                    name="closePage" 
+                    onClick={(e) => { 
+                      e.preventDefault(); 
+                      pageActive({ name: page.name === 'ITEM_DETAILS' ? 'ITEM_LIST' : 'COLOR_LIST' }) 
+                    }}
+                  >
+                    Close
+                  </a>
+                </div>
               </div>
             </div>
 

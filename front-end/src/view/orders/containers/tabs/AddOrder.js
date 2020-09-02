@@ -125,7 +125,7 @@ const AddOrder = ({
                     name="accountInfo" 
                     onClick={(e) => { 
                       e.preventDefault(); 
-                      pageActive({ name: 'ITEM_LIST' })
+                      pageActive({ name: page.name === 'COLOR_LIST' ? 'PRODUCT_LIST' : 'ITEM_LIST' })
                     }}
                   >
                     Close

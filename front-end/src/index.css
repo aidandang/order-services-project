@@ -17,6 +17,7 @@ body {
 /* wrapper settings */
 .main-wrapper {
   min-height: 100vh;
+  background-color: #ECEBF2;
 }
 .right-wrapper {
   min-height: 100vh;
@@ -50,16 +51,6 @@ body {
   background-color: #5D8C87 !important;
 }
 /* end of sidebar */
-
-/* landing page background */
-.landing-bg {
-  background: url('https://firebasestorage.googleapis.com/v0/b/order-services-media.appspot.com/o/landing-page%2Fcover-logistics-01.jpg?alt=media&token=0b141ceb-510d-4b8c-bf51-1cd1bffb48ea');
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-attachment: fixed;
-}
-/* end of landing page background */
 
 /* login page background */
 .login-bg {
