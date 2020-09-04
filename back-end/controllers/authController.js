@@ -6,14 +6,21 @@ const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/appError');
 const sendEmail = require('../utils/email');
 
-const signToken = id => {
-  return jwt.sign({ id }, process.env.JWT_SECRET, {
+const signToken = user => {
+  const payload = {
+    id: user._id,
+    displayName: user.name,
+    email: user.email,
+    role: user.role
+  };
+  
+  return jwt.sign(payload, process.env.JWT_SECRET, {
     expiresIn: process.env.JWT_EXPIRES_IN
   })
 }
 
 const createSendToken = (user, statusCode, res) => {
-  const token = signToken(user._id);
+  const token = signToken(user);
   const cookieOptions = {
     expires: new Date(
       Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000
@@ -51,10 +58,12 @@ exports.login = catchAsync(async (req, res, next) => {
     return next(new AppError('Please provide email and password.', 400));
   };
 
-  const user = await User.findOne({ email }).select('+password');
+  const user = await User.findOne({ email: 'aidandang@gmail.com' }).select('+password');
+
+  console.log(user)
 
   if (!user || !(await user.correctPassword(password, user.password))) {
-    return next(new AppError('Incorrect email or password', 401))
+    return next(new AppError('Incorrect email or password.', 401))
   }
 
   createSendToken(user, 200, res);
@@ -83,12 +92,7 @@ exports.protect = catchAsync(async (req, res, next) => {
     );
   }
 
-  req.user = {
-    id: currentUser._id,
-    displayName: currentUser.name,
-    email: currentUser.email,
-    role: currentUser.role
-  }
+  req.token = token;
   next();
 })
 
@@ -126,7 +130,7 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
     });
     res.status(200).json({
       status: 'success',
-      message: 'Token sent to email!'
+      message: 'Token was sent to your email.'
     })
   } catch(err) {
     user.passwordResetToken = undefined;
@@ -180,6 +184,6 @@ exports.updatePassword = catchAsync(async (req, res, next) => {
 exports.authorizedUser = (req, res) => {
   res.status(200).json({ 
     status: 'success',
-    user: req.user
+    token: req.token
   })
 }

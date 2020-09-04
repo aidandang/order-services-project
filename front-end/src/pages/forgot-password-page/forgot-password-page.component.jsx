@@ -2,40 +2,40 @@ import React from 'react';
 
 // components
 import Title from '../../components/title/title.component';
-import Login from '../../components/login/login.component';
+import ForgotPassword from '../../components/forgot-password/forgot-password.component';
 import Tabbar from '../../components/tabbar/tabbar.component';
 
 // redux
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import { selectLoginTabbar } from '../../state/tabbar/tabbar.selections';
+import { selectForgotPasswordTabbar } from '../../state/tabbar/tabbar.selections';
 
 // ui settings
-import './login-page.styles.css';
+import './forgot-password-page.styles.css';
 const titleSettings = {
-  title: 'Member Login',
+  title: 'Forgot Password?',
   button: undefined
 }
 
 // MAIN FUNCTION
-const LoginPage = ({ loginTabbar }) => {
+const ForgotPasswordPage = ({ forgotPasswordTabbar }) => {
 
-  const { selectedTab, list, message } = loginTabbar;
+  const { selectedTab, list, message } = forgotPasswordTabbar;
 
   return <>
     <Title settings={titleSettings} />
     <Tabbar
-      page='login' 
+      page='forgotPassword' 
       tabbarList={list} 
       selectedTab={selectedTab}
       message={message} 
     />
-    { selectedTab === 1 && <Login /> }
+    { selectedTab === 1 && <ForgotPassword /> }
   </>   
 }
 
 const mapStateToProps = createStructuredSelector({
-  loginTabbar: selectLoginTabbar
+  forgotPasswordTabbar: selectForgotPasswordTabbar
 })
 
-export default connect(mapStateToProps)(LoginPage);
+export default connect(mapStateToProps)(ForgotPasswordPage);

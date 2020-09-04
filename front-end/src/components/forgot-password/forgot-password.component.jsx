@@ -7,41 +7,32 @@ import * as Yup from "yup";
 import { useForm } from '../../utils/useForm';
 
 // components
-import RegisterForm from './register-form.component';
+import ForgotPasswordForm from './forgot-password-form.component';
+
+// ui settings
+import './forgot-password.styles.css';
 
 // redux
 import { connect } from 'react-redux';
-import { postUserAuthReq } from '../../state/api/api.requests';
+import { postReq } from '../../state/api/api.requests';
+import { TabbarActionTypes } from '../../state/tabbar/tabbar.types';
 
 // set form schema
 const formSchema = Yup.object().shape({
-  name: Yup
-    .string()
-    .required("Please provide your name"),
   email: Yup
     .string()
     .email("This must be a valid email address.")
-    .required("Please provide your email."),
-  password: Yup
-    .string()
-    .required("Please provide your password."),
-  passwordConfirm: Yup
-    .string()
-    .oneOf([Yup.ref('password'), null], 'Passwords must match.'),
-  active: Yup
-    .boolean()
+    .required("Please provide your email.")
 });
 
 // set form state
 const formState = {
-  name: "",
-  email: "",
-  password: "",
-  passwordConfirm: "",
-  active: false
+  email: ""
 };
 
-const Register = ({ postUserAuthReq }) => {
+const ForgotPassword = ({
+  postReq
+}) => {
   // set custom form hook
   const [
     formData,
@@ -53,11 +44,11 @@ const Register = ({ postUserAuthReq }) => {
   // Form submit function
   const formSubmit = e => {
     e.preventDefault();
-    postUserAuthReq('/users/signup', formData, 'register');
+    postReq('/users/forgot-password', formData, 'forgotPassword', TabbarActionTypes.SET_TABBAR_MESSAGE)
   }
-
+  
   return <>
-    <RegisterForm 
+    <ForgotPasswordForm 
       formData={formData} 
       formSubmit={formSubmit} 
       errors={errors} 
@@ -67,4 +58,4 @@ const Register = ({ postUserAuthReq }) => {
   </>
 }
 
-export default connect(null, { postUserAuthReq })(Register);
+export default connect(null, { postReq })(ForgotPassword);

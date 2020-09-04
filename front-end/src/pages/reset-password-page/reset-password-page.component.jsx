@@ -2,25 +2,24 @@ import React from 'react';
 
 // components
 import Title from '../../components/title/title.component';
-import Register from '../../components/register/register.component';
+import ResetPassword from '../../components/reset-password/reset-password.component';
 import Tabbar from '../../components/tabbar/tabbar.component';
 
 // redux
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import { selectRegisterTabbar } from '../../state/tabbar/tabbar.selections';
+import { selectResetPasswordTabbar } from '../../state/tabbar/tabbar.selections';
 
 // ui settings
-import './register-page.styles.css';
+import './reset-password-page.styles.css';
 const titleSettings = {
-  title: 'Register',
+  title: 'Reset Password',
   button: undefined
 }
 
-// MAIN FUNCTION
-const RegisterPage = ({ registerTabbar }) => {
+const ResetPasswordPage = ({ resetPasswordTabbar }) => {
 
-  const { selectedTab, list, message } = registerTabbar;
+  const { selectedTab, list, message } = resetPasswordTabbar;
 
   return <>
     <Title settings={titleSettings} />
@@ -29,12 +28,12 @@ const RegisterPage = ({ registerTabbar }) => {
       selectedTab={selectedTab}
       message={message} 
     />
-    { selectedTab === 1 && <Register /> }
-  </>   
+    { selectedTab === 1 && <ResetPassword /> }
+  </>
 }
 
 const mapStateToProps = createStructuredSelector({
-  registerTabbar: selectRegisterTabbar
+  resetPasswordTabbar: selectResetPasswordTabbar
 })
 
-export default connect(mapStateToProps)(RegisterPage);
+export default connect(mapStateToProps)(ResetPasswordPage);

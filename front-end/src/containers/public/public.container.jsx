@@ -7,11 +7,16 @@ import { Switch, Route, Redirect } from 'react-router-dom';
 import Header from '../../components/header/header.component';
 import Footer from '../../components/footer/footer.component';
 import LandingPage from '../../pages/landing-page/landing-page.component';
+import PageNotFound from '../../pages/page-not-found/page-not-found.component';
 import RegisterPage from '../../pages/register-page/register-page.component';
 import LoginPage from '../../pages/login-page/login-page.component';
+import ForgotPasswordPage from '../../pages/forgot-password-page/forgot-password-page.component';
+import ResetPasswordPage from '../../pages/reset-password-page/reset-password-page.component';
 
 // redux
 import { connect } from 'react-redux';
+import { createStructuredSelector } from 'reselect';
+import { selectCurrentUser } from '../../state/user/user.selectors';
 
 // ui settings
 import './public.styles.css';
@@ -23,7 +28,6 @@ const bgImage = 'https://firebasestorage.googleapis.com/v0/b/order-services-medi
 
 // MAIN FUNCTION
 const Public = ({ match, currentUser }) => {
-  
   const headerSettings = { navBg: "", isLogo: true };
   const backgroundStyles = {
     style: {}
@@ -34,28 +38,28 @@ const Public = ({ match, currentUser }) => {
   if (match.isExact) {
     headerSettings.navBg = Background.NAV_LANDING_BG;
     backgroundStyles.style.backgroundImage = `url(${bgImage})`;
-    backgroundStyles.class = 'row m-0 p-0 main-wrapper landing-bg';
+    backgroundStyles.class = 'row m-0 p-0 public-main-wrapper landing-bg';
   } else {
     headerSettings.navBg = Background.NAV_PUBLIC_BG;
-    backgroundStyles.class = 'row m-0 p-0 main-wrapper';
+    backgroundStyles.class = 'row m-0 p-0 public-main-wrapper';
   }
 
   return <>
     <div className="container-fluild">
-      <div 
-        className={backgroundStyles.class}
-        style={backgroundStyles.style}
-      >
+      <div className={backgroundStyles.class} style={backgroundStyles.style}>
         <div className="col-12 p-0 m-0">
           <Header settings={headerSettings} />
           
           {/* main container */}
-          <div className="row p-0 m-0 px-2 py-4">
+          <div className="row p-0 m-0 px-2 pt-4 pb-5">
             <div className="col">
               <Switch>
-                <Route exact path="/" render={() => <LandingPage />} />
                 <Route exact path="/register" render={() => currentUser ? <Redirect to='/' /> : <RegisterPage />} />
                 <Route exact path="/login" render={() => currentUser ? <Redirect to='/' /> : <LoginPage />} />
+                <Route exact path="/forgot-password" render={() => currentUser ? <Redirect to='/' /> : <ForgotPasswordPage />} />
+                <Route exact path="/reset-password/:token" render={() => currentUser ? <Redirect to='/' /> : <ResetPasswordPage />} />
+                <Route exact path="/" render={() => <LandingPage />} />
+                <Route path="/" render={() => <PageNotFound />} />
               </Switch>
             </div>
           </div>
@@ -63,23 +67,13 @@ const Public = ({ match, currentUser }) => {
           
         </div>
       </div>
-      <div className="row m-0 p-0 text-light">
-        <div className="col-12 p-0 m-0 footer">
-          <footer>
-            <div className="row p-0 m-0 px-2 py-2">
-              <div className="col">
-                <Footer />
-              </div>
-            </div>
-          </footer>
-        </div>
-      </div>
+      <Footer />
     </div>
   </>
 }
 
-const mapStateToProps = state => ({
-  currentUser: state.user.currentUser
+const mapStateToProps = createStructuredSelector({
+  currentUser: selectCurrentUser
 })
 
 export default connect(mapStateToProps)(Public);

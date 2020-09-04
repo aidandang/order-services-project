@@ -2,12 +2,13 @@ import React from 'react';
 
 // dependencies
 import * as Yup from "yup";
+import { useParams } from 'react-router-dom';
 
 // customs and utils
 import { useForm } from '../../utils/useForm';
 
 // components
-import RegisterForm from './register-form.component';
+import ResetPasswordForm from './reset-password-form.component';
 
 // redux
 import { connect } from 'react-redux';
@@ -15,33 +16,24 @@ import { postUserAuthReq } from '../../state/api/api.requests';
 
 // set form schema
 const formSchema = Yup.object().shape({
-  name: Yup
-    .string()
-    .required("Please provide your name"),
-  email: Yup
-    .string()
-    .email("This must be a valid email address.")
-    .required("Please provide your email."),
   password: Yup
     .string()
     .required("Please provide your password."),
   passwordConfirm: Yup
     .string()
-    .oneOf([Yup.ref('password'), null], 'Passwords must match.'),
-  active: Yup
-    .boolean()
+    .oneOf([Yup.ref('password'), null], 'Confirmed password does NOT match.')
 });
 
 // set form state
 const formState = {
-  name: "",
-  email: "",
   password: "",
-  passwordConfirm: "",
-  active: false
+  passwordConfirm: ""
 };
 
-const Register = ({ postUserAuthReq }) => {
+const ResetPassword = ({ postUserAuthReq }) => {
+
+  const params = useParams();
+
   // set custom form hook
   const [
     formData,
@@ -53,11 +45,11 @@ const Register = ({ postUserAuthReq }) => {
   // Form submit function
   const formSubmit = e => {
     e.preventDefault();
-    postUserAuthReq('/users/signup', formData, 'register');
+    postUserAuthReq(`/users/reset-password/${params.token}`, formData, 'resetPassword');
   }
 
   return <>
-    <RegisterForm 
+    <ResetPasswordForm 
       formData={formData} 
       formSubmit={formSubmit} 
       errors={errors} 
@@ -67,4 +59,4 @@ const Register = ({ postUserAuthReq }) => {
   </>
 }
 
-export default connect(null, { postUserAuthReq })(Register);
+export default connect(null, { postUserAuthReq })(ResetPassword);

@@ -5,7 +5,9 @@ import { Link } from 'react-router-dom';
 
 // redux
 import { connect } from 'react-redux';
-import { setCurrentUser } from '../../state/user/user.actions';
+import { createStructuredSelector } from 'reselect';
+import { selectCurrentUser } from '../../state/user/user.selectors';
+import { UserActionTypes } from '../../state/user/user.types';
 
 // assets
 import logo from '../../assets/logo.svg';
@@ -44,14 +46,14 @@ const collapseItems = [
 // MAIN COMPONENT
 const Header = ({ 
   currentUser,
-  setCurrentUser,
-  settings 
+  settings,
+  dispatch 
 }) => {
 
-  const handleClick = e => {
+  const handleLogOut = e => {
     e.preventDefault();
     localStorage.clear();
-    setCurrentUser(null)
+    dispatch({ type: UserActionTypes.USER_LOGGED_OUT })
   }
 
   return <>
@@ -87,14 +89,17 @@ const Header = ({
             <div className="col text-md-right">
               {
                 currentUser 
-                ? <Link 
-                    to="/" 
-                    className="text-light mx-md-2" 
-                    onClick={handleClick}
-                  >
-                    <i className="fas fa-sign-out-alt fa-lg"></i>
-                  </Link>
-                : <Link to="/login" className="text-light mx-md-2"><i className="fas fa-sign-in-alt fa-lg"></i></Link>            
+                ? <div className="btn-group text-light mx-md-2">
+                    <div className="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i className="fas fa-user fa-lg"></i>
+                    </div>
+                    <div className="dropdown-menu dropdown-menu-right header-dropdown-bg">
+                      <div className="dropdown-header text-uppercase">{currentUser.displayName}</div>
+                      <div className="dropdown-divider"></div>
+                      <button className="dropdown-item header-dropdown-item text-light" type="button" onClick={handleLogOut}>Log Out</button>
+                    </div>
+                  </div>
+                : <Link to="/login" className="text-light mx-md-2"><i className="far fa-user fa-lg"></i></Link>            
               }
             </div>
 
@@ -143,12 +148,8 @@ const Header = ({
   </>
 }
 
-const mapStateToProps = state => ({
-  currentUser: state.user.currentUser
+const mapStateToProps = createStructuredSelector({
+  currentUser: selectCurrentUser
 })
 
-const mapDispatchToProps = dispatch => ({
-  setCurrentUser: (user) => dispatch(setCurrentUser(user))
-})
-
-export default connect(mapStateToProps, mapDispatchToProps)(Header);
+export default connect(mapStateToProps)(Header);
