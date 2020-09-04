@@ -4,58 +4,28 @@ import React from 'react';
 import Button from '../button/button.component';
 
 // ui settings
-import './register-form.styles.css';
+import './reset-password-form.styles.css';
 const liClassName = "list-group-item list-group-item-action bg-item-list-cs";
 
-export default function RegisterForm({ 
+const ResetPasswordForm = ({
   formData, 
   formSubmit, 
   errors, 
   onInputChange, 
   buttonDisabled 
-}) {
+}) => {
   return <>
     <form onSubmit={formSubmit}>
       <div className="row">
-        <div className="col-sx-12 col-sm-10 col-md-8 col-lg-6">
+        <div className="col-xl-4 col-lg-5 col-md-6 col-sm-7">
           {/* The Card */}
           <div className="card mt-3">
             <ul className="list-group list-group-flush">
               <li className={liClassName}>
                 <div className="row">
-                  <div className="col-sm-6">
+                <div className="col">
                     <div className="form-group">
-                      <label htmlFor="name">Display Name (*)</label>
-                      <input 
-                        type="text" 
-                        className="form-control" 
-                        id="name" 
-                        value={formData.name}
-                        onChange={onInputChange} 
-                      />
-                      {errors.name.length > 0 ? <p className="mt-2 text-danger">{errors.name}</p> : null}
-                    </div>
-                  </div>
-                  <div className="col-sm-6">
-                    <div className="form-group">
-                      <label htmlFor="email">Email (*)</label>
-                      <input 
-                        type="email" 
-                        className="form-control" 
-                        id="email" 
-                        value={formData.email}
-                        onChange={onInputChange} 
-                      />
-                      {errors.email.length > 0 ? <p className="mt-2 text-danger">{errors.email}</p> : null}
-                    </div>
-                  </div>
-                </div>
-              </li>
-              <li className={liClassName}>
-                <div className="row">
-                  <div className="col-sm-6">
-                    <div className="form-group">
-                      <label htmlFor="password">Password (*)</label>
+                      <label htmlFor="password">New Password (*)</label>
                       <input 
                         type="password" 
                         className="form-control" 
@@ -65,10 +35,14 @@ export default function RegisterForm({
                       />
                       {errors.password.length > 0 ? <p className="mt-2 text-danger">{errors.password}</p> : null}
                     </div>
-                  </div>
-                  <div className="col-sm-6">
+                  </div> 
+                </div>
+              </li>
+              <li className={liClassName}>
+                <div className="row">
+                  <div className="col">
                     <div className="form-group">
-                      <label htmlFor="passwordConfirm">Confirm Password (*)</label>
+                      <label htmlFor="passwordConfirm">New Password Confirm (*)</label>
                       <input 
                         type="password" 
                         className="form-control" 
@@ -79,29 +53,27 @@ export default function RegisterForm({
                       {/* fixed bug of passwordConfirm matched with password but still show */}
                       {(errors.passwordConfirm.length > 0) && (formData.passwordConfirm !== formData.password) ? <p className="mt-2 text-danger">{errors.passwordConfirm}</p> : null}
                     </div>
-                  </div>  
+                  </div> 
                 </div>
               </li>
               <li className={liClassName}>
                 <div className="row mt-3">
                   <div className="col-md-4">
                     <div className="form-group">
-                      {/* Submit button */}
                       <Button buttonDisabled={buttonDisabled}>
                         Submit
                       </Button>
-                      {/* End of submit button */}
                     </div>
-                  </div>
+                  </div> 
                 </div>
-              </li>  
-
+              </li>
             </ul>
           </div>
           {/* End of the Card */}
         </div>
       </div>
     </form>
-
   </>
 }
+
+export default ResetPasswordForm;

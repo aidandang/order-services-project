@@ -11,7 +11,7 @@ import LoginForm from './login-form.component';
 
 // redux
 import { connect } from 'react-redux';
-import { logInWithEmailAndPassword } from '../../state/api/api.requests';
+import { postUserAuthReq } from '../../state/api/api.requests';
 
 // set form schema
 const formSchema = Yup.object().shape({
@@ -30,7 +30,7 @@ const formState = {
   password: ""
 };
 
-const Login = ({ logInWithEmailAndPassword }) => {
+const Login = ({ postUserAuthReq }) => {
   // set custom form hook
   const [
     formData,
@@ -42,7 +42,7 @@ const Login = ({ logInWithEmailAndPassword }) => {
   // Form submit function
   const formSubmit = e => {
     e.preventDefault();
-    logInWithEmailAndPassword(formData)
+    postUserAuthReq('/users/login', formData, 'login')
   }
 
   return <>
@@ -56,4 +56,4 @@ const Login = ({ logInWithEmailAndPassword }) => {
   </>
 }
 
-export default connect(null, { logInWithEmailAndPassword })(Login);
+export default connect(null, { postUserAuthReq })(Login);

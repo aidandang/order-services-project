@@ -9,8 +9,8 @@ router.get('/auth', authController.protect, authController.authorizedUser);
 router.post('/signup', authController.signup);
 router.post('/login', authController.login);
 
-router.post('/forgotpassword', authController.forgotPassword);
-router.patch('/resetpassword/:token', authController.resetPassword);
+router.post('/forgot-password', authController.forgotPassword);
+router.post('/reset-password/:token', authController.resetPassword);
 
 router.patch('/updatepassword', authController.protect, authController.updatePassword);
 

@@ -8,34 +8,9 @@
 }
 /* end of color schema */
 
-/* general settings */
 body {
   font-family: 'Roboto Condensed', sans-serif !important;
 }
-/* end of general settings */
-
-/* wrapper settings */
-.main-wrapper {
-  min-height: 100vh;
-  background-color: #ECEBF2;
-}
-.right-wrapper {
-  min-height: 100vh;
-  background-color: #ECEBF2;
-}
-/* end of wrapper settings */
-
-/* navbar */
-.navbar-bg {
-  background-color: rgba(188, 186, 191, 1);
-}
-.navbar-bg-landing {
-  background-color: rgba(188, 186, 191, .4);
-}
-.navbar-link:hover {
-  text-decoration: none;
-}
-/* end of navbar */
 
 /* sidebar */
 .sidebar {
@@ -51,28 +26,6 @@ body {
   background-color: #5D8C87 !important;
 }
 /* end of sidebar */
-
-/* login page background */
-.login-bg {
-  background-color: #ECEBF2;
-}
-/* end of login page background */
-
-/* footer */
-.footer {
-  background-color: #565659;
-}
-
-.btn-custom {
-  border-radius: 20px;
-  background-color: #5D8C87;
-  border: 1px solid rgba(93, 140, 135, 1);
-}
-
-.btn-custom-disabled {
-  border-radius: 20px;
-  cursor: default;
-}
 
 .btn-outline-cs {
   color: #5D8C87;

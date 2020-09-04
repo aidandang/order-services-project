@@ -1,0 +1,4 @@
+export const TabbarActionTypes = {
+  SET_SELECTED_TAB: 'SET_SELECTED_TAB',
+  SET_TABBAR_MESSAGE: 'SET_TABBAR_MESSAGE'
+}
