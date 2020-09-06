@@ -8,7 +8,7 @@ import Tabbar from '../../components/tabbar/tabbar.component';
 // redux
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import { selectForgotPasswordTabbar } from '../../state/tabbar/tabbar.selections';
+import { selectForgotPasswordTabbar } from '../../state/tabbar/tabbar.selectors';
 
 // ui settings
 import './forgot-password-page.styles.css';
@@ -20,7 +20,7 @@ const titleSettings = {
 // MAIN FUNCTION
 const ForgotPasswordPage = ({ forgotPasswordTabbar }) => {
 
-  const { selectedTab, list, message } = forgotPasswordTabbar;
+  const { selectedTab, list } = forgotPasswordTabbar;
 
   return <>
     <Title settings={titleSettings} />
@@ -28,7 +28,6 @@ const ForgotPasswordPage = ({ forgotPasswordTabbar }) => {
       page='forgotPassword' 
       tabbarList={list} 
       selectedTab={selectedTab}
-      message={message} 
     />
     { selectedTab === 1 && <ForgotPassword /> }
   </>   

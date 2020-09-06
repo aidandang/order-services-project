@@ -4,37 +4,39 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { setSelectedTab } from '../../state/tabbar/tabbar.actions';
 
-const Tabbar = ({ 
-  page,
+// ui settings
+import './tabbar.styles.css';
+
+const Tabbar = ({
+  page, 
   tabbarList, 
-  selectedTab,  
-  message,
+  selectedTab, 
   setSelectedTab 
 }) => {
+  
+  const { message } = tabbarList.find(item => item.id === selectedTab);
+
   return <>
     <div className="card border-0">
       <div className="card-header bg-card-cs">
         {
           tabbarList.map(item => item.id === selectedTab 
-            ? <span key={item.id} className="mr-3 tab-active-cs">{item.name}</span> 
+            ? <span key={item.id} className="mr-3 tab-selected">{item.name}</span> 
             : <a 
                 key={item.id} href="/" 
                 onClick={(e) => {
                   e.preventDefault(); 
                   setSelectedTab(page, item.id); 
                 }} 
-                className="tab-link-cs mr-3"
+                className="mr-3 tab-a-link"
               >
                 {item.name}
               </a> 
           )
         }
       </div>
-      <div className="card-body bg-card-cs">
-        { message.style === ''
-          ? <small className='card-text'>{message.text}</small>
-          : <small className={`card-text ${message.style}`}>{message.text}</small>
-        }
+      <div className="card-body bg-card-cs py-2">
+        <small className='card-text text-muted'>{message}</small>
       </div>
     </div>
   </>

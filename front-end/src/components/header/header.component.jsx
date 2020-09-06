@@ -14,39 +14,13 @@ import logo from '../../assets/logo.svg';
 
 // ui settings
 import './header.styles.css';
-const navbarItems = [
-  {
-    id: 1,
-    text: 'Application',
-    link: '/app',
-    icon: 'fas fa-briefcase'
-  },
-  {
-    id: 2,
-    text: 'Read Me',
-    link: '/app',
-    icon: 'fab fa-readme'
-  }
-];
-const collapseItems = [
-  {
-    id: 1,
-    text: 'Application',
-    link: '/app',
-    icon: 'fas fa-briefcase'
-  },
-  {
-    id: 2,
-    text: 'Read Me',
-    link: '/app',
-    icon: 'fab fa-readme'
-  }
-];
 
 // MAIN COMPONENT
 const Header = ({ 
   currentUser,
   settings,
+  navbarSections,
+  collapseSections,
   dispatch 
 }) => {
 
@@ -81,7 +55,7 @@ const Header = ({
               {settings.isLogo &&
                 <span className="text-light mr-4"><Link to="/"><img src={logo} width="32" alt="logo" /></Link></span>
               }
-              {navbarItems.map(item =>
+              {navbarSections.map(item =>
                 <span key={item.id} className="mr-3"><Link to={item.link} className="navbar-link text-light">{item.text}</Link></span>
               )}
             </div>
@@ -93,10 +67,10 @@ const Header = ({
                     <div className="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <i className="fas fa-user fa-lg"></i>
                     </div>
-                    <div className="dropdown-menu dropdown-menu-right header-dropdown-bg">
+                    <div className="dropdown-menu dropdown-menu-right">
                       <div className="dropdown-header text-uppercase">{currentUser.displayName}</div>
                       <div className="dropdown-divider"></div>
-                      <button className="dropdown-item header-dropdown-item text-light" type="button" onClick={handleLogOut}>Log Out</button>
+                      <button className="dropdown-item dropdown-item-cs" type="button" onClick={handleLogOut}>Log Out</button>
                     </div>
                   </div>
                 : <Link to="/login" className="text-light mx-md-2"><i className="far fa-user fa-lg"></i></Link>            
@@ -118,7 +92,7 @@ const Header = ({
             </div>
           </div>
         </div>
-        {collapseItems.map(item =>
+        {collapseSections.map(item =>
           <div key={item.id} className="col-12 py-2 collapse-link">
             <Link to={item.link} className="list-group-item-action text-light collapse-link">
               <div className="row">

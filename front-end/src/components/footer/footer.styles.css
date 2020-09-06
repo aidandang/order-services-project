@@ -8,7 +8,12 @@
   border: none;
 }
 
-/* footer */
 .footer {
-  background-color: #565659;
+  background-color: #83818C;
+}
+
+.footer-a {
+  color: #BCBABF;
+  text-decoration: underline;
+  font-weight: normal;
 }

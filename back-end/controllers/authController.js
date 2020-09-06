@@ -112,7 +112,7 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
   const user = await User.findOne({ email });
 
   if (!user) {
-    return next(new AppError('There is no user with email address.', 404))
+    return next(new AppError('There is no user with that email address.', 404))
   }
 
   const resetToken = user.createPasswordResetToken();
@@ -130,7 +130,7 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
     });
     res.status(200).json({
       status: 'success',
-      message: 'Token was sent to your email.'
+      message: 'Reset password instructions were sent to your email.'
     })
   } catch(err) {
     user.passwordResetToken = undefined;
@@ -153,7 +153,7 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
   });
 
   if (!user) {
-    return next(new AppError('Token is invalid or has expired', 400))
+    return next(new AppError('Token is invalid or has expired.', 400))
   }
 
   user.password = req.body.password;

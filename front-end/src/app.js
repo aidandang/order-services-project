@@ -10,7 +10,7 @@ import PrivateRoute from './routes/private.route.js';
 
 // redux
 import { connect } from 'react-redux';
-import { getAuthStateChanged } from './state/api/api.requests';
+import { getAuthStateChanged } from './state/api/auth-requests';
 import { setCurrentUser } from './state/user/user.actions';
 
 // MAIN COMPONENT

@@ -8,7 +8,7 @@ import Tabbar from '../../components/tabbar/tabbar.component';
 // redux
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import { selectRegisterTabbar } from '../../state/tabbar/tabbar.selections';
+import { selectRegisterTabbar } from '../../state/tabbar/tabbar.selectors';
 
 // ui settings
 import './register-page.styles.css';
@@ -20,14 +20,13 @@ const titleSettings = {
 // MAIN FUNCTION
 const RegisterPage = ({ registerTabbar }) => {
 
-  const { selectedTab, list, message } = registerTabbar;
+  const { selectedTab, list } = registerTabbar;
 
   return <>
     <Title settings={titleSettings} />
     <Tabbar 
       tabbarList={list} 
       selectedTab={selectedTab}
-      message={message} 
     />
     { selectedTab === 1 && <Register /> }
   </>   

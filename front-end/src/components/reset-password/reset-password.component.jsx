@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 // dependencies
 import * as Yup from "yup";
@@ -12,7 +12,10 @@ import ResetPasswordForm from './reset-password-form.component';
 
 // redux
 import { connect } from 'react-redux';
-import { postUserAuthReq } from '../../state/api/api.requests';
+import { createStructuredSelector } from 'reselect';
+import { postUserAuthReq } from '../../state/api/auth-requests';
+import { selectAlertMessage } from '../../state/alert/alert.selectors';
+import { clearAlertMessage } from '../../state/alert/alert.actions';
 
 // set form schema
 const formSchema = Yup.object().shape({
@@ -30,7 +33,11 @@ const formState = {
   passwordConfirm: ""
 };
 
-const ResetPassword = ({ postUserAuthReq }) => {
+const ResetPassword = ({ 
+  postUserAuthReq, 
+  alertMessage, 
+  clearAlertMessage 
+}) => {
 
   const params = useParams();
 
@@ -45,8 +52,15 @@ const ResetPassword = ({ postUserAuthReq }) => {
   // Form submit function
   const formSubmit = e => {
     e.preventDefault();
-    postUserAuthReq(`/users/reset-password/${params.token}`, formData, 'resetPassword');
+    postUserAuthReq(`/users/reset-password/${params.token}`, formData);
   }
+
+  useEffect(() => {
+    return () => {
+      clearAlertMessage();
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   return <>
     <ResetPasswordForm 
@@ -59,4 +73,13 @@ const ResetPassword = ({ postUserAuthReq }) => {
   </>
 }
 
-export default connect(null, { postUserAuthReq })(ResetPassword);
+const mapStateToProps = createStructuredSelector({
+  errMessage: selectAlertMessage
+})
+
+const mapDispatchToProps = dispatch => ({
+  postUserAuthReq: (endpoint, reqBody) => dispatch(postUserAuthReq(endpoint, reqBody)),
+  clearAlertMessage: () => dispatch(clearAlertMessage())
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(ResetPassword);

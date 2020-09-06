@@ -6,13 +6,10 @@
   background-color: rgba(188, 186, 191, 1);
 }
 
-.collapse-link:hover {
-  background-color: #5D8C87 !important;
+.nav-private-page {
+  background-color: rgba(188, 186, 191, 1);
 }
 
-.header-dropdown-bg {
-  background-color: #565659;
-}
-.header-dropdown-item:hover {
-  background-color: #5D8C87;
+.collapse-link:hover {
+  background-color: #5D8C87 !important;
 }

@@ -4,6 +4,10 @@ import storage from 'redux-persist/lib/storage';
 
 import userReducer from './user/user.reducer';
 import tabbarReducer from './tabbar/tabbar.reducer';
+import sidebarReducer from './sidebar/sidebar.reducer';
+import navbarReducer from './navbar/navbar.reducer';
+import productReducer from './product/product.reducer';
+import alertReducer from './alert/alert.reducer'
 
 const persistConfig = {
   key: 'root',
@@ -12,8 +16,12 @@ const persistConfig = {
 }
 
 const appReducer = combineReducers({
+  alert: alertReducer,
   user: userReducer,
   tabbar: tabbarReducer,
+  sidebar: sidebarReducer,
+  navbar: navbarReducer,
+  product: productReducer
 });
 
 const rootReducer = (state, action) => {
