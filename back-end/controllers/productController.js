@@ -6,6 +6,11 @@ const AppError = require('../utils/appError');
 const { productAggregate } = require('../utils/aggregation');
 
 exports.readProducts = catchAsync(async (req, res, next) => {
+  // delete special keywords in the query
+  const queryObj = { ...req.query };
+  const excludedFields = ['page', 'sort', 'limit', 'fields'];
+  excludedFields.forEach(element => delete queryObj[element]);
+
   let match = null;
 
   if (req.query.name) {
@@ -46,7 +51,7 @@ exports.readProducts = catchAsync(async (req, res, next) => {
   }
 
   const page = req.query.page * 1 || 1;
-  const limit = req.query.limit * 1 || 6;
+  const limit = req.query.limit * 1 || 2;
   const skip = (page - 1) * limit;
 
   const arr = await query;
@@ -58,12 +63,12 @@ exports.readProducts = catchAsync(async (req, res, next) => {
   const products = await query;
 
   res.status(200).json({
-    status: 'GET_SUCCESS',
+    status: 'success',
     info: {
       count,
       pages
     },
-    products
+    allIds: products
   });
 });
 

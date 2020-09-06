@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 // dependencies
 import * as Yup from "yup";
@@ -11,7 +11,10 @@ import RegisterForm from './register-form.component';
 
 // redux
 import { connect } from 'react-redux';
-import { postUserAuthReq } from '../../state/api/api.requests';
+import { createStructuredSelector } from 'reselect';
+import { postUserAuthReq } from '../../state/api/auth-requests';
+import { selectAlertMessage } from '../../state/alert/alert.selectors';
+import { clearAlertMessage } from '../../state/alert/alert.actions';
 
 // set form schema
 const formSchema = Yup.object().shape({
@@ -41,7 +44,12 @@ const formState = {
   active: false
 };
 
-const Register = ({ postUserAuthReq }) => {
+const Register = ({ 
+  postUserAuthReq, 
+  alertMessage, 
+  clearAlertMessage  
+}) => {
+
   // set custom form hook
   const [
     formData,
@@ -53,8 +61,15 @@ const Register = ({ postUserAuthReq }) => {
   // Form submit function
   const formSubmit = e => {
     e.preventDefault();
-    postUserAuthReq('/users/signup', formData, 'register');
+    postUserAuthReq('/users/signup', formData);
   }
+
+  useEffect(() => {
+    return () => {
+      clearAlertMessage();
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   return <>
     <RegisterForm 
@@ -67,4 +82,13 @@ const Register = ({ postUserAuthReq }) => {
   </>
 }
 
-export default connect(null, { postUserAuthReq })(Register);
+const mapStateToProps = createStructuredSelector({
+  errMessage: selectAlertMessage
+})
+
+const mapDispatchToProps = dispatch => ({
+  postUserAuthReq: (endpoint, reqBody) => dispatch(postUserAuthReq(endpoint, reqBody)),
+  clearAlertMessage: () => dispatch(clearAlertMessage())
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(Register);

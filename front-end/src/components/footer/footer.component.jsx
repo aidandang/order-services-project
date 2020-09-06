@@ -31,7 +31,7 @@ export default function Footer() {
                     <div className="col-md-3 my-3">
                       <div className="row flex-column align-items-start">
                         <div className="col">Contact Me</div>
-                        <div className="col"><small><a className="a-link-cs" href="mailto:info@aidandang.com">info@aidandang.com</a></small></div>
+                        <div className="col"><small><a className="footer-a" href="mailto:info@aidandang.com">info@aidandang.com</a></small></div>
                       </div>
                     </div>
                     <div className="col-md-3 my-3">
@@ -54,7 +54,7 @@ export default function Footer() {
                   </div>
                 </div>
                 <div className="col-12 my-3">
-                  <small>2020. Order Services Project, <a className="a-link-cs" href="https://aidandang.com">aidandang.com</a>.</small>
+                  <small>2020. Order Services Project, <a className="footer-a" href="https://aidandang.com">aidandang.com</a>.</small>
                 </div>
               </div>
             </div>

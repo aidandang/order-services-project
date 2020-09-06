@@ -1,55 +1,42 @@
-/* color schema */
+/* color schema sample */
 #color-schema {
   background-color: #BCBABF;
   background-color: #83818C;
   background-color: #565659;
   background-color: #ECEBF2;
   background-color: #5D8C87;
+  color: #F7F7F7;
 }
-/* end of color schema */
+/* end of color sample */
 
 body {
   font-family: 'Roboto Condensed', sans-serif !important;
-}
-
-/* sidebar */
-.sidebar {
-  min-height: 100vh;
-  background-color: #565659;
-  position: fixed;
-  z-index: 1;
-  top: 0;
-  left: 0;
-  overflow-x: hidden;
-}
-.sidebar-link:hover {
-  background-color: #5D8C87 !important;
-}
-/* end of sidebar */
-
-.btn-outline-cs {
-  color: #5D8C87;
-  border-radius: 20px;
-  border: 1px solid rgba(93, 140, 135, 1);
 }
 
 .bg-card-cs {
   background-color: #ECEBF2;
 }
 
-.tab-link-cs {
-  color: #5D8C87;
-  font-weight: bold;
-}
-
-.tab-active-cs {
-  font-weight: bold;
+.dropdown-item-cs:hover {
+  color: #F7F7F7;
+  background-color: #5D8C87;
 }
 
 .a-link-cs {
   color: #5D8C87;
   text-decoration: underline;
   font-weight: normal;
+}
+
+.li-link-cs {
+  cursor: pointer !important;
+}
+
+/*  */
+.btn-outline-cs {
+  color: #5D8C87;
+  border-radius: 20px;
+  border: 1px solid rgba(93, 140, 135, 1);
 }
 
 .stage-link-cs {
@@ -85,10 +72,6 @@ body {
 
 .table-row-no-link-cs:hover {
   background-color: #f8f9fa !important;
-}
-
-.li-link-cs {
-  cursor: pointer !important;
 }
 
 .product-img {

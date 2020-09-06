@@ -1,5 +1,7 @@
 import { TabbarActionTypes } from './tabbar.types';
-import { INITIAL_STATE } from './tabbar.data';
+import { TABBAR_LIST } from './tabbar.data';
+
+const INITIAL_STATE = TABBAR_LIST;
 
 const tabbarReducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
@@ -8,13 +10,6 @@ const tabbarReducer = (state = INITIAL_STATE, action) => {
         ...state,
         [action.payload.page]: { 
           ...state[action.payload.page], selectedTab: action.payload.tabId 
-        }
-      }
-    case TabbarActionTypes.SET_TABBAR_MESSAGE:
-      return {
-        ...state,
-        [action.payload.page]: { 
-          ...state[action.payload.page], message: action.payload.message
         }
       }
     default:

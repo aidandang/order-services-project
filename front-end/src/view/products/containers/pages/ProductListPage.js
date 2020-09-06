@@ -103,7 +103,7 @@ const ProductListPage = ({
       </div>
     </div>
     
-    {products.length > 0 && <>
+    { products.length > 0 && <>
       <div className="row">
         {products.map(product => Object.keys(product.colors).length > 0 &&
           <div key={product._id} className="col-lg-6 col-xl-4"> 
@@ -120,8 +120,7 @@ const ProductListPage = ({
         pages={pages} 
         itemLimit={5}
       />
-      </>
-    }
+    </>}
   </>
 }
 

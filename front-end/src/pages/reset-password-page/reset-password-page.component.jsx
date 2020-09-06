@@ -8,7 +8,7 @@ import Tabbar from '../../components/tabbar/tabbar.component';
 // redux
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import { selectResetPasswordTabbar } from '../../state/tabbar/tabbar.selections';
+import { selectResetPasswordTabbar } from '../../state/tabbar/tabbar.selectors';
 
 // ui settings
 import './reset-password-page.styles.css';
@@ -19,14 +19,13 @@ const titleSettings = {
 
 const ResetPasswordPage = ({ resetPasswordTabbar }) => {
 
-  const { selectedTab, list, message } = resetPasswordTabbar;
+  const { selectedTab, list } = resetPasswordTabbar;
 
   return <>
     <Title settings={titleSettings} />
     <Tabbar 
       tabbarList={list} 
       selectedTab={selectedTab}
-      message={message} 
     />
     { selectedTab === 1 && <ResetPassword /> }
   </>

@@ -21,3 +21,8 @@ export const selectResetPasswordTabbar = createSelector(
   [selectTabbar],
   tabbar => tabbar.resetPassword
 )
+
+export const selectProductListTabbar = createSelector(
+  [selectTabbar],
+  tabbar => tabbar.productList
+)

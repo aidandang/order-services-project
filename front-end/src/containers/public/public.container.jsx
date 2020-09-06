@@ -17,6 +17,7 @@ import ResetPasswordPage from '../../pages/reset-password-page/reset-password-pa
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { selectCurrentUser } from '../../state/user/user.selectors';
+import { selectNavbarSections }  from '../../state/navbar/navbar.selectors';
 
 // ui settings
 import './public.styles.css';
@@ -26,8 +27,7 @@ const Background = {
 }
 const bgImage = 'https://firebasestorage.googleapis.com/v0/b/order-services-media.appspot.com/o/landing-page%2Fcover-logistics-01.jpg?alt=media&token=0b141ceb-510d-4b8c-bf51-1cd1bffb48ea';
 
-// MAIN FUNCTION
-const Public = ({ match, currentUser }) => {
+const Public = ({ match, currentUser, navbarSections }) => {
   const headerSettings = { navBg: "", isLogo: true };
   const backgroundStyles = {
     style: {}
@@ -48,7 +48,7 @@ const Public = ({ match, currentUser }) => {
     <div className="container-fluild">
       <div className={backgroundStyles.class} style={backgroundStyles.style}>
         <div className="col-12 p-0 m-0">
-          <Header settings={headerSettings} />
+          <Header settings={headerSettings} navbarSections={navbarSections} collapseSections={navbarSections} />
           
           {/* main container */}
           <div className="row p-0 m-0 px-2 pt-4 pb-5">
@@ -73,7 +73,8 @@ const Public = ({ match, currentUser }) => {
 }
 
 const mapStateToProps = createStructuredSelector({
-  currentUser: selectCurrentUser
+  currentUser: selectCurrentUser,
+  navbarSections: selectNavbarSections
 })
 
 export default connect(mapStateToProps)(Public);
