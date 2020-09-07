@@ -51,7 +51,7 @@ exports.readProducts = catchAsync(async (req, res, next) => {
   }
 
   const page = req.query.page * 1 || 1;
-  const limit = req.query.limit * 1 || 2;
+  const limit = req.query.limit * 1 || 6;
   const skip = (page - 1) * limit;
 
   const arr = await query;
@@ -83,7 +83,7 @@ exports.readProductById = catchAsync(async (req, res, next) => {
   
   res.status(200).json({
     status: 'GET_SUCCESS',
-    product: product[0]
+    byId: product[0]
   });
 });
 
@@ -117,7 +117,7 @@ exports.updateProductById = catchAsync(async (req, res, next) => {
     .status(200)
     .json({
       status: 'PATCH_SUCCESS',
-      product: product[0]
+      byId: product[0]
     });
 });
 

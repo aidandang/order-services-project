@@ -33,14 +33,12 @@ const formSchema = Yup.object().shape({
 
 // set form state
 const formState = {
-  search: '',
-  field: '',
-  page: 1
+  search: ''
 }
 
 const ProductList = ({ getReq, products }) => {
 
-  const fetchSuccess = ProductActionTypes.GET_SUCCESS;
+  const fetchSuccess = ProductActionTypes.PRODUCT_GET_SUCCESS;
   const { allIds, info, queryObj } = products;
   
   // set custom form hook

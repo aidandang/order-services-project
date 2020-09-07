@@ -93,7 +93,8 @@ exports.protect = catchAsync(async (req, res, next) => {
   }
 
   req.token = token;
-  next();
+  req.user = currentUser;
+  return next();
 })
 
 exports.restrictTo = (...roles) => {

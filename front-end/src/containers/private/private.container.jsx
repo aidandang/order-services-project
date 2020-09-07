@@ -8,7 +8,7 @@ import Header from '../../components/header/header.component';
 import Footer from '../../components/footer/footer.component';
 import Sidebar from '../../components/sidebar/sidebar.component';
 import DashboardPage from '../../pages/dashboard-page/dashboard-page.component';
-import ProductListPage from '../../pages/product-list-page/product-list-page.component';
+import ProductRoutes from '../../components/product-routes/product-routes.component';
 
 // redux
 import { connect } from 'react-redux';
@@ -37,7 +37,7 @@ const Private = ({ navbarSections, sidebarSections }) => {
             <div className="row p-0 m-0 px-2 pt-4 pb-5">
               <div className="col">
                 <Switch>
-                  <Route exact path="/app/product" render={() => <ProductListPage />} />
+                  <Route path="/app/product" render={() => <ProductRoutes />} />
                   <Route exact path="/app" render={() => <DashboardPage />} />
                 </Switch>
               </div>
