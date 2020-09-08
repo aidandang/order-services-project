@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 
 // dependencies
 import * as Yup from "yup";
@@ -8,13 +8,13 @@ import { useForm } from '../../utils/useForm';
 
 // components
 import RegisterForm from './register-form.component';
+import AlertMesg from '../alert-mesg/alert-mesg.component';
 
 // redux
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { postUserAuthReq } from '../../state/api/auth-requests';
 import { selectAlertMessage } from '../../state/alert/alert.selectors';
-import { clearAlertMessage } from '../../state/alert/alert.actions';
 
 // set form schema
 const formSchema = Yup.object().shape({
@@ -46,8 +46,7 @@ const formState = {
 
 const Register = ({ 
   postUserAuthReq, 
-  alertMessage, 
-  clearAlertMessage  
+  alertMessage  
 }) => {
 
   // set custom form hook
@@ -64,31 +63,27 @@ const Register = ({
     postUserAuthReq('/users/signup', formData);
   }
 
-  useEffect(() => {
-    return () => {
-      clearAlertMessage();
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
-
   return <>
-    <RegisterForm 
-      formData={formData} 
-      formSubmit={formSubmit} 
-      errors={errors} 
-      onInputChange={onInputChange} 
-      buttonDisabled={buttonDisabled}
-    />
+    {
+      alertMessage
+      ? <AlertMesg />
+      : <RegisterForm 
+        formData={formData} 
+        formSubmit={formSubmit} 
+        errors={errors} 
+        onInputChange={onInputChange} 
+        buttonDisabled={buttonDisabled}
+      />
+    }
   </>
 }
 
 const mapStateToProps = createStructuredSelector({
-  errMessage: selectAlertMessage
+  alertMessage: selectAlertMessage
 })
 
 const mapDispatchToProps = dispatch => ({
-  postUserAuthReq: (endpoint, reqBody) => dispatch(postUserAuthReq(endpoint, reqBody)),
-  clearAlertMessage: () => dispatch(clearAlertMessage())
+  postUserAuthReq: (endpoint, reqBody) => dispatch(postUserAuthReq(endpoint, reqBody))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Register);

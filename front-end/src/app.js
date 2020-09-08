@@ -6,7 +6,7 @@ import { Switch, Route } from 'react-router-dom';
 // components
 import Public from './containers/public/public.container.jsx';
 import Private from './containers/private/private.container.jsx';
-import PrivateRoute from './routes/private.route.js';
+import PrivateRoute from './components/private-route/private-route.component';
 
 // redux
 import { connect } from 'react-redux';

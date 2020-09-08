@@ -12,6 +12,7 @@ import { searchFormValidation } from '../../utils/searchFormValidation';
 import SearchProductForm from '../search-product-form/search-product-form.component';
 import PreviewProducts from '../preview-products/preview-products.component';
 import PaginationBar from '../pagination-bar/pagination-bar.component';
+import AlertMesg from '../../components/alert-mesg/alert-mesg.component';
 
 // redux
 import { connect } from 'react-redux';
@@ -19,6 +20,7 @@ import { createStructuredSelector } from 'reselect';
 import { selectProductAllIds } from '../../state/product/product.selectors';
 import { getReq } from '../../state/api/get-request';
 import { ProductActionTypes } from '../../state/product/product.types';
+import { selectAlertMessage } from '../../state/alert/alert.selectors';
 
 // ui settings
 import './product-list.styles.css';
@@ -33,14 +35,12 @@ const formSchema = Yup.object().shape({
 
 // set form state
 const formState = {
-  search: '',
-  field: '',
-  page: 1
+  search: ''
 }
 
-const ProductList = ({ getReq, products }) => {
+const ProductList = ({ getReq, products, alertMessage, clearAlertMessage}) => {
 
-  const fetchSuccess = ProductActionTypes.GET_SUCCESS;
+  const fetchSuccess = ProductActionTypes.PRODUCT_GET_SUCCESS;
   const { allIds, info, queryObj } = products;
   
   // set custom form hook
@@ -72,29 +72,35 @@ const ProductList = ({ getReq, products }) => {
   }
   
   return <>
-    <SearchProductForm
-      formSubmit={formSubmit} 
-      formData={formData}
-      errors={errors}
-      onInputChange={onInputChange}
-      buttonDisabled={buttonDisabled}
-    />
-
     { 
-      allIds && <>
-        <PaginationBar 
-          page={queryObj.page ? Number(queryObj.page) : 1} 
-          pages={info.pages}
-          onPageChange={onPageChange} 
+      alertMessage 
+      ? <AlertMesg />
+      : <> 
+        <SearchProductForm
+          formSubmit={formSubmit} 
+          formData={formData}
+          errors={errors}
+          onInputChange={onInputChange}
+          buttonDisabled={buttonDisabled}
         />
-        <PreviewProducts /> 
+        {
+          allIds && <>
+            <PaginationBar 
+              page={queryObj.page ? Number(queryObj.page) : 1} 
+              pages={info.pages}
+              onPageChange={onPageChange} 
+            />
+            <PreviewProducts /> 
+          </>
+        }
       </>
     }
   </>
 }
 
 const mapStateToProps = createStructuredSelector({
-  products: selectProductAllIds
+  products: selectProductAllIds,
+  alertMessage: selectAlertMessage
 })
 
 const mapDispatchToProps = dispatch => ({

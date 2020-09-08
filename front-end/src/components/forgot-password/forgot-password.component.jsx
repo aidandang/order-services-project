@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 
 // dependencies
 import * as Yup from "yup";
@@ -19,7 +19,6 @@ import { createStructuredSelector } from 'reselect';
 import { postReq } from '../../state/api/post-request';
 import { AlertActionTypes } from '../../state/alert/alert.types';
 import { selectAlertMessage } from '../../state/alert/alert.selectors';
-import { clearAlertMessage } from '../../state/alert/alert.actions';
 
 // set form schema
 const formSchema = Yup.object().shape({
@@ -36,8 +35,7 @@ const formState = {
 
 const ForgotPassword = ({
   postReq,
-  alertMessage, 
-  clearAlertMessage 
+  alertMessage
 }) => {
   // set custom form hook
   const [
@@ -59,24 +57,19 @@ const ForgotPassword = ({
       fetchSuccess
     )
   }
-
-  useEffect(() => {
-    return () => {
-      clearAlertMessage();
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
   
   return <>
-    { alertMessage && <AlertMesg alertMessage={alertMessage} />}
-
-    <ForgotPasswordForm 
-      formData={formData} 
-      formSubmit={formSubmit} 
-      errors={errors} 
-      onInputChange={onInputChange} 
-      buttonDisabled={buttonDisabled}
-    />
+    { 
+      alertMessage 
+      ? <AlertMesg />
+      : <ForgotPasswordForm 
+        formData={formData} 
+        formSubmit={formSubmit} 
+        errors={errors} 
+        onInputChange={onInputChange} 
+        buttonDisabled={buttonDisabled}
+      />
+    }
   </>
 }
 
@@ -85,8 +78,7 @@ const mapStateToProps = createStructuredSelector({
 })
 
 const mapDispatchToProps = dispatch => ({
-  postReq: (pathname, reqBody, fetchSuccess, queryStr) => dispatch(postReq(pathname, reqBody, fetchSuccess, queryStr)),
-  clearAlertMessage: () => dispatch(clearAlertMessage())
+  postReq: (pathname, reqBody, fetchSuccess, queryStr) => dispatch(postReq(pathname, reqBody, fetchSuccess, queryStr))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(ForgotPassword);

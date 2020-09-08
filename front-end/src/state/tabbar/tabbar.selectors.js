@@ -26,3 +26,8 @@ export const selectProductListTabbar = createSelector(
   [selectTabbar],
   tabbar => tabbar.productList
 )
+
+export const selectProductByIdTabbar = createSelector(
+  [selectTabbar],
+  tabbar => tabbar.productById
+)

@@ -5,6 +5,7 @@ import ReactDOM from 'react-dom';
 import { BrowserRouter as Router } from 'react-router-dom';
 
 // components
+import ScrollToTop from './components/scroll-to-top/scroll-to-top.component';
 import App from './app';
 
 // redux
@@ -19,6 +20,7 @@ ReactDOM.render(
   <Provider store={store}>
     <Router>
       <PersistGate persistor={persistor}>
+        <ScrollToTop />
         <App />
       </PersistGate>
     </Router>

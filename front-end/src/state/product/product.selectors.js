@@ -11,3 +11,13 @@ export const selectProductAllIds = createSelector(
     queryObj: queryString.parse(product.queryStr)
   })
 )
+
+export const selectProductById = createSelector(
+  [selectProduct],
+  product => product.byId
+)
+
+export const selectProductIsEdit = createSelector(
+  [selectProduct],
+  product => product.isEdit
+)

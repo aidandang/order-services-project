@@ -53,5 +53,15 @@ export const TABBAR_LIST = {
         message: 'Each product has to have a brand. If a brand is not found, create new.'
       }
     ]
+  },
+  productById: {
+    selectedTab: 1,
+    list: [
+      {
+        id: 1,
+        name: 'Product Information',
+        message: 'General infomation of the product and its colors.'
+      }
+    ]
   }
 }
