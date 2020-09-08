@@ -1,18 +1,42 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+
+// redux
+import { connect } from 'react-redux';
+import { createStructuredSelector } from 'reselect';
+import { selectAlertMessage } from '../../state/alert/alert.selectors'; 
+import { clearAlertMessage } from '../../state/alert/alert.actions';
 
 // ui settings
 import './alert-mesg.styles.css';
 
-const AlertMesg = ({ alertMessage }) => {
+const AlertMesg = ({ alertMessage, clearAlertMessage }) => {
+
+  useEffect(() => {
+    return () => {
+      clearAlertMessage();
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
   return <>
-    <div className='row my-4'>
+    <div className='row mt-4'>
       <div className='col'>
-        <span className={`alert alert-${alertMessage.color}`} role="alert">
-          {alertMessage.result.message}
-        </span>  
+       
+          <div className={`alert alert-${alertMessage.color} d-flex justify-content-between`}>
+            <span>{alertMessage.result.message}</span>
+            <span className='clear-alert' onClick={(e) => clearAlertMessage()}>&#10006;</span>
+          </div>
       </div>
     </div>
   </>
 }
 
-export default AlertMesg;
+const mapStateToProps = createStructuredSelector({
+  alertMessage: selectAlertMessage
+})
+
+const mapDispatchToProps = dispatch => ({
+  clearAlertMessage: () => dispatch(clearAlertMessage())
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(AlertMesg);
