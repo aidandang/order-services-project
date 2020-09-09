@@ -59,8 +59,13 @@ export const TABBAR_LIST = {
     list: [
       {
         id: 1,
-        name: 'Product Information',
-        message: 'General infomation of the product and its colors.'
+        name: 'Style Information',
+        message: 'General infomation of the product style.'
+      },
+      {
+        id: 2,
+        name: 'Color Information',
+        message: 'Color options of this produc style.'
       }
     ]
   }

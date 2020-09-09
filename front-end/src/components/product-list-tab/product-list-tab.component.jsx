@@ -9,10 +9,10 @@ import { useForm } from '../../utils/useForm';
 import { searchFormValidation } from '../../utils/searchFormValidation';
 
 // components
-import SearchProductForm from '../search-product-form/search-product-form.component';
-import PreviewProducts from '../preview-products/preview-products.component';
+import SearchProductForm from './search-product-form.component';
+import PreviewProducts from './preview-products.component';
 import PaginationBar from '../pagination-bar/pagination-bar.component';
-import AlertMesg from '../../components/alert-mesg/alert-mesg.component';
+import AlertMesg from '../alert-mesg/alert-mesg.component';
 
 // redux
 import { connect } from 'react-redux';
@@ -21,9 +21,6 @@ import { selectProductAllIds } from '../../state/product/product.selectors';
 import { getReq } from '../../state/api/get-request';
 import { ProductActionTypes } from '../../state/product/product.types';
 import { selectAlertMessage } from '../../state/alert/alert.selectors';
-
-// ui settings
-import './product-list.styles.css';
 
 // set form schema
 const formSchema = Yup.object().shape({
@@ -38,7 +35,11 @@ const formState = {
   search: ''
 }
 
-const ProductList = ({ getReq, products, alertMessage, clearAlertMessage}) => {
+const ProductListTab = ({ 
+  getReq, 
+  products, 
+  alertMessage
+}) => {
 
   const fetchSuccess = ProductActionTypes.PRODUCT_GET_SUCCESS;
   const { allIds, info, queryObj } = products;
@@ -107,4 +108,4 @@ const mapDispatchToProps = dispatch => ({
   getReq: (pathname, fetchSuccess, queryStr) => dispatch(getReq(pathname, fetchSuccess, queryStr))
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(ProductList);
+export default connect(mapStateToProps, mapDispatchToProps)(ProductListTab);

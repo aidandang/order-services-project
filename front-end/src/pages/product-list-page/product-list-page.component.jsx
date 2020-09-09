@@ -3,7 +3,7 @@ import React from 'react';
 // components
 import Title from '../../components/title/title.component';
 import Tabbar from '../../components/tabbar/tabbar.component';
-import ProductList from '../../components/product-list/product-list.component';
+import ProductListTab from '../../components/product-list-tab/product-list-tab.component';
 
 // redux
 import { connect } from 'react-redux';
@@ -28,7 +28,7 @@ const ProductListPage = ({ productListTabbar }) => {
       tabbarList={list} 
       selectedTab={selectedTab}
     />
-    { selectedTab === 1 && <ProductList /> }
+    { selectedTab === 1 && <ProductListTab /> }
   </>   
 }
 

@@ -1,15 +1,12 @@
 import React from 'react';
 
 // components
-import ProductCard from '../product-card/product-card.component';
+import ProductCard from './product-card.component';
 
 // redux
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { selectProductAllIds } from '../../state/product/product.selectors';
-
-// ui settings
-import './preview-products.styles.css';
 
 const PreviewProducts = ({
   products

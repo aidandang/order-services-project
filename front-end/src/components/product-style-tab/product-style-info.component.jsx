@@ -7,7 +7,6 @@ import { selectProductById } from '../../state/product/product.selectors';
 import { productSetIsEdit } from '../../state/product/product.actions';
 
 // ui settings
-import './product-style-info.styles.css';
 const liClassName = "list-group-item list-group-item-action bg-item-list-cs";
 
 const ProductStyleInfo = ({ product, productSetIsEdit }) => {

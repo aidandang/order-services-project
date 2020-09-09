@@ -1,25 +1,45 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+
+// dependencies
+import { useParams } from 'react-router-dom'; 
 
 // components
 import Title from '../../components/title/title.component';
 import Tabbar from '../../components/tabbar/tabbar.component';
-import ProductInfo from '../../components/product-info/product-info.component';
+import ProductStyleTab from '../../components/product-style-tab/product-style-tab.component';
+import ProductColorTab from '../../components/product-color-tab/product-color-tab.component';
+import AlertMesg from '../../components/alert-mesg/alert-mesg.component';
 
 // redux
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { selectProductByIdTabbar } from '../../state/tabbar/tabbar.selectors';
+import { selectAlertMessage } from '../../state/alert/alert.selectors';
+import { selectProductById, selectProductIsEdit } from '../../state/product/product.selectors';
+import { getReq } from '../../state/api/get-request';
+import { ProductActionTypes } from '../../state/product/product.types';
 
 // ui settings
 import './product-by-id-page.styles.css';
+
 const titleSettings = {
   title: 'Product Details',
   button: undefined
 }
 
-const ProductByIdPage = ({ productByIdTabbar }) => {
+const ProductByIdPage = ({ 
+  getReq,
+  productByIdTabbar,
+  alertMessage 
+}) => {
 
+  const params = useParams();
   const { selectedTab, list } = productByIdTabbar;
+
+  useEffect(() => {
+    getReq(`/products/${params.id}`, ProductActionTypes.PRODUCT_GET_SUCCESS)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   return <>
     <Title settings={titleSettings} />
@@ -28,12 +48,30 @@ const ProductByIdPage = ({ productByIdTabbar }) => {
       tabbarList={list} 
       selectedTab={selectedTab}
     />
-    { selectedTab === 1 && <ProductInfo /> }
+    { 
+      alertMessage 
+      ? <AlertMesg /> 
+      : <>
+        { selectedTab === 1 && <ProductStyleTab /> }
+        { selectedTab === 2 && <ProductColorTab /> }
+      </>
+    }
   </>
 }
 
 const mapStateToProps = createStructuredSelector({
-  productByIdTabbar: selectProductByIdTabbar
+  productByIdTabbar: selectProductByIdTabbar,
+  productById: selectProductById,
+  productIsEdit: selectProductIsEdit,
+  alertMessage: selectAlertMessage
 })
 
-export default connect(mapStateToProps)(ProductByIdPage);
+const mapDispatchToProps = dispatch => ({
+  getReq: (
+    pathname, 
+    fetchSuccess, 
+    queryStr
+  ) => dispatch(getReq(pathname, fetchSuccess, queryStr))
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(ProductByIdPage);

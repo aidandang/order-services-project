@@ -1,7 +1,6 @@
 import React from 'react'
 
 // ui settings
-import './product-style-edit-form.styles.css';
 const liClassName = "list-group-item list-group-item-action bg-item-list-cs";
 
 const ProductStyleEditForm = ({

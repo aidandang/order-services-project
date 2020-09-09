@@ -11,12 +11,11 @@ import { useForm } from '../../utils/useForm';
 
 // redux
 import { connect } from 'react-redux';
+import { createStructuredSelector } from 'reselect';
 import { patchReq } from '../../state/api/patch-request';
+import { selectProductById } from '../../state/product/product.selectors';
 import { ProductActionTypes } from '../../state/product/product.types';
 import { productSetIsEdit } from '../../state/product/product.actions';
-
-// ui settings
-import './product-style-edit.styles.css';
 
 // set form schema
 const formSchema = Yup.object().shape({
@@ -95,6 +94,10 @@ const ProductStyleEdit = ({
   </>
 }
 
+const mapStateToProps = createStructuredSelector({
+  product: selectProductById
+})
+
 const mapDispatchToProps = dispatch => ({
   productSetIsEdit: (value) => dispatch(productSetIsEdit(value)),
   patchReq: (
@@ -105,4 +108,4 @@ const mapDispatchToProps = dispatch => ({
   ) => dispatch(patchReq(pathname, reqBody, fetchSuccess, queryStr))
 })
 
-export default connect(null, mapDispatchToProps)(ProductStyleEdit);
+export default connect(mapStateToProps, mapDispatchToProps)(ProductStyleEdit);
