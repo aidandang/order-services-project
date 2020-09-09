@@ -4,7 +4,6 @@ import React from 'react';
 import { useRouteMatch, useHistory } from 'react-router-dom';
 
 // ui settings
-import './product-card.styles.css';
 const liClassName = "list-group-item list-group-item-action bg-item-list-cs";
 
 const ProductCard = ({
