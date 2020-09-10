@@ -5,7 +5,16 @@ const INITIAL_STATE = {
   info: null,
   queryStr: '',
   byId: null,
-  isEdit: false
+  isEditing: false,
+  newProduct: {
+    brandId: '',
+    name: '',
+    styleCode: '',
+    sku: '',
+    desc: '',
+    active: true
+  },
+  doneAddingStyle: false
 }
 
 const fetchSuccessOptions = (state, action) => {
@@ -33,12 +42,20 @@ const productReducer = (state = INITIAL_STATE, action) => {
       return {
         ...state,
         byId: action.payload.result.byId,
-        isEdit: false
+        isEditing: false
       }
-    case ProductActionTypes.PRODUCT_SET_IS_EDIT:
+    case ProductActionTypes.PRODUCT_SET_IS_EDITING:
       return {
         ...state,
-        isEdit: action.payload
+        isEditing: action.payload
+      }
+    case ProductActionTypes.SET_NEW_PRODUCT_STYLE:
+      return {
+        ...state,
+        newProduct: {
+          ...state.newProduct, ...action.payload
+        },
+        doneAddingStyle: true
       }
     default:
       return state;

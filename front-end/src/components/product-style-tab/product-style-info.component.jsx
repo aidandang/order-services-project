@@ -4,12 +4,12 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { selectProductById } from '../../state/product/product.selectors';
-import { productSetIsEdit } from '../../state/product/product.actions';
+import { productSetIsEditing } from '../../state/product/product.actions';
 
 // ui settings
 const liClassName = "list-group-item list-group-item-action bg-item-list-cs";
 
-const ProductStyleInfo = ({ product, productSetIsEdit }) => {
+const ProductStyleInfo = ({ product, productSetIsEditing }) => {
 
   // Check if brand name was deleted or not to avoid system crash for undefined error.
   let brandName = "N/A";
@@ -29,7 +29,7 @@ const ProductStyleInfo = ({ product, productSetIsEdit }) => {
                   name="accountInfo" 
                   onClick={(e) => { 
                     e.preventDefault();
-                    productSetIsEdit(true)
+                    productSetIsEditing(true)
                   }}
                 >
                   Edit
@@ -83,6 +83,6 @@ const mapStateToProps = createStructuredSelector({
 })
 
 const mapDispatchToProps = dispatch => ({
-  productSetIsEdit: (value) => dispatch(productSetIsEdit(value))
+  productSetIsEditing: (value) => dispatch(productSetIsEditing(value))
 })
 export default connect(mapStateToProps, mapDispatchToProps)(ProductStyleInfo);

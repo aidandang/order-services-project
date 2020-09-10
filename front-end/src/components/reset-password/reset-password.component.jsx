@@ -5,7 +5,7 @@ import * as Yup from "yup";
 import { useParams } from 'react-router-dom';
 
 // customs and utils
-import { useForm } from '../../utils/useForm';
+import { useForm } from '../custom-hooks/use-form';
 
 // components
 import ResetPasswordForm from './reset-password-form.component';

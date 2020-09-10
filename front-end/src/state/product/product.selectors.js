@@ -17,7 +17,17 @@ export const selectProductById = createSelector(
   product => product.byId
 )
 
-export const selectProductIsEdit = createSelector(
+export const selectProductIsEditing = createSelector(
   [selectProduct],
-  product => product.isEdit
+  product => product.isEditing
+)
+
+export const selectNewProduct = createSelector(
+  [selectProduct],
+  product => product.newProduct
+)
+
+export const selectDoneAddingStyle = createSelector(
+  [selectProduct],
+  product => product.doneAddingStyle
 )

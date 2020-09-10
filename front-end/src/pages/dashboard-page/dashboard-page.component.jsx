@@ -4,7 +4,6 @@ import React from 'react';
 import Title from '../../components/title/title.component';
 
 // ui settings
-import './dashboard-page.styles.css';
 const titleSettings = {
   title: 'Dashboard',
   button: undefined

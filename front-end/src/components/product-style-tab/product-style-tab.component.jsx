@@ -7,22 +7,22 @@ import ProductStyleEdit from './product-style-edit.component';
 // redux
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import { selectProductById, selectProductIsEdit } from '../../state/product/product.selectors';
+import { selectProductById, selectProductIsEditing } from '../../state/product/product.selectors';
 
 const ProductStyleTab = ({ 
   productById, 
-  productIsEdit
+  productIsEditing
 }) => {
 
   return <>
-    { (productById && !productIsEdit) && <ProductStyleInfo /> }
-    { (productById && productIsEdit) && <ProductStyleEdit />  } 
+    { (productById && !productIsEditing) && <ProductStyleInfo /> }
+    { (productById && productIsEditing) && <ProductStyleEdit />  } 
   </>
 }
 
 const mapStateToProps = createStructuredSelector({
   productById: selectProductById,
-  productIsEdit: selectProductIsEdit,
+  productIsEditing: selectProductIsEditing,
 })
 
 export default connect(mapStateToProps)(ProductStyleTab);
