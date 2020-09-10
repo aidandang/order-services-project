@@ -46,11 +46,6 @@ export const TABBAR_LIST = {
         id: 1,
         name: 'Product List',
         message: 'Search for products by names or styles.'
-      },
-      {
-        id: 2,
-        name: 'Brand',
-        message: 'Each product has to have a brand. If a brand is not found, create new.'
       }
     ]
   },
@@ -66,6 +61,21 @@ export const TABBAR_LIST = {
         id: 2,
         name: 'Color Information',
         message: 'Color options of this produc style.'
+      }
+    ]
+  },
+  addProduct: {
+    selectedTab: 1,
+    list: [
+      {
+        id: 1,
+        name: 'Create a New Product',
+        message: 'Product need to have style and at least 1 color information.'
+      },
+      {
+        id: 2,
+        name: 'Brand',
+        message: 'Each product has to have a brand. If a brand is not found, create new.'
       }
     ]
   }

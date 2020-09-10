@@ -3,44 +3,24 @@ import React from 'react';
 // ui settings
 const liClassName = "list-group-item bg-item-list-cs list-group-item-action";
 
-export default function AddProductForm({ 
-  formData, 
-  formSubmit, 
+const AddProductStyleForm = ({
+  formSubmit,
+  formData,
   errors, 
   onInputChange, 
-  buttonDisabled,
-  brands,
-  pageActive,
-  page 
-}) {
-
-  // style index number
-  const i = 0;
-
+  buttonDisabled 
+}) => {
   return <>
     <form onSubmit={formSubmit}>
       <div className="row">
         <div className="col-12">
 
-          {/* Product Information Card */}
+          {/* The Card */}
           <div className="card my-3">
 
             <div className="card-header bg-card-cs">
               <div className="row">
-                <div className="col text-uppercase font-weight-bold">Product Information</div>
-                <div className="col text-right">
-                  <a 
-                    href="/" 
-                    className="a-link-cs" 
-                    name="closePage" 
-                    onClick={(e) => { 
-                      e.preventDefault(); 
-                      pageActive(page) 
-                    }}
-                  >
-                    Close
-                  </a>
-                </div>
+                <div className="col text-uppercase font-weight-bold">Product Style Information</div>
               </div>
             </div>
 
@@ -57,32 +37,25 @@ export default function AddProductForm({
                         onChange={onInputChange}
                       >
                         <option value="">...</option>
-                        {brands.map(brand => <option key={brand._id} value={brand._id}>{brand.name}</option>)}
+                        <option value="1">1</option>
                       </select>
-                      <p className="mt-2">
-                        <small>
-                          {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-                          <a
-                            href="#" 
-                            className="a-link-cs"
-                            onClick={(e) => { 
-                              e.preventDefault(); 
-                              pageActive({ name: 'ADD_BRAND' }) 
-                            }}
-                          >
-                            (+) Add a New Brand
-                          </a>
-                        </small>
-                      </p>
+                      <small>
+                        {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+                        <a
+                          href="#" 
+                          className="a-link-cs"
+                          onClick={(e) => { 
+                            e.preventDefault();
+                          }}
+                        >
+                          (+) Add a New Brand
+                        </a>
+                      </small>
                       {errors.brandId.length > 0 ? <p className="mt-2 text-danger">{errors.brandId}</p> : null}
                     </div>
                   </div>
-                </div>
-              </li>
 
-              <li className={liClassName}>
-                <div className="row">
-                  <div className="col">
+                  <div className="col-md-6">
                     <div className="form-group">
                       <label htmlFor="name">Name (*)</label>
                       <input 
@@ -152,63 +125,6 @@ export default function AddProductForm({
               </li>
 
               <li className={liClassName}>
-                <div className="row">
-                  <div className="col-md-6">
-                    <div className="form-group">
-                      <label htmlFor="color">Color (*)</label>
-                      <input 
-                        type="text" 
-                        className="form-control" 
-                        id="color" 
-                        value={formData.colors[i].color}
-                        onChange={e => onInputChange(e, { type: 'array', name: 'colors', index: i })}
-                      />
-                      <small>Copy and paste color from the product's website.</small>
-                      {errors.colors[i].color.length > 0 ? <p className="mt-2 text-danger">{errors.colors[i].color}</p> : null}
-                    </div>
-                  </div>
-                </div>
-              </li>
-
-              <li className={liClassName}>
-                <div className="row">
-                  <div className="col">
-                    <div className="form-group">
-                      <label htmlFor="url">URL</label>
-                      <input 
-                        type="text" 
-                        className="form-control" 
-                        id="url" 
-                        value={formData.colors[i].url}
-                        onChange={e => onInputChange(e, { type: 'array', name: 'colors', index: i })}
-                      />
-                      <small>Copy and paste url from the product's website.</small>
-                      {errors.colors[i].url.length > 0 ? <p className="mt-2 text-danger">{errors.colors[i].url}</p> : null}
-                    </div>
-                  </div>
-                </div>
-              </li>
-
-              <li className={liClassName}>
-                <div className="row">
-                  <div className="col">
-                    <div className="form-group">
-                      <label htmlFor="image">Image</label>
-                      <input 
-                        type="text" 
-                        className="form-control" 
-                        id="image" 
-                        value={formData.colors[i].image}
-                        onChange={e => onInputChange(e, { type: 'array', name: 'colors', index: i })}
-                      />
-                      <small>Copy and paste image address from the product's website.</small>
-                      {errors.colors[i].image.length > 0 ? <p className="mt-2 text-danger">{errors.colors[i].image}</p> : null}
-                    </div>
-                  </div>
-                </div>
-              </li>
-
-              <li className={liClassName}>
                 <div className="row mt-3">
                   <div className="col-md-4">
                     <div className="form-group">
@@ -218,7 +134,7 @@ export default function AddProductForm({
                         className={`btn btn-${buttonDisabled ? "secondary btn-custom-disabled" : "primary btn-custom"}`}
                         disabled={buttonDisabled}
                       >
-                        Add Product
+                        Next
                       </button>
                       {/* End of submit button */}
                     </div>
@@ -228,10 +144,12 @@ export default function AddProductForm({
               
             </ul>
           </div>
-          {/* End of Product Information Card */}
+          {/* End of the Card */}
 
         </div>
       </div>
     </form>
   </>
 }
+
+export default AddProductStyleForm;

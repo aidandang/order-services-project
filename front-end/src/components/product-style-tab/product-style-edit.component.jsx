@@ -7,7 +7,7 @@ import * as Yup from "yup";
 import ProductStyleEditForm from './product-style-edit-form.component';
 
 // utils
-import { useForm } from '../../utils/useForm';
+import { useForm } from '../custom-hooks/use-form';
 
 // redux
 import { connect } from 'react-redux';
@@ -15,16 +15,13 @@ import { createStructuredSelector } from 'reselect';
 import { patchReq } from '../../state/api/patch-request';
 import { selectProductById } from '../../state/product/product.selectors';
 import { ProductActionTypes } from '../../state/product/product.types';
-import { productSetIsEdit } from '../../state/product/product.actions';
+import { productSetIsEditing } from '../../state/product/product.actions';
 
 // set form schema
 const formSchema = Yup.object().shape({
   name: Yup
     .string()
     .required("Name is required."),
-  brandId: Yup
-    .string()
-    .required("Brand is required."),
   styleCode: Yup
     .string()
     .required('Style code is required.'),
@@ -32,10 +29,6 @@ const formSchema = Yup.object().shape({
     .string(),
   desc: Yup
     .string(),
-  colors: Yup
-    .array(),
-  rev: Yup
-    .array(),
   active: Yup
     .boolean()
 });
@@ -43,18 +36,15 @@ const formSchema = Yup.object().shape({
 // set form state
 const formState = {
   name: "",
-  brandId: "",
   styleCode: "",
   sku: "",
   desc: "",
-  colors: [],
-  rev: [],
   active: ""
 };
 
 const ProductStyleEdit = ({ 
   product, 
-  productSetIsEdit, 
+  productSetIsEditing, 
   patchReq 
 }) => {
   const [
@@ -89,7 +79,7 @@ const ProductStyleEdit = ({
       errors={errors}
       onInputChange={onInputChange}
       buttonDisabled={buttonDisabled}
-      productSetIsEdit={productSetIsEdit}
+      productSetIsEditing={productSetIsEditing}
     />
   </>
 }
@@ -99,7 +89,7 @@ const mapStateToProps = createStructuredSelector({
 })
 
 const mapDispatchToProps = dispatch => ({
-  productSetIsEdit: (value) => dispatch(productSetIsEdit(value)),
+  productSetIsEditing: (value) => dispatch(productSetIsEditing(value)),
   patchReq: (
     pathname,
     reqBody, 

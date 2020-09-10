@@ -9,7 +9,7 @@ const ProductStyleEditForm = ({
   errors, 
   onInputChange, 
   buttonDisabled,
-  productSetIsEdit
+  productSetIsEditing
 }) => {
   return <>
     <form onSubmit={formSubmit}>
@@ -28,7 +28,7 @@ const ProductStyleEditForm = ({
                     name="generalInfo" 
                     onClick={(e) => { 
                       e.preventDefault();
-                      productSetIsEdit(false) 
+                      productSetIsEditing(false) 
                     }}
                   >
                     Close

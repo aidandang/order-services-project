@@ -1,6 +1,6 @@
 import queryString from 'query-string';
 
-export const searchFormValidation = (e, formData) => {
+export const convertSearchFormToQueryString = (e, formData) => {
   let search = "";
 
   if (formData.search.length > 0 ) {

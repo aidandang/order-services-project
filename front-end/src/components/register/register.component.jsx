@@ -4,7 +4,7 @@ import React from 'react';
 import * as Yup from "yup";
 
 // customs and utils
-import { useForm } from '../../utils/useForm';
+import { useForm } from '../custom-hooks/use-form';
 
 // components
 import RegisterForm from './register-form.component';

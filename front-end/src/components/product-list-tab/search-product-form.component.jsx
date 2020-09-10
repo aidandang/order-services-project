@@ -1,5 +1,8 @@
 import React from 'react';
 
+// dependencies
+import { Link } from 'react-router-dom';
+
 // ui settings
 const liClassName = "list-group-item list-group-item-action bg-item-list-cs";
 
@@ -51,12 +54,12 @@ const SearchProductForm = ({
                   </form>
                   <small className="text-muted">
                     {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-                    <a 
-                      href="#" 
+                    <Link 
+                      to="/app/product/add" 
                       className="a-link-cs"
                     >
                       (+) Add a New Product 
-                    </a>
+                    </Link>
                   </small>
                 </div>
               </div>

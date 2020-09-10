@@ -5,8 +5,8 @@ import * as Yup from "yup";
 import queryString from 'query-string';
 
 // utils
-import { useForm } from '../../utils/useForm';
-import { searchFormValidation } from '../../utils/searchFormValidation';
+import { useForm } from '../custom-hooks/use-form';
+import { convertSearchFormToQueryString } from '../utils/convert-search-form-to-query-string';
 
 // components
 import SearchProductForm from './search-product-form.component';
@@ -25,9 +25,7 @@ import { selectAlertMessage } from '../../state/alert/alert.selectors';
 // set form schema
 const formSchema = Yup.object().shape({
   search: Yup
-    .string(),
-  page: Yup
-    .number()
+    .string()
 });
 
 // set form state
@@ -56,7 +54,7 @@ const ProductListTab = ({
   const formSubmit = (e) => {
     e.preventDefault();
     
-    const queryStr = searchFormValidation(e, formData);
+    const queryStr = convertSearchFormToQueryString(e, formData);
 
     if (queryStr !== undefined) {
       getReq('/products', fetchSuccess, queryStr)
