@@ -1,5 +1,4 @@
 import { UserActionTypes } from './user.types';
-import { jwtToUser } from './user.utils';
 
 const INITIAL_STATE = {
   currentUser: null
@@ -10,8 +9,7 @@ const userReducer = (state = INITIAL_STATE, action) => {
     case UserActionTypes.SET_CURRENT_USER:
       return {
         ...state,
-        isFetching: false,
-        currentUser: jwtToUser(action.payload)
+        currentUser: action.payload
       };
     default:
       return state;

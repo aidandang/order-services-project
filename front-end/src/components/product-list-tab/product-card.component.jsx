@@ -39,7 +39,7 @@ const ProductCard = ({
             <div className="col-12 align-self-center text-center">
               <img 
                 className="product-img my-2" 
-                src={product.colors[0].image} alt={brandName} 
+                src={product.styleImage} alt={brandName} 
               />
             </div>
           </div>

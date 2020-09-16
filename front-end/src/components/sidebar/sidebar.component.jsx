@@ -27,13 +27,13 @@ const Sidebar = ({ sidebarSections }) => {
       <div className="row flex-column">
         {sidebarSections.length > 0 
           ? sidebarSections.map(item => 
-            <div key={item.id} className="col-12 py-2 pl-4 pr-3 sidebar-link">
-              <Link to={item.link} className="text-light list-group-item-action">
-                <div className="row">
-                  <div className="col-2 text-center">
+            <div key={item.id} className="col py-2 pl-4 pr-3 sidebar-link">
+              <Link to={item.link} className="text-light">
+                <div className="d-flex">
+                  <div className="text-center sidebar-icon-col">
                     <i className={item.icon}></i>
                   </div>
-                  <div className="col-10 text-left">
+                  <div className="text-left pl-3">
                     {item.text}
                   </div>
                 </div>

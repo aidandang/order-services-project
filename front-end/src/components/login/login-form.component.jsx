@@ -3,6 +3,9 @@ import React from 'react';
 // dependencies
 import { Link } from 'react-router-dom';
 
+// firebase
+import { signInWithGoogle } from '../../firebase/firebase.utils';
+
 // components
 import Button from '../button/button.component';
 
@@ -65,11 +68,24 @@ export default function LoginForm({
               </li>
               <li className={liClassName}>
                 <div className="row mt-3">
-                  <div className="col-md-4">
+                  <div className="col">
                     <div className="form-group">
                       {/* Submit button */}
-                      <Button buttonDisabled={buttonDisabled}>
-                        Submit
+                      <Button 
+                        type='submit'
+                        disabled={buttonDisabled}
+                      >
+                        Sign in
+                      </Button>
+                      <span className='mr-3'></span>
+                      <Button  
+                        onClick={e => {
+                          e.preventDefault();
+                          signInWithGoogle();
+                        }}
+                        isGoogleSignIn
+                      >
+                        <i className="fab fa-google text-light"></i><span className='mr-2'></span>Sign in with Google
                       </Button>
                       {/* End of submit button */}
                     </div>

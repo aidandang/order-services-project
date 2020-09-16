@@ -9,7 +9,7 @@ const ProductStyleEditForm = ({
   errors, 
   onInputChange, 
   buttonDisabled,
-  productSetIsEditing
+  setEditingStyle
 }) => {
   return <>
     <form onSubmit={formSubmit}>
@@ -28,7 +28,7 @@ const ProductStyleEditForm = ({
                     name="generalInfo" 
                     onClick={(e) => { 
                       e.preventDefault();
-                      productSetIsEditing(false) 
+                      setEditingStyle(false) 
                     }}
                   >
                     Close
@@ -85,6 +85,25 @@ const ProductStyleEditForm = ({
                       />
                       <small>SKU can be scanned from the product label.</small>
                       {errors.sku.length > 0 ? <p className="mt-2 text-danger">{errors.sku}</p> : null}
+                    </div>
+                  </div>
+                </div>
+              </li>
+
+              <li className={liClassName}>
+                <div className="row">
+                  <div className="col">
+                    <div className="form-group">
+                      <label htmlFor="styleImage">Image URL (*)</label>
+                      <input 
+                        type="text" 
+                        className="form-control" 
+                        id="styleImage" 
+                        value={formData.styleImage}
+                        onChange={onInputChange} 
+                      />
+                      <small>Copy image hyperlink in here.</small>
+                      {errors.styleImage.length > 0 ? <p className="mt-2 text-danger">{errors.styleImage}</p> : null}
                     </div>
                   </div>
                 </div>

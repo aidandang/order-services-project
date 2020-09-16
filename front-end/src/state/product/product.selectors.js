@@ -17,9 +17,9 @@ export const selectProductById = createSelector(
   product => product.byId
 )
 
-export const selectProductIsEditing = createSelector(
+export const selectEditingStyle = createSelector(
   [selectProduct],
-  product => product.isEditing
+  product => product.editingStyle
 )
 
 export const selectNewProduct = createSelector(

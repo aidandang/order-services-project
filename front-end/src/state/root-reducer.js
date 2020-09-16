@@ -12,7 +12,7 @@ import alertReducer from './alert/alert.reducer'
 const persistConfig = {
   key: 'root',
   storage,
-  whitelist: ['user']
+  whitelist: ['']
 }
 
 const appReducer = combineReducers({

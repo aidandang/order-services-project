@@ -1,9 +1,33 @@
 import React from 'react';
 
-const ProductColorInfo = () => {
+// components
+import ProductColorCard from './product-color-card.component';
+import AddColorCard from './add-color-card.component';
+
+// redux
+import { connect } from 'react-redux';
+import { createStructuredSelector } from 'reselect';
+import { selectProductById } from '../../state/product/product.selectors';
+
+const ProductColorInfo = ({ productById }) => {
   return <>
-    PRODUCT COLOR INFO
+    <div className="row">
+      { 
+        productById.colors.map(color => 
+          <div key={color._id} className="col-xl-4 col-lg-6">
+            <ProductColorCard color={color} />
+          </div>
+        )
+      }
+      <div className="col-xl-4 col-lg-6">
+        <AddColorCard />
+      </div>
+    </div>
   </>
 }
 
-export default ProductColorInfo;
+const mapStateToProps = createStructuredSelector({
+  productById: selectProductById
+})
+
+export default connect(mapStateToProps)(ProductColorInfo);

@@ -12,7 +12,7 @@ import './footer.styles.css';
 export default function Footer() {
   return <>
     <div className="row m-0 p-0 text-light">
-      <div className="col-12 p-0 m-0 footer">
+      <div className="col p-0 m-0 footer">
         <footer>
           <div className="row p-0 m-0 px-2 py-2">
             <div className="col">
