@@ -12,5 +12,6 @@ export const NAVBAR_LIST = {
       link: '/app',
       icon: 'fab fa-readme'
     }
-  ]
+  ],
+  activeSection: 0
 };

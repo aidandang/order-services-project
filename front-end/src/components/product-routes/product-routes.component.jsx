@@ -9,8 +9,8 @@ export default function ProductRoutes() {
   return <>
     <Switch>
       <Route exact path="/app/product" render={() => <ProductListPage />} />
-      <Route exact path="/app/product/add" render={() => <AddProductPage />} />
-      <Route exact path="/app/product/:id" render={() => <ProductByIdPage />} />
+      <Route path="/app/product/add" render={() => <AddProductPage />} />
+      <Route path="/app/product/:id" render={() => <ProductByIdPage />} />
     </Switch>
   </>
 }

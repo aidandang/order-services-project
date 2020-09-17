@@ -2,38 +2,51 @@ import React, { useEffect } from 'react';
 
 // dependencies
 import { Switch, Route } from 'react-router-dom';
-
 // components
-import Public from './containers/public/public.container.jsx';
-import Private from './containers/private/private.container.jsx';
-import PrivateRoute from './components/private-route/private-route.component';
-
+import PublicRoutes from './routes/public/public-routes.component.jsx';
+import AuthRoute from './routes/private/auth-route.component';
+import PrivateRoutes from './routes/private/private-routes.component';
+// firebase
+import { auth, createUserProfileDocument } from './firebase/firebase.utils';
 // redux
 import { connect } from 'react-redux';
-import { getAuthStateChanged } from './state/api/auth-requests';
 import { setCurrentUser } from './state/user/user.actions';
 
-// MAIN COMPONENT
-const App = ({ getAuthStateChanged, setCurrentUser }) => {
-  const token = localStorage.getItem('token');
-
+const App = ({
+  setCurrentUser
+}) => {
   useEffect(() => {
-    if (token) getAuthStateChanged()
-    else setCurrentUser(null);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [token])
+    let listener = null;
+    listener = auth.onAuthStateChanged(async userAuth => {
+      if (userAuth) {
+        const userRef = await createUserProfileDocument(userAuth);
 
+        userRef.onSnapshot(snapShot => {
+          setCurrentUser({
+            id: snapShot.id,
+            ...snapShot.data()  
+          })
+        })
+      } else {
+        setCurrentUser(userAuth)
+      }
+    })
+    return () => {
+      listener();
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+  
   return (
     <Switch>
-      <PrivateRoute path="/app" component={Private} />
-      <Route path='/' component={Public} />    
+      <AuthRoute path="/app" component={PrivateRoutes} />
+      <Route path='/' render={props => <PublicRoutes {...props} />} />    
     </Switch>
   )
 }
 
 const mapDispatchToProps = dispatch => ({
-  getAuthStateChanged: () => dispatch(getAuthStateChanged()),
-  setCurrentUser: (user) => dispatch(setCurrentUser(user))
+  setCurrentUser: user => dispatch(setCurrentUser(user))
 })
 
 export default connect(null, mapDispatchToProps)(App);

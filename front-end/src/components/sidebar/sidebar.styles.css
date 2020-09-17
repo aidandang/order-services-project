@@ -10,3 +10,6 @@
 .sidebar-link:hover {
   background-color: #5D8C87 !important;
 }
+.sidebar-icon-col {
+  width: 20px;
+}

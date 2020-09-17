@@ -2,14 +2,12 @@ import React from 'react';
 
 import './button.styles.css';
 
-const Button = ({ children, ...otherProps }) => {
-  const { buttonDisabled } = otherProps;
-
+const Button = ({ children, isGoogleSignIn, disabled, ...otherProps }) => {
   return (
     <button 
-      type='submit'
-      className={`btn btn-${buttonDisabled ? "secondary btn-custom-disabled" : "primary btn-custom"}`} 
-      disabled={buttonDisabled}
+      className={`btn ${disabled ? 'btn-secondary' : 'btn-primary'} btn-custom ${isGoogleSignIn && 'btn-custom-google'}`}
+      disabled={disabled}
+      {...otherProps}
     >
       {children}
     </button>

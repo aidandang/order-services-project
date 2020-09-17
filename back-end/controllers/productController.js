@@ -61,6 +61,8 @@ exports.readProducts = catchAsync(async (req, res, next) => {
   query = query.skip(skip).limit(limit);
   
   const products = await query;
+  
+  if (products.length === 0) return next(new AppError('No product found.', 404))
 
   res.status(200).json({
     status: 'success',

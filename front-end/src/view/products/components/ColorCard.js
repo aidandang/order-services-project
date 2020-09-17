@@ -1,7 +1,7 @@
 import React from 'react';
 
 // import components, actions and settings
-import { liClassName } from '../../../state/actions/uiSettings';
+const liClassName = "list-group-item list-group-item-action bg-item-list-cs";
 
 export default function ColorCard({
   color,

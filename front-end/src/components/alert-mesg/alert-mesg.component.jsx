@@ -23,7 +23,7 @@ const AlertMesg = ({ alertMessage, clearAlertMessage }) => {
       <div className='col'>
        
           <div className={`alert alert-${alertMessage.color} d-flex justify-content-between`}>
-            <span>{alertMessage.result.message}</span>
+            <span>{alertMessage.message}</span>
             <span className='clear-alert' onClick={(e) => clearAlertMessage()}>&#10006;</span>
           </div>
       </div>

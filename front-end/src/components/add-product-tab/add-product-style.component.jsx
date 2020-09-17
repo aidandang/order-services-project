@@ -6,12 +6,6 @@ import * as Yup from "yup";
 // utils and custom hooks
 import { useForm } from '../custom-hooks/use-form';
 
-// redux
-import { connect } from 'react-redux';
-import { createStructuredSelector } from 'reselect';
-import { selectNewProduct } from '../../state/product/product.selectors'
-import { setNewProductStyle } from '../../state/product/product.actions';
-
 // components
 import AddProductStyleForm from './add-product-style-form.component';
 
@@ -63,12 +57,4 @@ const AddProductStyle = ({ setNewProductStyle, newProduct }) => {
   </>
 }
 
-const mapStateToProps = createStructuredSelector({
-  newProduct: selectNewProduct
-})
-
-const mapDispatchToProps = dispatch => ({
-  setNewProductStyle: (style) => dispatch(setNewProductStyle(style))
-})
-
-export default connect(mapStateToProps, mapDispatchToProps)(AddProductStyle);
+export default AddProductStyle;

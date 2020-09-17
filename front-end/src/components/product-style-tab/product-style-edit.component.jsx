@@ -13,9 +13,8 @@ import { useForm } from '../custom-hooks/use-form';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { patchReq } from '../../state/api/patch-request';
-import { selectProductById } from '../../state/product/product.selectors';
 import { ProductActionTypes } from '../../state/product/product.types';
-import { productSetIsEditing } from '../../state/product/product.actions';
+import { setEditingStyle } from '../../state/product/product.actions';
 
 // set form schema
 const formSchema = Yup.object().shape({
@@ -27,6 +26,9 @@ const formSchema = Yup.object().shape({
     .required('Style code is required.'),
   sku: Yup
     .string(),
+  styleImage: Yup
+    .string()
+    .required('Image URL is required.'),
   desc: Yup
     .string(),
   active: Yup
@@ -38,13 +40,14 @@ const formState = {
   name: "",
   styleCode: "",
   sku: "",
+  styleImage: "",
   desc: "",
   active: ""
 };
 
 const ProductStyleEdit = ({ 
   product, 
-  productSetIsEditing, 
+  setEditingStyle, 
   patchReq 
 }) => {
   const [
@@ -79,17 +82,13 @@ const ProductStyleEdit = ({
       errors={errors}
       onInputChange={onInputChange}
       buttonDisabled={buttonDisabled}
-      productSetIsEditing={productSetIsEditing}
+      setEditingStyle={setEditingStyle}
     />
   </>
 }
 
-const mapStateToProps = createStructuredSelector({
-  product: selectProductById
-})
-
 const mapDispatchToProps = dispatch => ({
-  productSetIsEditing: (value) => dispatch(productSetIsEditing(value)),
+  setEditingStyle: (value) => dispatch(setEditingStyle(value)),
   patchReq: (
     pathname,
     reqBody, 
@@ -98,4 +97,4 @@ const mapDispatchToProps = dispatch => ({
   ) => dispatch(patchReq(pathname, reqBody, fetchSuccess, queryStr))
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(ProductStyleEdit);
+export default connect(mapDispatchToProps)(ProductStyleEdit);

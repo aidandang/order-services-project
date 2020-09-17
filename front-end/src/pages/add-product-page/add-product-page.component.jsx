@@ -17,7 +17,7 @@ const titleSettings = {
 }
 
 const AddProductPage = ({ addProductTabbar }) => {
-
+  
   const { selectedTab, list } = addProductTabbar;
 
   return <>

@@ -3,6 +3,9 @@ import React from 'react';
 // dependencies
 import { Link } from 'react-router-dom';
 
+// components
+import Menu from './menu.component';
+
 // redux
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
@@ -19,7 +22,6 @@ import './header.styles.css';
 const Header = ({ 
   currentUser,
   settings,
-  navbarSections,
   collapseSections,
   dispatch 
 }) => {
@@ -52,12 +54,8 @@ const Header = ({
           <div className="row align-items-center">
             
             <div className="col d-none d-md-block text-md-left ml-2">
-              {settings.isLogo &&
-                <span className="text-light mr-4"><Link to="/"><img src={logo} width="32" alt="logo" /></Link></span>
-              }
-              {navbarSections.map(item =>
-                <span key={item.id} className="mr-3"><Link to={item.link} className="navbar-link text-light">{item.text}</Link></span>
-              )}
+              {settings.isLogo && <span className="text-light mr-4"><Link to="/"><img src={logo} width="32" alt="logo" /></Link></span>}
+              {settings.isPrivate && <Menu />}
             </div>
             
             <div className="col text-md-right">

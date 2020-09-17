@@ -4,25 +4,15 @@ import React from 'react';
 import ProductStyleInfo from './product-style-info.component';
 import ProductStyleEdit from './product-style-edit.component';
 
-// redux
-import { connect } from 'react-redux';
-import { createStructuredSelector } from 'reselect';
-import { selectProductById, selectProductIsEditing } from '../../state/product/product.selectors';
-
 const ProductStyleTab = ({ 
   productById, 
-  productIsEditing
+  editingStyle
 }) => {
 
   return <>
-    { (productById && !productIsEditing) && <ProductStyleInfo /> }
-    { (productById && productIsEditing) && <ProductStyleEdit />  } 
+    { (productById && !editingStyle) && <ProductStyleInfo /> }
+    { (productById && editingStyle) && <ProductStyleEdit />  } 
   </>
 }
 
-const mapStateToProps = createStructuredSelector({
-  productById: selectProductById,
-  productIsEditing: selectProductIsEditing,
-})
-
-export default connect(mapStateToProps)(ProductStyleTab);
+export default ProductStyleTab;

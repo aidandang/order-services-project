@@ -3,13 +3,12 @@ import React from 'react';
 // redux
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import { selectProductById } from '../../state/product/product.selectors';
-import { productSetIsEditing } from '../../state/product/product.actions';
+import { setEditingStyle } from '../../state/product/product.actions';
 
 // ui settings
 const liClassName = "list-group-item list-group-item-action bg-item-list-cs";
 
-const ProductStyleInfo = ({ product, productSetIsEditing }) => {
+const ProductStyleInfo = ({ product, setEditingStyle }) => {
 
   // Check if brand name was deleted or not to avoid system crash for undefined error.
   let brandName = "N/A";
@@ -29,7 +28,7 @@ const ProductStyleInfo = ({ product, productSetIsEditing }) => {
                   name="accountInfo" 
                   onClick={(e) => { 
                     e.preventDefault();
-                    productSetIsEditing(true)
+                    setEditingStyle(true)
                   }}
                 >
                   Edit
@@ -53,13 +52,12 @@ const ProductStyleInfo = ({ product, productSetIsEditing }) => {
             <li className={liClassName}>
               <div className="row">
                 <div className="col-4 align-self-center">
-                  <span className="font-weight-bold">{`Style No. ${product.styleCode}`}</span><br />
-                  <span className="font-weight-bold">{product.colors[0].color}</span>
+                  <span className="font-weight-bold">{`Style No. ${product.styleCode}`}</span>
                 </div>
                 <div className="col-8">
                   <img 
                     className="product-img my-2" 
-                    src={product.colors[0].image} alt={product.name} 
+                    src={product.styleImage} alt={product.name} 
                   />
                 </div>
               </div>
@@ -78,11 +76,7 @@ const ProductStyleInfo = ({ product, productSetIsEditing }) => {
   </>
 }
 
-const mapStateToProps = createStructuredSelector({
-  product: selectProductById
-})
-
 const mapDispatchToProps = dispatch => ({
-  productSetIsEditing: (value) => dispatch(productSetIsEditing(value))
+  setEditingStyle: (value) => dispatch(setEditingStyle(value))
 })
-export default connect(mapStateToProps, mapDispatchToProps)(ProductStyleInfo);
+export default connect(null, mapDispatchToProps)(ProductStyleInfo);
