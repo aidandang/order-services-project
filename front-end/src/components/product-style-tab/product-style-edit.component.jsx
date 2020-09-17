@@ -13,7 +13,6 @@ import { useForm } from '../custom-hooks/use-form';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { patchReq } from '../../state/api/patch-request';
-import { selectProductById } from '../../state/product/product.selectors';
 import { ProductActionTypes } from '../../state/product/product.types';
 import { setEditingStyle } from '../../state/product/product.actions';
 
@@ -88,10 +87,6 @@ const ProductStyleEdit = ({
   </>
 }
 
-const mapStateToProps = createStructuredSelector({
-  product: selectProductById
-})
-
 const mapDispatchToProps = dispatch => ({
   setEditingStyle: (value) => dispatch(setEditingStyle(value)),
   patchReq: (
@@ -102,4 +97,4 @@ const mapDispatchToProps = dispatch => ({
   ) => dispatch(patchReq(pathname, reqBody, fetchSuccess, queryStr))
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(ProductStyleEdit);
+export default connect(mapDispatchToProps)(ProductStyleEdit);

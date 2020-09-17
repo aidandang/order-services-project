@@ -6,8 +6,14 @@ import * as Yup from "yup";
 import { useForm } from '../custom-hooks/use-form';
 // components
 import SignInForm from './sign-in-form.component';
+import AlertMesg from '../alert-mesg/alert-mesg.component';
 // firebase
 import { auth } from '../../firebase/firebase.utils';
+// redux
+import { connect } from 'react-redux';
+import { createStructuredSelector } from 'reselect';
+import { selectAlertMessage } from '../../state/alert/alert.selectors'; 
+import { setAlertMessage } from '../../state/alert/alert.actions';
 
 // set form schema
 const formSchema = Yup.object().shape({
@@ -25,7 +31,10 @@ const formState = {
   password: ""
 };
 
-const SignIn = () => {
+const SignIn = ({
+  alertMessage,
+  setAlertMessage
+}) => {
   const [
     formData,
     errors, 
@@ -40,11 +49,13 @@ const SignIn = () => {
     try {
       await auth.signInWithEmailAndPassword(email, password);
     } catch (error) {
-      console.error(error);
+      setAlertMessage({ message: error.message, color: 'danger' })
     }
   }
 
   return <>
+    {alertMessage && <AlertMesg />}
+
     <SignInForm 
       formData={formData} 
       formSubmit={formSubmit} 
@@ -55,4 +66,12 @@ const SignIn = () => {
   </>
 }
 
-export default SignIn;
+const mapStateToProps = createStructuredSelector({
+  alertMessage: selectAlertMessage
+})
+
+const mapDispatchToProps = dispatch => ({
+  setAlertMessage: (payload) => dispatch(setAlertMessage(payload)) 
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(SignIn);

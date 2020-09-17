@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 // dependencies
 import * as Yup from "yup";
 import queryString from 'query-string';
+import { useLocation, useHistory } from 'react-router-dom';
 
 // utils
 import { useForm } from '../custom-hooks/use-form';
@@ -17,7 +18,7 @@ import AlertMesg from '../alert-mesg/alert-mesg.component';
 // redux
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import { selectProductAllIds } from '../../state/product/product.selectors';
+import { selectProductData } from '../../state/product/product.selectors';
 import { getReq } from '../../state/api/get-request';
 import { ProductActionTypes } from '../../state/product/product.types';
 import { selectAlertMessage } from '../../state/alert/alert.selectors';
@@ -27,22 +28,21 @@ const formSchema = Yup.object().shape({
   search: Yup
     .string()
 });
-
 // set form state
 const formState = {
   search: ''
 }
 
-const ProductListTab = ({ 
+const ProductList = ({ 
   getReq, 
-  products, 
+  data, 
   alertMessage
 }) => {
+  const location = useLocation();
+  const history = useHistory();
 
-  const fetchSuccess = ProductActionTypes.PRODUCT_GET_SUCCESS;
-  const { allIds, info, queryObj } = products;
-  
-  // set custom form hook
+  const queryObj = queryString.parse(location.search);
+
   const [
     formData,
     errors, 
@@ -50,25 +50,30 @@ const ProductListTab = ({
     buttonDisabled
   ] = useForm(formState, formState, formSchema);
 
-  // form submit function
+  // handle search form 
   const formSubmit = (e) => {
     e.preventDefault();
     
     const queryStr = convertSearchFormToQueryString(e, formData);
 
     if (queryStr !== undefined) {
-      getReq('/products', fetchSuccess, queryStr)
+      history.push('/app/product' + queryStr)
     }
   }
 
   // handle pagination
   const onPageChange = (page) => {
-  
-    const updatedQueryObj = { ...queryObj, page }
-    const queryStr = '?' + queryString.stringify(updatedQueryObj)
+    queryObj.page = page;
+    const queryStr = '?' + queryString.stringify(queryObj);
 
-    getReq('/products', fetchSuccess, queryStr)
+    history.push('/app/product' + queryStr)
   }
+
+  useEffect(() => {
+    const fetchSuccess = ProductActionTypes.PRODUCT_FETCH_SUCCESS;
+    getReq('/products', fetchSuccess, location.search)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [location.search])
   
   return <>
     { 
@@ -83,10 +88,10 @@ const ProductListTab = ({
           buttonDisabled={buttonDisabled}
         />
         {
-          allIds && <>
+          data && data.info && <>
             <PaginationBar 
               page={queryObj.page ? Number(queryObj.page) : 1} 
-              pages={info.pages}
+              pages={data.info.pages}
               onPageChange={onPageChange} 
             />
             <PreviewProducts /> 
@@ -98,12 +103,12 @@ const ProductListTab = ({
 }
 
 const mapStateToProps = createStructuredSelector({
-  products: selectProductAllIds,
-  alertMessage: selectAlertMessage
+  alertMessage: selectAlertMessage,
+  data: selectProductData
 })
 
 const mapDispatchToProps = dispatch => ({
   getReq: (pathname, fetchSuccess, queryStr) => dispatch(getReq(pathname, fetchSuccess, queryStr))
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(ProductListTab);
+export default connect(mapStateToProps, mapDispatchToProps)(ProductList);

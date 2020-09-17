@@ -13,9 +13,7 @@ import AlertMesg from '../../components/alert-mesg/alert-mesg.component';
 // redux
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import { selectProductByIdTabbar } from '../../state/tabbar/tabbar.selectors';
 import { selectAlertMessage } from '../../state/alert/alert.selectors';
-import { selectProductById } from '../../state/product/product.selectors';
 import { getReq } from '../../state/api/get-request';
 import { ProductActionTypes } from '../../state/product/product.types';
 
@@ -60,8 +58,6 @@ const ProductByIdPage = ({
 }
 
 const mapStateToProps = createStructuredSelector({
-  productByIdTabbar: selectProductByIdTabbar,
-  productById: selectProductById,
   alertMessage: selectAlertMessage
 })
 

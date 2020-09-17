@@ -15,6 +15,11 @@ const SearchProductForm = ({
     <div className="row">
       <div className="col-lg-6">
         <div className="card my-3">
+          <div className="card-header bg-card-cs">
+            <div className="row">
+              <div className="col text-uppercase font-weight-bold align-self-center">Search For Products</div>
+            </div>
+          </div>
           <ul className="list-group list-group-flush">
             <li className={liClassName}>
               <div className="row">

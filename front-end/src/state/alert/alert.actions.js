@@ -1,8 +1,8 @@
 import { AlertActionTypes } from './alert.types';
 
-export const setAlertMessage = (alertMessage) => ({
+export const setAlertMessage = (payload) => ({
   type: AlertActionTypes.SET_ALERT_MESSAGE,
-  payload: alertMessage
+  payload
 })
 
 export const clearAlertMessage = () => ({

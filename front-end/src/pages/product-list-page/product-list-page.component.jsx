@@ -2,13 +2,7 @@ import React from 'react';
 
 // components
 import Title from '../../components/title/title.component';
-import Tabbar from '../../components/tabbar/tabbar.component';
-import ProductListTab from '../../components/product-list-tab/product-list-tab.component';
-
-// redux
-import { connect } from 'react-redux';
-import { createStructuredSelector } from 'reselect';
-import { selectProductListTabbar } from '../../state/tabbar/tabbar.selectors';
+import ProductList from '../../components/product-list/product-list.component';
 
 // ui settings
 import './product-list-page.styles.css';
@@ -17,23 +11,11 @@ const titleSettings = {
   button: undefined
 }
 
-const ProductListPage = ({ productListTabbar }) => {
-
-  const { selectedTab, list } = productListTabbar;
-
+const ProductListPage = () => {
   return <>
     <Title settings={titleSettings} />
-    <Tabbar
-      page='productList' 
-      tabbarList={list} 
-      selectedTab={selectedTab}
-    />
-    { selectedTab === 1 && <ProductListTab /> }
+    <ProductList />
   </>   
 }
 
-const mapStateToProps = createStructuredSelector({
-  productListTabbar: selectProductListTabbar
-})
-
-export default connect(mapStateToProps)(ProductListPage);
+export default ProductListPage;

@@ -3,7 +3,6 @@ import React from 'react';
 // redux
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import { selectProductById } from '../../state/product/product.selectors';
 import { setEditingStyle } from '../../state/product/product.actions';
 
 // ui settings
@@ -77,11 +76,7 @@ const ProductStyleInfo = ({ product, setEditingStyle }) => {
   </>
 }
 
-const mapStateToProps = createStructuredSelector({
-  product: selectProductById
-})
-
 const mapDispatchToProps = dispatch => ({
   setEditingStyle: (value) => dispatch(setEditingStyle(value))
 })
-export default connect(mapStateToProps, mapDispatchToProps)(ProductStyleInfo);
+export default connect(null, mapDispatchToProps)(ProductStyleInfo);

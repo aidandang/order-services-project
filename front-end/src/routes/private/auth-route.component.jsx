@@ -9,20 +9,23 @@ import { createStructuredSelector } from 'reselect';
 import { selectCurrentUser } from '../../state/user/user.selectors';
 
 const AuthRoute = ({ component: Component, currentUser, ...rest }) => { 
-  return (
-    <Route
-      {...rest}
-      render={props =>
-        currentUser ? (
-          <Component {...props} />
-        ) : (
-          <Redirect 
-            to={'/signin'} 
-          />
-        )
-      }
-    />
-)};
+  return <>
+    { currentUser &&
+      <Route
+        {...rest}
+        render={props =>
+          currentUser ? (
+            <Component {...props} />
+          ) : (
+            <Redirect 
+              to={'/signin'} 
+            />
+          )
+        }
+      />
+    }
+  </>
+};
 
 const mapStateToProps = createStructuredSelector({
   currentUser: selectCurrentUser

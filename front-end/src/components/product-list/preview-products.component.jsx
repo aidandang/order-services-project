@@ -6,13 +6,13 @@ import ProductCard from './product-card.component';
 // redux
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import { selectProductAllIds } from '../../state/product/product.selectors';
+import { selectProductData } from '../../state/product/product.selectors';
 
 const PreviewProducts = ({
-  products
+  data
 }) => {
 
-  const { allIds } = products;
+  const { allIds } = data;
 
   return <>
     <div className="row">
@@ -26,7 +26,7 @@ const PreviewProducts = ({
 }
 
 const mapStateToProps = createStructuredSelector({
-  products: selectProductAllIds
+  data: selectProductData
 })
 
 export default connect(mapStateToProps)(PreviewProducts);

@@ -7,7 +7,6 @@ import AddColorCard from './add-color-card.component';
 // redux
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import { selectProductById } from '../../state/product/product.selectors';
 
 const ProductColorInfo = ({ productById }) => {
   return <>
@@ -26,8 +25,4 @@ const ProductColorInfo = ({ productById }) => {
   </>
 }
 
-const mapStateToProps = createStructuredSelector({
-  productById: selectProductById
-})
-
-export default connect(mapStateToProps)(ProductColorInfo);
+export default connect()(ProductColorInfo);

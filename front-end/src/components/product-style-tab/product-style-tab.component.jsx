@@ -4,11 +4,6 @@ import React from 'react';
 import ProductStyleInfo from './product-style-info.component';
 import ProductStyleEdit from './product-style-edit.component';
 
-// redux
-import { connect } from 'react-redux';
-import { createStructuredSelector } from 'reselect';
-import { selectProductById, selectEditingStyle } from '../../state/product/product.selectors';
-
 const ProductStyleTab = ({ 
   productById, 
   editingStyle
@@ -20,9 +15,4 @@ const ProductStyleTab = ({
   </>
 }
 
-const mapStateToProps = createStructuredSelector({
-  productById: selectProductById,
-  editingStyle: selectEditingStyle,
-})
-
-export default connect(mapStateToProps)(ProductStyleTab);
+export default ProductStyleTab;
