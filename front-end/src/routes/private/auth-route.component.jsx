@@ -10,20 +10,14 @@ import { selectCurrentUser } from '../../state/user/user.selectors';
 
 const AuthRoute = ({ component: Component, currentUser, ...rest }) => { 
   return <>
-    { currentUser &&
-      <Route
-        {...rest}
-        render={props =>
-          currentUser ? (
-            <Component {...props} />
-          ) : (
-            <Redirect 
-              to={'/signin'} 
-            />
-          )
-        }
-      />
-    }
+    <Route
+      {...rest}
+      render={props => 
+        currentUser 
+        ? <Component {...props} /> 
+        : <Redirect to={'/signin'} />
+      }
+    />
   </>
 };
 

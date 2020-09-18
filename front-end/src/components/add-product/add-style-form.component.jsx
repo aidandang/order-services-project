@@ -1,5 +1,9 @@
 import React from 'react';
 
+// dependencies
+import { Link } from 'react-router-dom';
+// components
+import Button from '../button/button.component';
 // ui settings
 const liClassName = "list-group-item bg-item-list-cs list-group-item-action";
 
@@ -20,7 +24,7 @@ const AddProductStyleForm = ({
 
             <div className="card-header bg-card-cs">
               <div className="row">
-                <div className="col text-uppercase font-weight-bold">Product Style Information</div>
+                <div className="col text-uppercase font-weight-bold">Product Style</div>
               </div>
             </div>
 
@@ -40,16 +44,7 @@ const AddProductStyleForm = ({
                         <option value="1">1</option>
                       </select>
                       <small>
-                        {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-                        <a
-                          href="#" 
-                          className="a-link-cs"
-                          onClick={(e) => { 
-                            e.preventDefault();
-                          }}
-                        >
-                          (+) Add a New Brand
-                        </a>
+                        <Link to="/app/product/brand/add" className="a-link-cs">(+) Add a New Brand</Link>
                       </small>
                       {errors.brandId.length > 0 ? <p className="mt-2 text-danger">{errors.brandId}</p> : null}
                     </div>
@@ -104,6 +99,25 @@ const AddProductStyleForm = ({
                   </div>
                 </div>
               </li>
+
+              <li className={liClassName}>
+                <div className="row">
+                  <div className="col">
+                    <div className="form-group">
+                      <label htmlFor="styleImage">Image URL (*)</label>
+                      <input 
+                        type="text" 
+                        className="form-control" 
+                        id="styleImage" 
+                        value={formData.styleImage}
+                        onChange={onInputChange} 
+                      />
+                      <small>Copy image hyperlink in here.</small>
+                      {errors.styleImage.length > 0 ? <p className="mt-2 text-danger">{errors.styleImage}</p> : null}
+                    </div>
+                  </div>
+                </div>
+              </li>
               
               <li className={liClassName}>
                 <div className="row">
@@ -129,13 +143,12 @@ const AddProductStyleForm = ({
                   <div className="col-md-4">
                     <div className="form-group">
                       {/* Submit button */}
-                      <button 
+                      <Button 
                         type="submit" 
-                        className={`btn btn-${buttonDisabled ? "secondary btn-custom-disabled" : "primary btn-custom"}`}
                         disabled={buttonDisabled}
                       >
-                        Next
-                      </button>
+                        Save
+                      </Button>
                       {/* End of submit button */}
                     </div>
                   </div>

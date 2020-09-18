@@ -3,7 +3,6 @@ import React from 'react';
 // redux
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import { setEditingStyle } from '../../state/product/product.actions';
 
 // ui settings
 const liClassName = "list-group-item list-group-item-action bg-item-list-cs";
@@ -76,7 +75,4 @@ const ProductStyleInfo = ({ product, setEditingStyle }) => {
   </>
 }
 
-const mapDispatchToProps = dispatch => ({
-  setEditingStyle: (value) => dispatch(setEditingStyle(value))
-})
-export default connect(null, mapDispatchToProps)(ProductStyleInfo);
+export default connect()(ProductStyleInfo);

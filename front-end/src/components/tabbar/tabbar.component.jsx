@@ -9,18 +9,18 @@ import './tabbar.styles.css';
 
 const Tabbar = ({
   page, 
-  tabbarList, 
+  list, 
   selectedTab, 
   setSelectedTab 
 }) => {
   
-  const { message } = tabbarList.find(item => item.id === selectedTab);
+  const { message } = list.find(item => item.id === selectedTab);
 
   return <>
     <div className="card border-0">
       <div className="card-header bg-card-cs">
         {
-          tabbarList.map(item => item.id === selectedTab 
+          list.map(item => item.id === selectedTab 
             ? <span key={item.id} className="mr-3 tab-selected">{item.name}</span> 
             : <a 
                 key={item.id} href="/" 

@@ -2,12 +2,13 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const CORS = require('cors');
-const morgan = require('morgan')
+const morgan = require('morgan');
 
 const app = express();
 
 const AppError = require('./utils/appError');
-const globalErrorHandler = require('./controllers/errorController')
+const globalErrorHandler = require('./controllers/errorController');
+const firebaseAuthController = require('./controllers/firebaseAuthController');
 const userRouter = require('./routes/userRoutes'); 
 const customerRouter = require('./routes/customerRoutes'); 
 const productRouter = require('./routes/productRoutes'); 
@@ -18,6 +19,9 @@ const orderRouter = require('./routes/orderRoutes');
 app.use(morgan('dev'));
 app.use(bodyParser.json());
 app.use(CORS());
+
+// firebase authentication
+app.use('/', firebaseAuthController.protect);
 
 // mount routes
 app.use('/api/v1/users', userRouter); 

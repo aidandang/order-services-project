@@ -10,10 +10,13 @@ import PrivateRoutes from './routes/private/private-routes.component';
 import { auth, createUserProfileDocument } from './firebase/firebase.utils';
 // redux
 import { connect } from 'react-redux';
+import { createStructuredSelector } from 'reselect';
+import { selectIsCheckingAuth } from './state/user/user.selectors';
 import { setCurrentUser } from './state/user/user.actions';
 
 const App = ({
-  setCurrentUser
+  setCurrentUser,
+  isCheckingAuth
 }) => {
   useEffect(() => {
     let listener = null;
@@ -26,27 +29,34 @@ const App = ({
             id: snapShot.id,
             ...snapShot.data()  
           })
-        })
+        });
       } else {
-        setCurrentUser(userAuth)
+        setCurrentUser(userAuth);
       }
     })
     return () => {
       listener();
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, []);
   
-  return (
-    <Switch>
-      <AuthRoute path="/app" component={PrivateRoutes} />
-      <Route path='/' render={props => <PublicRoutes {...props} />} />    
-    </Switch>
-  )
+  return <>
+    { 
+      !isCheckingAuth &&
+      <Switch>
+        <AuthRoute path="/app" component={PrivateRoutes} />
+        <Route path='/' render={props => <PublicRoutes {...props} />} />    
+      </Switch>
+    }
+  </>
 }
+
+const mapStateToProps = createStructuredSelector({
+  isCheckingAuth: selectIsCheckingAuth
+})
 
 const mapDispatchToProps = dispatch => ({
   setCurrentUser: user => dispatch(setCurrentUser(user))
 })
 
-export default connect(null, mapDispatchToProps)(App);
+export default connect(mapStateToProps, mapDispatchToProps)(App);

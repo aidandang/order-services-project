@@ -14,7 +14,6 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { patchReq } from '../../state/api/patch-request';
 import { ProductActionTypes } from '../../state/product/product.types';
-import { setEditingStyle } from '../../state/product/product.actions';
 
 // set form schema
 const formSchema = Yup.object().shape({
@@ -88,7 +87,6 @@ const ProductStyleEdit = ({
 }
 
 const mapDispatchToProps = dispatch => ({
-  setEditingStyle: (value) => dispatch(setEditingStyle(value)),
   patchReq: (
     pathname,
     reqBody, 
@@ -97,4 +95,4 @@ const mapDispatchToProps = dispatch => ({
   ) => dispatch(patchReq(pathname, reqBody, fetchSuccess, queryStr))
 })
 
-export default connect(mapDispatchToProps)(ProductStyleEdit);
+export default connect(null, mapDispatchToProps)(ProductStyleEdit);
