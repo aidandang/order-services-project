@@ -5,22 +5,22 @@ const authController = require('../controllers/authController');
 
 router
   .route('/')
-  .get(authController.protect, customerController.readCustomers)
-  .post(authController.protect, customerController.createCustomer);
+  .get(customerController.readCustomers)
+  .post(customerController.createCustomer);
 
 router
   .route('/:id')
-  .get(authController.protect, customerController.readCustomerById)
-  .patch(authController.protect, authController.restrictTo('admin'), customerController.updateCustomer)
-  .delete(authController.protect, authController.restrictTo('admin'), customerController.deleteCustomer);
+  .get(customerController.readCustomerById)
+  .patch(authController.restrictTo('admin'), customerController.updateCustomer)
+  .delete(authController.restrictTo('admin'), customerController.deleteCustomer);
 
 router
   .route('/:id/shippinginfo')
-  .post(authController.protect, customerController.addShippingInfo);
+  .post(customerController.addShippingInfo);
 
 router
   .route('/:id/shippinginfo/:sid')
-  .patch(authController.protect, authController.restrictTo('admin'), customerController.updateShippingInfo)
-  .delete(authController.protect, authController.restrictTo('admin'), customerController.deleteShippingInfo);
+  .patch(authController.restrictTo('admin'), customerController.updateShippingInfo)
+  .delete(authController.restrictTo('admin'), customerController.deleteShippingInfo);
   
 module.exports = router;

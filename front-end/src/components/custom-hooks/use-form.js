@@ -56,5 +56,5 @@ export const useForm = (initialValues, initialErrors, schema) => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [values]);
 
-  return [values, errors, onInputChange, buttonDisabled];
+  return [values, errors, onInputChange, buttonDisabled, setValues];
 };

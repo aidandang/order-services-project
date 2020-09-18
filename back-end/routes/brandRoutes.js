@@ -5,12 +5,12 @@ const authController = require('../controllers/authController');
 
 router
   .route('/')
-  .get(authController.protect, brandController.readBrands)
-  .post(authController.protect, brandController.createBrand);
+  .get(brandController.readBrands)
+  .post(brandController.createBrand);
 
 router
   .route('/:id')
-  .patch(authController.protect, brandController.updateBrand)
-  .delete(authController.protect, brandController.deleteBrand);
+  .patch(brandController.updateBrand)
+  .delete(brandController.deleteBrand);
   
 module.exports = router;

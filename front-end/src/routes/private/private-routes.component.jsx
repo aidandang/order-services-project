@@ -7,7 +7,7 @@ import Navbar from '../../components/navbar/navbar.component';
 import Footer from '../../components/footer/footer.component';
 import Sidebar from '../../components/sidebar/sidebar.component';
 import DashboardPage from '../../pages/dashboard-page/dashboard-page.component';
-import ProductRoutes from '../../components/product-routes/product-routes.component';
+import ProductRoutes from './product-routes.component';
 // ui settings
 import './private-routes.styles.css';
 
