@@ -1,37 +1,23 @@
 import React from 'react';
 
 // components
-import Tabbar from '../tabbar/tabbar.component';
 import AddStyle from './add-style.component';
 import AddColor from './add-color.component';
 
-// redux
-import { connect } from 'react-redux';
-import { createStructuredSelector } from 'reselect';
-import { selectAddProductTabbar } from '../../state/tabbar/tabbar.selectors';
+// ui settings
+import './add-product.styles.css';
 
-const AddProduct = ({
-  addProductTabbar
-}) => {
-  const { list, selectedTab } = addProductTabbar;
-
+const AddProduct = () => {
   return <>
-    <Tabbar 
-      page='addProduct'
-      list={list}
-      selectedTab={selectedTab}
-    />
-    {
-      selectedTab === 1 && <AddStyle />
-    }
-    {
-      selectedTab === 2 && <AddColor />
-    }
+    <div className="row">
+      <div className="col-xl-8 add-style-col">
+        <AddStyle />
+      </div>
+      <div className="col-xl-4 add-color-col">
+        <AddColor />
+      </div>
+    </div>
   </>
 }
 
-const mapStateToProps = createStructuredSelector({
-  addProductTabbar: selectAddProductTabbar,
-})
-
-export default connect(mapStateToProps)(AddProduct);
+export default AddProduct;

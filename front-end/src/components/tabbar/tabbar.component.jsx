@@ -21,7 +21,7 @@ const Tabbar = ({
       <div className="card-header bg-card-cs">
         {
           list.map(item => item.id === selectedTab 
-            ? <span key={item.id} className="mr-3 tab-selected">{item.name}</span> 
+            ? <h4 key={item.id} className="mb-0 mr-3 tab-selected">{item.name}</h4> 
             : <a 
                 key={item.id} href="/" 
                 onClick={(e) => {

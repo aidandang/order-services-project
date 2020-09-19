@@ -4,18 +4,16 @@ import React from 'react';
 import Title from '../../components/title/title.component';
 import ProductList from '../../components/product-list/product-list.component';
 
-// ui settings
-import './product-list-page.styles.css';
-const titleSettings = {
-  title: 'Products',
-  button: undefined
-}
-
 const ProductListPage = () => {
+  const title = {
+    name: 'Product List',
+    message: 'A product can be searched by either its name or style.'
+  }
+  
   return <>
-    <Title settings={titleSettings} />
+    <Title title={title} />
     <ProductList />
-  </>   
+  </>
 }
 
 export default ProductListPage;

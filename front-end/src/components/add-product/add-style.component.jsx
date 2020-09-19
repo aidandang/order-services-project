@@ -7,11 +7,10 @@ import { useForm } from '../custom-hooks/use-form';
 // components
 import AddStyleForm from './add-style-form.component';
 // redux
-import { connect, batch } from 'react-redux';
+import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { selectProductObj } from '../../state/product/product.selectors';
 import { addProductStyle } from '../../state/product/product.actions';
-import { setSelectedTab } from '../../state/tabbar/tabbar.actions';
 
 // set form schema
 const formSchema = Yup.object().shape({
@@ -47,25 +46,19 @@ const formState = {
 
 const AddStyle = ({
   productObj,
-  addProductStyle,
-  setSelectedTab
+  addProductStyle
 }) => {
   const [
     formData,
     errors, 
     onInputChange, 
-    buttonDisabled,
-    setValues
+    buttonDisabled
   ] = useForm(productObj.name ? productObj : formState, formState, formSchema);
 
   // a new product form submit
   const formSubmit = e => {
     e.preventDefault();
-    batch(() => {
-      addProductStyle(formData);
-      setSelectedTab('addProduct', 3)
-    })
-    setValues(formState);
+    addProductStyle(formData);
   }
 
   return <>
@@ -84,8 +77,7 @@ const mapStateToProps = createStructuredSelector({
 })
 
 const mapDispatchToProps = dispatch => ({
-  addProductStyle: payload => dispatch(addProductStyle(payload)),
-  setSelectedTab: (page, tabId) => dispatch(setSelectedTab(page, tabId))
+  addProductStyle: payload => dispatch(addProductStyle(payload))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(AddStyle);

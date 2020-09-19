@@ -3,15 +3,13 @@ import React from 'react';
 // components
 import Title from '../../components/title/title.component';
 
-// ui settings
-const titleSettings = {
-  title: 'Dashboard',
-  button: undefined
-}
-
 const DashboardPage = () => {
+  const title = {
+    name: 'Dashboard',
+    message: 'The statistic page of Order Services.'
+  }
   return <>
-    <Title settings={titleSettings} />
+    <Title title={title} />
   </>
 }
 

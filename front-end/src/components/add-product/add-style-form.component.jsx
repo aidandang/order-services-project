@@ -31,7 +31,7 @@ const AddProductStyleForm = ({
             <ul className="list-group list-group-flush">
               <li className={liClassName}>
                 <div className="row">
-                  <div className="col-md-6">
+                  <div className="col-lg-6">
                     <div className="form-group">
                       <label htmlFor="brandId">Brand (*)</label>
                       <select 
@@ -50,7 +50,7 @@ const AddProductStyleForm = ({
                     </div>
                   </div>
 
-                  <div className="col-md-6">
+                  <div className="col-lg-6">
                     <div className="form-group">
                       <label htmlFor="name">Name (*)</label>
                       <input 
@@ -69,7 +69,7 @@ const AddProductStyleForm = ({
 
               <li className={liClassName}>
                 <div className="row">
-                  <div className="col-md-6">
+                  <div className="col-lg-6">
                     <div className="form-group">
                       <label htmlFor="styleCode">Style Code (*)</label>
                       <input 
@@ -83,7 +83,7 @@ const AddProductStyleForm = ({
                       {errors.styleCode.length > 0 ? <p className="mt-2 text-danger">{errors.styleCode}</p> : null}
                     </div>
                   </div>
-                  <div className="col-md-6">
+                  <div className="col-lg-6">
                     <div className="form-group">
                       <label htmlFor="sku">SKU</label>
                       <input 
@@ -144,10 +144,10 @@ const AddProductStyleForm = ({
                     <div className="form-group">
                       {/* Submit button */}
                       <Button 
-                        type="submit" 
+                        type="submit"
                         disabled={buttonDisabled}
                       >
-                        Save
+                        Submit
                       </Button>
                       {/* End of submit button */}
                     </div>

@@ -1,24 +1,28 @@
 import React from 'react';
 
 // dependencies
-import { Link } from 'react-router-dom';
+import { Link, useHistory, useLocation } from 'react-router-dom';
+import queryString from 'query-string';
 import uuid from 'react-uuid';
 
 // ui settings
-import './pagination-bar.styles.css'
+import './pagination-bar.styles.css';
 
 const PaginationBar = ({ 
-  page, 
-  onPageChange, 
-  pages
+  numberOfPages,
+  limit
 }) => {
+  const location = useLocation();
+  const history = useHistory();
   
-  const itemLimit = 5;
-  let activeItem = page || 1;
+  const queryObj = queryString.parse(location.search);
+  const { page } = queryObj;  
+  let activeItem = Number(page) || 1;
+  const itemLimit = limit || 5;
 
   // set an array of total indexed items in the pagination bar, from 1 to the total pages in the query.
   const arrayOfItems = [];
-  for (let i = 0; i < pages; i++) {
+  for (let i = 0; i < numberOfPages; i++) {
     arrayOfItems.push(i + 1);
   }
 
@@ -28,10 +32,18 @@ const PaginationBar = ({
   const lastItem = currStage * itemLimit;
   const firstItem = lastItem - itemLimit;
   let currItems = 0;
-  if (pages <= lastItem) {
-    currItems = arrayOfItems.slice(firstItem, pages);
+  if (numberOfPages <= lastItem) {
+    currItems = arrayOfItems.slice(firstItem, numberOfPages);
   } else {
     currItems = arrayOfItems.slice(firstItem, lastItem);
+  }
+
+  // handle pagination
+  const onPageChange = (page) => {
+    queryObj.page = page;
+    const queryStr = '?' + queryString.stringify(queryObj);
+
+    history.push('/app/product' + queryStr)
   }
 
   return <>
@@ -85,7 +97,7 @@ const PaginationBar = ({
               </li>
             )}
             
-            {activeItem === pages 
+            {activeItem === numberOfPages 
               ?
                 <li className="page-item disabled">
                   <Link 
