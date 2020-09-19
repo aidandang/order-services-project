@@ -1,8 +1,37 @@
 import React from 'react';
 
+// ui settings
+const liClassName = "list-group-item bg-item-list-cs list-group-item-action";
+
 const AddColor = () => {
   return <>
-    <div>ADD COLOR</div>
+    <div className="card my-3">
+      <div className="card-header bg-card-cs">
+        <div className="row">
+          <div className="col text-uppercase font-weight-bold">ADD COLOR</div>
+        </div>
+      </div>
+      <ul className="list-group list-group-flush">
+    
+        <li className={liClassName}>
+          <div className="row"> 
+            <div className="col-12 align-self-center text-center">
+              <a 
+                href="/" 
+                className="a-link-cs" 
+                name="colorInfo" 
+                onClick={(e) => { 
+                  e.preventDefault();
+                }}
+              >
+                Add a New Color (+)
+              </a>
+            </div>
+          </div>
+        </li> 
+
+      </ul>
+    </div>
   </>
 }
 

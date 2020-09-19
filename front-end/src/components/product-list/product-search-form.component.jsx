@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 // ui settings
 const liClassName = "list-group-item list-group-item-action bg-item-list-cs";
 
-const SearchProductForm = ({ 
+const ProductSearchForm = ({ 
   formData, 
   formSubmit,  
   onInputChange
@@ -76,4 +76,4 @@ const SearchProductForm = ({
   </>
 }
 
-export default SearchProductForm;
+export default ProductSearchForm;

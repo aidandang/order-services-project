@@ -4,15 +4,14 @@ import React from 'react';
 import Title from '../../components/title/title.component';
 import AddProduct from '../../components/add-product/add-product.component';
 
-// ui settings
-const titleSettings = {
-  title: 'Add Product',
-  button: undefined
-}
-
 const AddProductPage = () => {
+  const title = {
+    name: 'Add Product',
+    message: 'Submit product after filling out product style and at least one product color.'
+  }
+  
   return <>
-    <Title settings={titleSettings} />
+    <Title title={title} />
     <AddProduct />
   </>
 }

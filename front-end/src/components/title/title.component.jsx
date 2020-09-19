@@ -1,25 +1,18 @@
 import React from 'react';
 
-// dependencies
-import { Link } from 'react-router-dom';
-
 // ui settings
 import './title.styles.css';
 
-// MAIN COMPONET
-const Title = ({ 
-  settings: { title, button }
+const Title = ({
+  title
 }) => {
   return <>
-    <div className="row align-items-center">
-      <div className="col-7">
-        <h4 className="font-weight-bold">{title}</h4>
+    <div className="card border-0">
+      <div className="card-header title_card_header">
+        <h4 className="mb-0 mr-3 title_font">{title.name}</h4>
       </div>
-      <div className="col-5 text-right">
-        { button 
-          ? <Link to={button.href} className="btn btn-primary btn-custom">{button.text}</Link>
-          : null
-        }
+      <div className="card-body py-2 title_card_header">
+        <small className='card-text text-muted'>{title.message}</small>
       </div>
     </div>
   </>
