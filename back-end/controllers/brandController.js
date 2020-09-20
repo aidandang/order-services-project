@@ -15,8 +15,8 @@ exports.readBrands = catchAsync(async (req, res, next) => {
   const brands = await query;
 
   res.status(200).json({
-    status: 'GET_SUCCESS',
-    brands
+    status: 'success',
+    allIds: brands
   });
 });
 

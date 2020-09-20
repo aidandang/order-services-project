@@ -1,9 +1,13 @@
 import React from 'react';
 
 // dependencies
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 // components
 import Button from '../button/button.component';
+// redux
+import { connect } from 'react-redux';
+import { createStructuredSelector } from 'reselect';
+import { selectBrandData } from '../../state/brand/brand.selectors';
 // ui settings
 const liClassName = "list-group-item bg-item-list-cs list-group-item-action";
 
@@ -12,8 +16,12 @@ const AddProductStyleForm = ({
   formData,
   errors, 
   onInputChange, 
-  buttonDisabled 
+  buttonDisabled,
+  data 
 }) => {
+
+  const location = useLocation();
+
   return <>
     <form onSubmit={formSubmit}>
       <div className="row">
@@ -41,10 +49,10 @@ const AddProductStyleForm = ({
                         onChange={onInputChange}
                       >
                         <option value="">...</option>
-                        <option value="1">1</option>
+                        {data && data.allIds.map(brand => <option key={brand._id} value={brand._id}>{brand.name}</option>)}
                       </select>
                       <small>
-                        <Link to="/app/product/brand/add" className="a-link-cs">(+) Add a New Brand</Link>
+                        <Link to={`${location.pathname}?action=add-brand`} className="a-link-cs">(+) Add a New Brand</Link>
                       </small>
                       {errors.brandId.length > 0 ? <p className="mt-2 text-danger">{errors.brandId}</p> : null}
                     </div>
@@ -165,4 +173,8 @@ const AddProductStyleForm = ({
   </>
 }
 
-export default AddProductStyleForm;
+const mapStateToProps = createStructuredSelector({
+  data: selectBrandData
+})
+
+export default connect(mapStateToProps)(AddProductStyleForm);
