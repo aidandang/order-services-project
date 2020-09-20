@@ -1,38 +1,64 @@
 import React from 'react';
 
-// ui settings
-const liClassName = "list-group-item bg-item-list-cs list-group-item-action";
+// import dependencies
+import * as Yup from "yup";
+// components
+import { useForm } from '../custom-hooks/use-form';
+import AddColorForm from './add-color-form.component';
+// redux
+import { connect } from 'react-redux';
+import { addProductColor } from '../../state/product/product.actions';
 
-const AddColor = () => {
+// set form schema
+const formSchema = Yup.object().shape({
+  color: Yup
+    .string()
+    .required("Color is required"),
+  image: Yup
+    .string(),
+  url: Yup
+    .string()
+});
+// set form state
+const formState = {
+  color: "",
+  image: "",
+  url: ""
+};
+
+// MAIN COMPONENT
+const AddColor = ({
+  addProductColor
+}) => {
+
+  const [
+    formData,
+    errors, 
+    onInputChange, 
+    buttonDisabled,
+    setValues
+  ] = useForm(formState, formState, formSchema);
+
+  // Form submit function
+  const formSubmit = e => {
+    e.preventDefault();
+    addProductColor(formData);
+    setValues(formState);
+  }
+
   return <>
-    <div className="card my-3">
-      <div className="card-header bg-card-cs">
-        <div className="row">
-          <div className="col text-uppercase font-weight-bold">ADD COLOR</div>
-        </div>
-      </div>
-      <ul className="list-group list-group-flush">
-    
-        <li className={liClassName}>
-          <div className="row"> 
-            <div className="col-12 align-self-center text-center">
-              <a 
-                href="/" 
-                className="a-link-cs" 
-                name="colorInfo" 
-                onClick={(e) => { 
-                  e.preventDefault();
-                }}
-              >
-                Add a New Color (+)
-              </a>
-            </div>
-          </div>
-        </li> 
-
-      </ul>
-    </div>
+    <AddColorForm
+      formSubmit={formSubmit}
+      formData={formData}
+      errors={errors}
+      onInputChange={onInputChange}
+      buttonDisabled={buttonDisabled}
+    />
   </>
 }
 
-export default AddColor;
+const mapDispatchToProps = dispatch => ({
+  addProductColor: payload => dispatch(addProductColor(payload))
+})
+
+export default connect(null, mapDispatchToProps)(AddColor);
