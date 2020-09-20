@@ -13,6 +13,23 @@ body {
   font-family: 'Roboto Condensed', sans-serif !important;
 }
 
+.a-link-cs {
+  color: #5D8C87;
+  text-decoration: underline;
+  font-weight: normal;
+}
+
+.on-click {
+  color: #5D8C87;
+  text-decoration: underline;
+  font-weight: normal;
+  cursor: pointer !important;
+}
+
+.on-click:hover {
+  color: #0069D9;
+}
+
 .bg-card-cs {
   background-color: #ECEBF2;
 }
@@ -20,12 +37,6 @@ body {
 .dropdown-item-cs:hover {
   color: #F7F7F7;
   background-color: #5D8C87;
-}
-
-.a-link-cs {
-  color: #5D8C87;
-  text-decoration: underline;
-  font-weight: normal;
 }
 
 .li-link-cs {

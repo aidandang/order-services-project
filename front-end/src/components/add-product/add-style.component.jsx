@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 // dependencies
 import * as Yup from "yup";
+import { useHistory, useLocation } from 'react-router-dom';
 // utils and custom hooks
 import { useForm } from '../custom-hooks/use-form';
 // components
@@ -11,6 +12,8 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { selectProductObj } from '../../state/product/product.selectors';
 import { addProductStyle } from '../../state/product/product.actions';
+import { getReq } from '../../state/api/get-request';
+import { BrandActionTypes } from '../../state/brand/brand.types';
 
 // set form schema
 const formSchema = Yup.object().shape({
@@ -46,8 +49,13 @@ const formState = {
 
 const AddStyle = ({
   productObj,
-  addProductStyle
+  addProductStyle,
+  getReq
 }) => {
+
+  const history = useHistory();
+  const location = useLocation();
+
   const [
     formData,
     errors, 
@@ -59,7 +67,14 @@ const AddStyle = ({
   const formSubmit = e => {
     e.preventDefault();
     addProductStyle(formData);
+    history.push(`${location.pathname}?action=submit`);
   }
+
+  useEffect(() => {
+    const fetchSuccess = BrandActionTypes.BRAND_FETCH_SUCCESS;
+    getReq('/brands', fetchSuccess)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   return <>
     <AddStyleForm
@@ -77,7 +92,8 @@ const mapStateToProps = createStructuredSelector({
 })
 
 const mapDispatchToProps = dispatch => ({
-  addProductStyle: payload => dispatch(addProductStyle(payload))
+  addProductStyle: payload => dispatch(addProductStyle(payload)),
+  getReq: (pathname, fetchSuccess, queryStr) => dispatch(getReq(pathname, fetchSuccess, queryStr))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(AddStyle);

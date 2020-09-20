@@ -10,3 +10,8 @@ export const addProductColor = color => ({
   payload: color 
 })
 
+export const removeProductColor = index => ({
+  type: ProductActionTypes.REMOVE_PRODUCT_COLOR,
+  payload: index 
+})
+

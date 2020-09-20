@@ -7,11 +7,13 @@ import uuid from 'react-uuid';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { selectProductObj } from '../../state/product/product.selectors';
+import { removeProductColor } from '../../state/product/product.actions';
 // ui settings
 const liClassName = "list-group-item bg-item-list-cs list-group-item-action";
 
 const PreviewColors = ({
-  productObj
+  productObj,
+  removeProductColor
 }) => {
 
   const location = useLocation();
@@ -50,7 +52,7 @@ const PreviewColors = ({
                   </div>
                   <div className="col align-self-center">
                     <span>{color.color}</span><br />
-                    <span className="a-link-cs">Remove</span>
+                    <span className="on-click" onClick={e => removeProductColor(index)}>Remove</span>
                   </div>
                 </div>
               </li>
@@ -65,4 +67,8 @@ const mapStateToProps = createStructuredSelector({
   productObj: selectProductObj
 })
 
-export default connect(mapStateToProps)(PreviewColors);
+const mapDispatchToProps = dispatch => ({
+  removeProductColor: index => dispatch(removeProductColor(index))
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(PreviewColors);
