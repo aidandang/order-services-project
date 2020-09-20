@@ -49,7 +49,7 @@ const AddProductStyleForm = ({
                         onChange={onInputChange}
                       >
                         <option value="">...</option>
-                        {data && data.allIds.map(brand => <option key={brand._id} value={brand._id}>{brand.name}</option>)}
+                        {data.allIds && data.allIds.map(brand => <option key={brand._id} value={brand._id}>{brand.name}</option>)}
                       </select>
                       <small>
                         <Link to={`${location.pathname}?action=add-brand`} className="a-link-cs">(+) Add a New Brand</Link>
@@ -155,7 +155,7 @@ const AddProductStyleForm = ({
                         type="submit"
                         disabled={buttonDisabled}
                       >
-                        Submit
+                        Add Style
                       </Button>
                       {/* End of submit button */}
                     </div>

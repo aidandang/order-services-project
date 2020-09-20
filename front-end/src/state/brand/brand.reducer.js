@@ -1,7 +1,7 @@
 import { BrandActionTypes } from './brand.types';
 
 const INITIAL_STATE = {
-  data: null
+  data: {}
 }
 
 const brandReducer = (state =  INITIAL_STATE, action) => {
@@ -9,7 +9,7 @@ const brandReducer = (state =  INITIAL_STATE, action) => {
     case BrandActionTypes.BRAND_FETCH_SUCCESS:
       return {
         ...state,
-        data: action.payload
+        data: {...state.data, ...action.payload} 
       }
     default: 
       return state;

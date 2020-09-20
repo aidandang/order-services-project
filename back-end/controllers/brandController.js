@@ -23,8 +23,8 @@ exports.readBrands = catchAsync(async (req, res, next) => {
 exports.createBrand = catchAsync(async (req, res, next) => {
   const newBrand = await Brand.create(req.body);
   res.status(201).json({
-    status: 'POST_SUCCESS',
-    brand: newBrand
+    status: 'success',
+    byId: newBrand
   });
 });
 

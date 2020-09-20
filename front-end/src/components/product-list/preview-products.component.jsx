@@ -16,10 +16,11 @@ const PreviewProducts = ({
 
   return <>
     <div className="row">
-      {allIds.map(product => Object.keys(product.colors).length > 0 &&
-        <div key={product._id} className="col-lg-6 col-xl-4"> 
-          <ProductCard product={product} />
-        </div>
+      {
+        allIds.map(product => 
+          <div key={product._id} className="col-lg-6 col-xl-4"> 
+            <ProductCard product={product} />
+          </div>
       )}
     </div>  
   </>

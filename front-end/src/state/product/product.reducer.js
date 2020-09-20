@@ -27,6 +27,14 @@ const productReducer = (state = INITIAL_STATE, action) => {
           colors: [...state.productObj.colors, action.payload]
         }
       }
+    case ProductActionTypes.REMOVE_PRODUCT_COLOR:
+      return {
+        ...state,
+        productObj: { 
+          ...state.productObj,
+          colors: state.productObj.colors.filter((color, index) => index !== action.payload)
+        }
+      }
     default:
       return state;
   }
