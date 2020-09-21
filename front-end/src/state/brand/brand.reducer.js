@@ -9,7 +9,7 @@ const brandReducer = (state =  INITIAL_STATE, action) => {
     case BrandActionTypes.BRAND_FETCH_SUCCESS:
       return {
         ...state,
-        data: {...state.data, ...action.payload} 
+        data: { ...state.data, ...action.payload } 
       }
     default: 
       return state;

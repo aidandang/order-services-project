@@ -84,7 +84,7 @@ exports.readProductById = catchAsync(async (req, res, next) => {
   }
   
   res.status(200).json({
-    status: 'GET_SUCCESS',
+    status: 'success',
     byId: product[0]
   });
 });

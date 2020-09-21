@@ -15,6 +15,7 @@ import SubmitProduct from './submit-product.component';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { selectProductObj } from '../../state/product/product.selectors';
+import { removeProductColor } from '../../state/product/product.actions';
 import { addProductStyle } from '../../state/product/product.actions';
 import { getReq } from '../../state/api/get-request';
 import { BrandActionTypes } from '../../state/brand/brand.types';
@@ -56,6 +57,7 @@ const formState = {
 const AddProduct = ({
   productObj,
   addProductStyle,
+  removeProductColor,
   getReq
 }) => {
 
@@ -111,7 +113,7 @@ const AddProduct = ({
             { action === 'submit' && <SubmitProduct />}
           </div>
           <div className="col-xl-4 add-color-col">
-            <PreviewColors />
+            <PreviewColors productObj={productObj} removeProductColor={removeProductColor} />
           </div>
         </div>
     }
@@ -124,7 +126,8 @@ const mapStateToProps = createStructuredSelector({
 
 const mapDispatchToProps = dispatch => ({
   addProductStyle: payload => dispatch(addProductStyle(payload)),
-  getReq: (pathname, fetchSuccess, queryStr) => dispatch(getReq(pathname, fetchSuccess, queryStr))
+  getReq: (pathname, fetchSuccess, queryStr) => dispatch(getReq(pathname, fetchSuccess, queryStr)),
+  removeProductColor: index => dispatch(removeProductColor(index))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(AddProduct);
