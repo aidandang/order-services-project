@@ -1,12 +1,11 @@
 import React, { useEffect } from 'react';
 
 // dependencies
-import { useLocation } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 // components
-import ProductSearch from './product-search.component';
-import PreviewProducts from './preview-products.component';
-import PaginationBar from '../pagination-bar/pagination-bar.component';
 import AlertMesg from '../alert-mesg/alert-mesg.component';
+import PreviewColors from '../add-product/preview-colors.component';
+import ProductInfo from './product-info.component';
 // redux
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
@@ -15,16 +14,18 @@ import { getReq } from '../../state/api/get-request';
 import { ProductActionTypes } from '../../state/product/product.types';
 import { selectAlertMessage } from '../../state/alert/alert.selectors';
 
-const ProductList = ({ 
+const ProductById = ({ 
   getReq, 
   data, 
   alertMessage
 }) => {
+
+  const params = useParams();
   const location = useLocation();
   
   useEffect(() => {
     const fetchSuccess = ProductActionTypes.PRODUCT_FETCH_SUCCESS;
-    getReq('/products', fetchSuccess, location.search)
+    getReq('/products/' + params.id, fetchSuccess, location.search)
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location.search])
   
@@ -33,20 +34,14 @@ const ProductList = ({
       alertMessage 
       ? <AlertMesg />
       : <> 
-        <ProductSearch />
-        {
-          data && data.info && <>
-            <PaginationBar  
-              numberOfPages={data.info.pages}
-              limit={5}
-            />
-            <PreviewProducts />
-            <PaginationBar 
-              numberOfPages={data.info.pages}
-              limit={5}
-            /> 
-          </>
-        }
+        <div className="row">
+          <div className="col-xl-8 add-style-col">
+            <ProductInfo product={(data && data.byId) ? data.byId : null} />
+          </div>
+          <div className="col-xl-4 add-color-col">
+            <PreviewColors productObj={(data && data.byId) ? data.byId : null}/>
+          </div>
+        </div>
       </>
     }
   </>
@@ -61,4 +56,4 @@ const mapDispatchToProps = dispatch => ({
   getReq: (pathname, fetchSuccess, queryStr) => dispatch(getReq(pathname, fetchSuccess, queryStr))
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(ProductList);
+export default connect(mapStateToProps, mapDispatchToProps)(ProductById);

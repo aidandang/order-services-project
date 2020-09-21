@@ -3,11 +3,6 @@ import React from 'react';
 // dependencies
 import { useLocation, Link } from 'react-router-dom';
 import uuid from 'react-uuid';
-// redux
-import { connect } from 'react-redux';
-import { createStructuredSelector } from 'reselect';
-import { selectProductObj } from '../../state/product/product.selectors';
-import { removeProductColor } from '../../state/product/product.actions';
 // ui settings
 const liClassName = "list-group-item bg-item-list-cs list-group-item-action";
 
@@ -40,7 +35,7 @@ const PreviewColors = ({
           </div>
         </li>
         { 
-          productObj.colors.length > 0 && 
+          productObj && productObj.colors && productObj.colors.length > 0 && 
             productObj.colors.map((color, index) => 
               <li key={uuid()} className={liClassName}>
                 <div className="row"> 
@@ -63,12 +58,4 @@ const PreviewColors = ({
   </>
 }
 
-const mapStateToProps = createStructuredSelector({
-  productObj: selectProductObj
-})
-
-const mapDispatchToProps = dispatch => ({
-  removeProductColor: index => dispatch(removeProductColor(index))
-})
-
-export default connect(mapStateToProps, mapDispatchToProps)(PreviewColors);
+export default PreviewColors;

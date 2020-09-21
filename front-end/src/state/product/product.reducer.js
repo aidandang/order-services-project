@@ -12,7 +12,7 @@ const productReducer = (state = INITIAL_STATE, action) => {
     case ProductActionTypes.PRODUCT_FETCH_SUCCESS:
       return {
         ...state,
-        data: action.payload
+        data: { ...state.data, ...action.payload }
       }
     case ProductActionTypes.ADD_PRODUCT_STYLE:
       return {
