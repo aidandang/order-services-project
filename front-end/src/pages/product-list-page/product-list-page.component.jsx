@@ -1,18 +1,22 @@
 import React from 'react';
 
+// dependencies
+import { useLocation } from 'react-router-dom';
+import queryString from 'query-string';
 // components
-import Title from '../../components/title/title.component';
 import ProductList from '../../components/product-list/product-list.component';
+import ProductByIdEdit from '../../components/product-by-id-edit/product-by-id-edit.component';
 
 const ProductListPage = () => {
-  const title = {
-    name: 'Product List',
-    message: 'A product can be searched by either its name or style.'
-  }
+
+  const location = useLocation();
+
+  const queryObj = queryString.parse(location.search);
+  const { type } = queryObj;
   
   return <>
-    <Title title={title} />
-    <ProductList />
+    { type !== 'add' && <ProductList /> }
+    { type === 'add' && <ProductByIdEdit />}
   </>
 }
 

@@ -1,7 +1,7 @@
 import { ProductActionTypes } from './product.types';
 
-export const addProductStyle = style => ({
-  type: ProductActionTypes.ADD_PRODUCT_STYLE,
+export const updateProductStyle = style => ({
+  type: ProductActionTypes.UPDATE_PRODUCT_STYLE,
   payload: style 
 })
 
@@ -10,8 +10,8 @@ export const addProductColor = color => ({
   payload: color 
 })
 
-export const removeProductColor = index => ({
-  type: ProductActionTypes.REMOVE_PRODUCT_COLOR,
-  payload: index 
+export const editProduct = byId => ({
+  type: ProductActionTypes.EDIT_PRODUCT,
+  payload: byId
 })
 

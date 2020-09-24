@@ -2,40 +2,32 @@ import React from 'react';
 
 // dependencies
 import { Link, useLocation } from 'react-router-dom';
-// components
-import Button from '../button/button.component';
-// redux
-import { connect } from 'react-redux';
-import { createStructuredSelector } from 'reselect';
-import { selectBrandData } from '../../state/brand/brand.selectors';
+import queryString from 'query-string';
 // ui settings
 const liClassName = "list-group-item bg-item-list-cs list-group-item-action";
 
-const AddProductStyleForm = ({
+const ProductStyleForm = ({
   formSubmit,
   formData,
   errors, 
-  onInputChange, 
-  buttonDisabled,
-  data 
+  onInputChange,
+  brands
 }) => {
 
   const location = useLocation();
+  const queryObj = queryString.parse(location.search);
+  const { type } = queryObj;
 
   return <>
     <form onSubmit={formSubmit}>
       <div className="row">
         <div className="col-12">
-
-          {/* The Card */}
           <div className="card my-3">
-
             <div className="card-header bg-card-cs">
               <div className="row">
                 <div className="col text-uppercase font-weight-bold">Product Style</div>
               </div>
             </div>
-
             <ul className="list-group list-group-flush">
               <li className={liClassName}>
                 <div className="row">
@@ -49,10 +41,10 @@ const AddProductStyleForm = ({
                         onChange={onInputChange}
                       >
                         <option value="">...</option>
-                        {data.allIds && data.allIds.map(brand => <option key={brand._id} value={brand._id}>{brand.name}</option>)}
+                        {brands && brands.map(brand => <option key={brand._id} value={brand._id}>{brand.name}</option>)}
                       </select>
                       <small>
-                        <Link to={`${location.pathname}?action=add-brand`} className="a-link-cs">(+) Add a New Brand</Link>
+                        <Link to={`${location.pathname}?type=${type}&action=add-brand`} className="a-link-cs">(+) Add a New Brand</Link>
                       </small>
                       {errors.brandId.length > 0 ? <p className="mt-2 text-danger">{errors.brandId}</p> : null}
                     </div>
@@ -146,35 +138,12 @@ const AddProductStyleForm = ({
                 </div>
               </li>
 
-              <li className={liClassName}>
-                <div className="row mt-3">
-                  <div className="col-md-4">
-                    <div className="form-group">
-                      {/* Submit button */}
-                      <Button 
-                        type="submit"
-                        disabled={buttonDisabled}
-                      >
-                        Add Style
-                      </Button>
-                      {/* End of submit button */}
-                    </div>
-                  </div>
-                </div>
-              </li>  
-              
             </ul>
           </div>
-          {/* End of the Card */}
-
         </div>
       </div>
     </form>
   </>
 }
 
-const mapStateToProps = createStructuredSelector({
-  data: selectBrandData
-})
-
-export default connect(mapStateToProps)(AddProductStyleForm);
+export default ProductStyleForm;

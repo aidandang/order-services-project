@@ -1,7 +1,7 @@
 import React from 'react';
 
 // dependencies
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 // ui settings
 const liClassName = "list-group-item list-group-item-action bg-item-list-cs";
@@ -11,6 +11,9 @@ const ProductSearchForm = ({
   formSubmit,  
   onInputChange
 }) => {
+
+  const location = useLocation();
+
   return <>
     <div className="row">
       <div className="col-lg-6">
@@ -60,7 +63,7 @@ const ProductSearchForm = ({
                   <small className="text-muted">
                     {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                     <Link 
-                      to="/app/product/add" 
+                      to={location.pathname + '?type=add'}
                       className="a-link-cs"
                     >
                       (+) Add a New Product 

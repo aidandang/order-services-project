@@ -1,5 +1,7 @@
 import React from 'react';
 
+// dependencies
+import { Link } from 'react-router-dom'; 
 // ui settings
 import './title.styles.css';
 
@@ -8,8 +10,18 @@ const Title = ({
 }) => {
   return <>
     <div className="card border-0">
-      <div className="card-header title_card_header">
-        <h4 className="mb-0 mr-3 title_font">{title.name}</h4>
+      <div className="card-header mb-0 title_card_header">
+        <div className="d-flex justify-content-start">
+          <div>
+            <span className="h4 mr-3 title_font">{title.name}</span>
+          </div>
+          {
+            title.button && 
+            <div className="text-right align-self-center">
+              <Link to={title.button.link} className="px-3 py-1 title-btn">{title.button.text}</Link>
+            </div>
+          }
+        </div>
       </div>
       <div className="card-body py-2 title_card_header">
         <small className='card-text text-muted'>{title.message}</small>
