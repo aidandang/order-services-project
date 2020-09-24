@@ -7,7 +7,7 @@ export const selectProductData = createSelector(
   product => product.data
 )
 
-export const selectProductObj = createSelector(
+export const selectProdObj = createSelector(
   [selectProduct],
-  product => product.productObj
+  product => product.prodObj
 )

@@ -2,25 +2,24 @@ import React, { useEffect } from 'react';
 
 // dependencies
 import * as Yup from "yup";
-import { useHistory, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import queryString from 'query-string';
 // components
+import Title from '../title/title.component';
 import { useForm } from '../custom-hooks/use-form';
-import AddStyleForm from './add-style-form.component';
+import SubmitCard from './submit-card.component';
+import ProductStyleForm from './product-style-form.component';
 import PreviewColors from './preview-colors.component';
 import AddColor from './add-color.component';
 import AddBrand from '../brand/add-brand.component';
-import SubmitProduct from './submit-product.component';
+import AlertMesg from '../alert-mesg/alert-mesg.component';
 // redux
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import { selectProductObj } from '../../state/product/product.selectors';
-import { removeProductColor } from '../../state/product/product.actions';
-import { addProductStyle } from '../../state/product/product.actions';
+import { selectBrandData } from '../../state/brand/brand.selectors';
 import { getReq } from '../../state/api/get-request';
 import { BrandActionTypes } from '../../state/brand/brand.types';
-// ui settings
-import './add-product.styles.css';
+import { selectAlertMessage } from '../../state/alert/alert.selectors';
 
 // set form schema
 const formSchema = Yup.object().shape({
@@ -51,33 +50,40 @@ const formState = {
   styleImage: "",
   sku: "",
   desc: "",
-  active: true
+  active: true,
+  colors: []
 }
 
-const AddProduct = ({
-  productObj,
-  addProductStyle,
-  removeProductColor,
-  getReq
+const ProductByIdEdit = ({
+  product,
+  data,
+  getReq,
+  alertMessage
 }) => {
 
-  const history = useHistory();
   const location = useLocation();
 
   const queryObj = queryString.parse(location.search);
-  const { action } = queryObj;
+  const { type, action } = queryObj;
+
+  let titleName = 'Edit Product';
+  if (type === 'add') titleName = 'Add Product';
+
+  const title = {
+    name: titleName,
+    message: 'Add or edit a product and its colors.'
+  }
 
   const [
     formData,
     errors, 
     onInputChange, 
-    buttonDisabled
-  ] = useForm(productObj.name ? productObj : formState, formState, formSchema);
+    buttonDisabled,
+    setValues
+  ] = useForm(type === 'edit' ? product : formState, formState, formSchema); // if prodObj then edit product, else add product
 
   const formSubmit = e => {
     e.preventDefault();
-    addProductStyle(formData);
-    history.push(`${location.pathname}?action=submit`);
   }
 
   useEffect(() => {
@@ -87,47 +93,52 @@ const AddProduct = ({
   }, [])
 
   return <>
-    {
-      action === 'submit' 
-      ? 
-        <div className="row">
-          <div className="col-xl-8 add-style-col">
-            <SubmitProduct />
-          </div>
-        </div>
-      : 
+    <Title title={title} />
+    { 
+      alertMessage 
+      ? <AlertMesg />
+      : <>
         <div className="row">
           <div className="col-xl-8 add-style-col">
             { 
-              !action && 
-                <AddStyleForm
+              action !== 'add-color' && action !== 'add-brand' &&
+                <ProductStyleForm
                   formSubmit={formSubmit}
                   formData={formData} 
                   errors={errors} 
-                  onInputChange={onInputChange} 
-                  buttonDisabled={buttonDisabled}
+                  onInputChange={onInputChange}
+                  brands={data.allIds ? data.allIds : null}
                 /> 
             }
             { action === 'add-color' && <AddColor />}
             { action === 'add-brand' && <AddBrand />}
-            { action === 'submit' && <SubmitProduct />}
           </div>
           <div className="col-xl-4 add-color-col">
-            <PreviewColors productObj={productObj} removeProductColor={removeProductColor} />
+            <div className="row flex-column">
+              <div className="col">
+                <SubmitCard formSubmit={formSubmit} buttonDisabled={buttonDisabled} />
+              </div>
+              <div className="col">
+                { 
+                  action !== 'add-brand' && 
+                    <PreviewColors colors={formData.colors} setValues={setValues} />
+                }
+              </div>
+            </div>        
           </div>
         </div>
+      </>
     }
   </>
 }
 
 const mapStateToProps = createStructuredSelector({
-  productObj: selectProductObj
+  data: selectBrandData,
+  alertMessage: selectAlertMessage
 })
 
 const mapDispatchToProps = dispatch => ({
-  addProductStyle: payload => dispatch(addProductStyle(payload)),
-  getReq: (pathname, fetchSuccess, queryStr) => dispatch(getReq(pathname, fetchSuccess, queryStr)),
-  removeProductColor: index => dispatch(removeProductColor(index))
+  getReq: (pathname, fetchSuccess, queryStr) => dispatch(getReq(pathname, fetchSuccess, queryStr))
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(AddProduct);
+export default connect(mapStateToProps, mapDispatchToProps)(ProductByIdEdit);

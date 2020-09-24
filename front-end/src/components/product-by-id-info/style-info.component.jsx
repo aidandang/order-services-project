@@ -1,15 +1,30 @@
 import React from 'react';
 
+// dependecies
+import { Link, useLocation, useHistory } from 'react-router-dom';
+// redux
+import { connect } from 'react-redux';
+import { updateProductStyle } from '../../state/product/product.actions';
 // ui settings
 const liClassName = "list-group-item bg-item-list-cs list-group-item-action";
 
-export default function ProductInfo({ 
-  product
-}) {
+const StyleInfo = ({ 
+  product,
+  updateProduct
+}) => {
+
+  const location = useLocation();
+  const history = useHistory();
 
   // Check if brand name was deleted or not to avoid system crash for undefined error.
   let brandName = "N/A";
-  if (product && product.brand.length > 0 && product.brand[0].preferredName.length > 0) brandName = product.brand[0].preferredName;
+  if (product && product.brand && product.brand[0].preferredName.length > 0) brandName = product.brand[0].preferredName;
+
+  const handleEditProduct = (e) => {
+    e.preventDefault();
+    updateProduct(product);
+    history.push(`${location.pathname}?type=edit-product${location.search && '&' + location.search}`)
+  }
 
   return <>
     {product &&
@@ -21,15 +36,13 @@ export default function ProductInfo({
               <div className="row">
                 <div className="col text-uppercase font-weight-bold">Product Information</div>
                 <div className="col text-right">
-                  <a href="/" 
-                    className="a-link-cs" 
-                    name="accountInfo" 
-                    onClick={(e) => { 
-                      e.preventDefault();
-                    }}
+                  <Link 
+                    to={`${location.pathname}?type=edit-product${location.search && '&' + location.search}`} 
+                    className="a-link-cs"
+                    onClick={handleEditProduct}
                   >
                     Edit
-                  </a>
+                  </Link>
                 </div>
               </div>
             </div>
@@ -66,7 +79,7 @@ export default function ProductInfo({
                   <div className="col-8">
                     <img 
                       className="product-img my-2" 
-                      src={product.colors[0].image} alt={product.name} 
+                      src={product.styleImage} alt={product.name} 
                     />
                   </div>
                 </div>
@@ -79,3 +92,9 @@ export default function ProductInfo({
     }
   </>
 }
+
+const mapDispatchToProps = dispatch => ({
+  updateProduct: product => dispatch(updateProductStyle(product))
+})
+
+export default connect(null, mapDispatchToProps)(StyleInfo);

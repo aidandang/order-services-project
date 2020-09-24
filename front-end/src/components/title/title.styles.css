@@ -5,3 +5,13 @@
 .title_font {
   font-weight: bold;
 }
+
+.title-btn {
+  color: #5D8C87;
+  border-radius: 20px;
+  border: 1px solid rgba(93, 140, 135, 1);
+}
+
+.title-btn:hover {
+  color: #5D8C87;
+}

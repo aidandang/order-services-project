@@ -1,10 +1,7 @@
 import { ProductActionTypes } from './product.types';
 
 const INITIAL_STATE = {
-  data: null,
-  productObj: {
-    colors: []
-  }
+  data: {}
 }
 
 const productReducer = (state = INITIAL_STATE, action) => {
@@ -14,25 +11,17 @@ const productReducer = (state = INITIAL_STATE, action) => {
         ...state,
         data: { ...state.data, ...action.payload }
       }
-    case ProductActionTypes.ADD_PRODUCT_STYLE:
+    case ProductActionTypes.UPDATE_PRODUCT_STYLE:
       return {
         ...state,
-        productObj: { ...state.productObj, ...action.payload }
+        prodObj: { ...state.prodObj, ...action.payload }
       }
     case ProductActionTypes.ADD_PRODUCT_COLOR:
       return {
         ...state,
-        productObj: { 
-          ...state.productObj,
-          colors: [...state.productObj.colors, action.payload]
-        }
-      }
-    case ProductActionTypes.REMOVE_PRODUCT_COLOR:
-      return {
-        ...state,
-        productObj: { 
-          ...state.productObj,
-          colors: state.productObj.colors.filter((color, index) => index !== action.payload)
+        prodObj: {
+          ...state.prodObj,
+          colors: [ ...state.prodObj.colors, action.payload ]
         }
       }
     default:

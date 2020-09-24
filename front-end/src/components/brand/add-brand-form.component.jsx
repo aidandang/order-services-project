@@ -2,6 +2,7 @@ import React from 'react';
 
 // dependencies
 import { Link, useLocation } from 'react-router-dom';
+import queryString from 'query-string';
 // components
 import Button from '../button/button.component';
 // ui settings
@@ -17,6 +18,9 @@ export default function BrandForm({
 
   const location = useLocation();
 
+  const queryObj = queryString.parse(location.search);
+  const { type } = queryObj;
+
   return <>
     <form onSubmit={formSubmit}>
       <div className="row">
@@ -29,7 +33,7 @@ export default function BrandForm({
                 <div className="col text-uppercase font-weight-bold align-self-center">Add Brand</div>
                 <div className="col text-right">
                   <Link 
-                    to={location.pathname}
+                    to={`${location.pathname}?type=${type}`}
                     className="a-link-cs" 
                   >
                     Close
