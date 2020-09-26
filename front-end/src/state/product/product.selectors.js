@@ -6,8 +6,3 @@ export const selectProductData = createSelector(
   [selectProduct],
   product => product.data
 )
-
-export const selectProdObj = createSelector(
-  [selectProduct],
-  product => product.prodObj
-)

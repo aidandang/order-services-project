@@ -8,6 +8,7 @@ import Footer from '../../components/footer/footer.component';
 import Sidebar from '../../components/sidebar/sidebar.component';
 import DashboardPage from '../../pages/dashboard-page/dashboard-page.component';
 import ProductRoutes from './product-routes.component';
+import CustomerRoutes from './customer-routes.component';
 // ui settings
 import './private-routes.styles.css';
 
@@ -28,6 +29,7 @@ const PrivateRoutes = () => {
                 <div className="col">
                   <Switch>
                     <Route path="/app/product" render={() => <ProductRoutes />} />
+                    <Route path="/app/customer" render={() => <CustomerRoutes />} />
                     <Route exact path="/app" render={() => <DashboardPage />} />
                   </Switch>
                 </div>

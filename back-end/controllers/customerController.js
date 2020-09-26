@@ -34,7 +34,7 @@ exports.readCustomers = catchAsync(async (req, res, next) => {
         count: count,
         pages: pages
       },
-      customers
+      allIds: customers
     });
 });
 
@@ -49,7 +49,7 @@ exports.readCustomerById = catchAsync(async (req, res, next) => {
     .status(200)
     .json({
       status: 'success',
-      customer
+      byId: customer
     });
 });
 
@@ -59,7 +59,7 @@ exports.createCustomer = catchAsync(async (req, res, next) => {
     .status(201)
     .json({
       status: 'success',
-      customer: newCustomer
+      byId: newCustomer
     });
 });
 
