@@ -21,7 +21,7 @@ const PreviewAddresses = ({
     e.preventDefault();
     setValues(prevState => ({ 
       ...prevState,
-      shippingAddress: prevState.shippingAddress.filter((address, idx) => idx !== index)
+      shippingInfo: prevState.shippingInfo.filter((address, idx) => idx !== index)
     }))
   } 
 
@@ -38,7 +38,7 @@ const PreviewAddresses = ({
           <div className="row"> 
             <div className="col-12 align-self-center text-center">
               <Link 
-                to={`${location.pathname}?type=${type}&action=add-color`} 
+                to={`${location.pathname}?type=${type}&action=add-address`} 
                 className="a-link-cs"
               >
                 (+) Add a New Address 
@@ -50,14 +50,12 @@ const PreviewAddresses = ({
           addresses.length > 0 &&
             addresses.map((address, index) => 
               <li key={uuid()} className={liClassName}>
-                <div className="row"> 
-                  <div className="col align-self-center text-center">
+                <div className="row">
+                  <div className="col-12 align-self-center">
                     <span className="font-weight-bold">{address.fullname}</span><br />
                     <span>{`${address.streetAddress1},`}</span><br />
                     <span>{`${address.city}, ${address.state} ${address.zipcode}`}</span><br />
-                    <span>{address.phone}</span>
-                  </div>
-                  <div className="col align-self-center">
+                    <span>{address.phone}</span><br />
                     <span className="on-click" onClick={e => removeAddress(e, index)}>Remove</span>
                   </div>
                 </div>

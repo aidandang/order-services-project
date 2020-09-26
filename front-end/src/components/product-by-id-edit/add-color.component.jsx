@@ -1,6 +1,6 @@
 import React from 'react';
 
-// import dependencies
+// dependencies
 import * as Yup from "yup";
 // components
 import { useForm } from '../custom-hooks/use-form';
@@ -23,7 +23,6 @@ const formState = {
   url: ""
 };
 
-// MAIN COMPONENT
 const AddColor = ({
   setNewColor
 }) => {
@@ -36,7 +35,6 @@ const AddColor = ({
     setValues
   ] = useForm(formState, formState, formSchema);
 
-  // Form submit function
   const formSubmit = e => {
     e.preventDefault();
     setNewColor(prevState => ({
