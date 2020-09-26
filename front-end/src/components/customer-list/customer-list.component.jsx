@@ -4,24 +4,24 @@ import React, { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 // components
 import Title from '../title/title.component';
-import ProductSearch from './product-search.component';
-import PreviewProducts from './preview-products.component';
+import CustomerSearch from './customer-search.component';
+import PreviewCustomers from './preview-customers.component';
 import PaginationBar from '../pagination-bar/pagination-bar.component';
 import AlertMesg from '../alert-mesg/alert-mesg.component';
 // redux
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import { selectProductData } from '../../state/product/product.selectors';
+import { selectCustomerData } from '../../state/customer/customer.selectors';
 import { getReq } from '../../state/api/get-request';
-import { ProductActionTypes } from '../../state/product/product.types';
+import { CustomerActionTypes } from '../../state/customer/customer.types';
 import { selectAlertMessage } from '../../state/alert/alert.selectors';
 
 const title = {
-  name: 'Product List',
-  message: 'A product can be searched by either its name or style.'
+  name: 'Customer List',
+  message: 'A customer can be searched by either its account or name or address.'
 }
 
-const ProductList = ({ 
+const CustomerList = ({ 
   getReq, 
   data, 
   alertMessage
@@ -35,8 +35,8 @@ const ProductList = ({
   }
   
   useEffect(() => {
-    const fetchSuccess = ProductActionTypes.PRODUCT_FETCH_SUCCESS;
-    getReq('/products', fetchSuccess, location.search)
+    const fetchSuccess = CustomerActionTypes.CUSTOMER_FETCH_SUCCESS;
+    getReq('/customers', fetchSuccess, location.search)
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location.search])
   
@@ -46,14 +46,14 @@ const ProductList = ({
       alertMessage 
       ? <AlertMesg />
       : <> 
-        <ProductSearch />
+        <CustomerSearch />
         {
           data && data.info && <>
             <PaginationBar  
               numberOfPages={data.info.pages}
               limit={5}
             />
-            <PreviewProducts />
+            <PreviewCustomers />
             <PaginationBar 
               numberOfPages={data.info.pages}
               limit={5}
@@ -67,11 +67,11 @@ const ProductList = ({
 
 const mapStateToProps = createStructuredSelector({
   alertMessage: selectAlertMessage,
-  data: selectProductData
+  data: selectCustomerData
 })
 
 const mapDispatchToProps = dispatch => ({
   getReq: (pathname, fetchSuccess, queryStr) => dispatch(getReq(pathname, fetchSuccess, queryStr))
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(ProductList);
+export default connect(mapStateToProps, mapDispatchToProps)(CustomerList);

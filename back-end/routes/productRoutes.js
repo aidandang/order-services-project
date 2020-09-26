@@ -11,8 +11,8 @@ router
 router
   .route('/:id')
   .get(productController.readProductById)
-  .patch(authController.restrictTo('admin'), productController.updateProductById)
-  .delete(authController.restrictTo('admin'), productController.deleteProductById)
+  .patch(productController.updateProductById)
+  .delete(productController.deleteProductById)
 
 router
   .route('/:id/colors/')
@@ -20,7 +20,7 @@ router
 
 router
   .route('/:id/colors/:sid')
-  .patch(authController.restrictTo('admin'), productController.updateColor)
-  .delete(authController.restrictTo('admin'), productController.deleteColor);
+  .patch(productController.updateColor)
+  .delete(productController.deleteColor);
   
 module.exports = router;

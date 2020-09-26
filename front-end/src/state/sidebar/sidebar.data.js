@@ -15,7 +15,7 @@ export const SIDEBAR_LIST = {
     {
       id: 3,
       text: 'Customers',
-      link: '/app/customers',
+      link: '/app/customer',
       icon: 'fas fa-address-card'
     },
     { 

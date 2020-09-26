@@ -1,7 +1,10 @@
 import { ProductActionTypes } from './product.types';
 
 const INITIAL_STATE = {
-  data: {}
+  data: {},
+  prodObj: {
+    colors: []
+  }
 }
 
 const productReducer = (state = INITIAL_STATE, action) => {
@@ -10,19 +13,6 @@ const productReducer = (state = INITIAL_STATE, action) => {
       return {
         ...state,
         data: { ...state.data, ...action.payload }
-      }
-    case ProductActionTypes.UPDATE_PRODUCT_STYLE:
-      return {
-        ...state,
-        prodObj: { ...state.prodObj, ...action.payload }
-      }
-    case ProductActionTypes.ADD_PRODUCT_COLOR:
-      return {
-        ...state,
-        prodObj: {
-          ...state.prodObj,
-          colors: [ ...state.prodObj.colors, action.payload ]
-        }
       }
     default:
       return state;

@@ -43,7 +43,7 @@ const PaginationBar = ({
     queryObj.page = page;
     const queryStr = '?' + queryString.stringify(queryObj);
 
-    history.push('/app/product' + queryStr)
+    history.push(location.pathname + queryStr)
   }
 
   return <>

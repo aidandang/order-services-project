@@ -7,6 +7,7 @@ import sidebarReducer from './sidebar/sidebar.reducer';
 import navbarReducer from './navbar/navbar.reducer';
 import productReducer from './product/product.reducer';
 import brandReducer from './brand/brand.reducer';
+import customerReducer from './customer/customer.reducer';
 import alertReducer from './alert/alert.reducer';
 import isFetchingReducer from './is-fetching/is-fetching.reducer';
 
@@ -23,6 +24,7 @@ const appReducer = combineReducers({
   navbar: navbarReducer,
   product: productReducer,
   brand: brandReducer,
+  customer: customerReducer,
   isFetching: isFetchingReducer
 });
 

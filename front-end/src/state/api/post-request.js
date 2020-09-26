@@ -22,7 +22,7 @@ const handleErrorMesg = (err) => {
   return payload
 }
 
-// GET request.
+// POST request.
 export const postReq = (
   pathname,
   fetchSuccess,

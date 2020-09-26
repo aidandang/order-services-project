@@ -1,13 +1,10 @@
 import React from 'react';
 
-// import dependencies
+// dependencies
 import * as Yup from "yup";
 // components
 import { useForm } from '../custom-hooks/use-form';
 import AddColorForm from './add-color-form.component';
-// redux
-import { connect } from 'react-redux';
-import { addProductColor } from '../../state/product/product.actions';
 
 // set form schema
 const formSchema = Yup.object().shape({
@@ -26,9 +23,8 @@ const formState = {
   url: ""
 };
 
-// MAIN COMPONENT
 const AddColor = ({
-  addProductColor
+  setNewColor
 }) => {
 
   const [
@@ -39,11 +35,13 @@ const AddColor = ({
     setValues
   ] = useForm(formState, formState, formSchema);
 
-  // Form submit function
   const formSubmit = e => {
     e.preventDefault();
-    addProductColor(formData);
-    setValues(formState);
+    setNewColor(prevState => ({
+      ...prevState,
+      colors: [ ...prevState.colors, formData ]
+    }));
+    setValues(formState)
   }
 
   return <>
@@ -57,8 +55,4 @@ const AddColor = ({
   </>
 }
 
-const mapDispatchToProps = dispatch => ({
-  addProductColor: payload => dispatch(addProductColor(payload))
-})
-
-export default connect(null, mapDispatchToProps)(AddColor);
+export default AddColor;
