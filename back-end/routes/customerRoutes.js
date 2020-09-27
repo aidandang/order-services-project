@@ -11,8 +11,8 @@ router
 router
   .route('/:id')
   .get(customerController.readCustomerById)
-  .patch(authController.restrictTo('admin'), customerController.updateCustomer)
-  .delete(authController.restrictTo('admin'), customerController.deleteCustomer);
+  .patch(customerController.updateCustomer)
+  .delete(customerController.deleteCustomer);
 
 router
   .route('/:id/shippinginfo')
@@ -20,7 +20,7 @@ router
 
 router
   .route('/:id/shippinginfo/:sid')
-  .patch(authController.restrictTo('admin'), customerController.updateShippingInfo)
-  .delete(authController.restrictTo('admin'), customerController.deleteShippingInfo);
+  .patch(customerController.updateShippingInfo)
+  .delete(customerController.deleteShippingInfo);
   
 module.exports = router;

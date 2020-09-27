@@ -64,7 +64,7 @@ exports.createCustomer = catchAsync(async (req, res, next) => {
 });
 
 exports.addShippingInfo = catchAsync(async (req, res, next) => {
-  const newShipingInfo = await Customer.findByIdAndUpdate(
+  const result = await Customer.findByIdAndUpdate(
     req.params.id, 
     { $push: 
       { "shippingInfo": req.body } 
@@ -75,7 +75,7 @@ exports.addShippingInfo = catchAsync(async (req, res, next) => {
     .status(201)
     .json({
       status: 'success',
-      customer: newShipingInfo
+      byId: result
     });
 });
 
@@ -101,7 +101,7 @@ exports.deleteShippingInfo = catchAsync(async (req, res, next) => {
     .status(200)
     .json({
       status: 'DELETE_SUCCESS',
-      customer: result
+      byId: result
     });
 });
 
@@ -119,7 +119,7 @@ exports.updateShippingInfo = catchAsync(async (req, res, next) => {
     .status(201)
     .json({
       status: 'success',
-      customer: result
+      byId: result
     });
 });
 
@@ -133,7 +133,7 @@ exports.updateCustomer = catchAsync(async (req, res, next) => {
     .status(200)
     .json({
       status: 'success',
-      customer
+      byId: customer
     });
 });
 
@@ -146,6 +146,6 @@ exports.deleteCustomer = catchAsync(async (req, res, next) => {
     .status(204)
     .json({
       status: 'success',
-      customer: result
+      byId: result
     });
 });
