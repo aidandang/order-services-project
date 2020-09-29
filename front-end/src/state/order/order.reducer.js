@@ -1,12 +1,12 @@
-import { ProductActionTypes } from './product.types';
+import { OrderActionTypes } from './order.types';
 
 const INITIAL_STATE = {
   data: {}
 }
 
-const productReducer = (state = INITIAL_STATE, action) => {
+const orderReducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
-    case ProductActionTypes.PRODUCT_FETCH_SUCCESS:
+    case OrderActionTypes.ORDER_FETCH_SUCCESS:
       return {
         ...state,
         data: { ...state.data, ...action.payload }
@@ -16,4 +16,4 @@ const productReducer = (state = INITIAL_STATE, action) => {
   }
 }
 
-export default productReducer;
+export default orderReducer;
