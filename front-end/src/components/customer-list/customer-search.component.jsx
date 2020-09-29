@@ -2,7 +2,7 @@ import React from 'react';
 
 // dependencies
 import * as Yup from "yup";
-import { useHistory } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 
 // utils
 import { useForm } from '../custom-hooks/use-form';
@@ -22,7 +22,9 @@ const formState = {
 }
 
 const CustomerSearch = () => {
+
   const history = useHistory();
+  const location = useLocation();
 
   const [
     formData,
@@ -38,7 +40,7 @@ const CustomerSearch = () => {
     const queryStr = convertSearchFormToQueryString(e, formData);
 
     if (queryStr !== undefined) {
-      history.push('/app/customer' + queryStr)
+      history.push(location.pathname + queryStr)
     }
   }
 

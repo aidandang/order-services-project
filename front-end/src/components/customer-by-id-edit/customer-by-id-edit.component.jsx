@@ -21,7 +21,6 @@ import { CustomerActionTypes } from '../../state/customer/customer.types';
 import { selectAlertMessage } from '../../state/alert/alert.selectors';
 
 // set form schema
-// set form schema
 const formSchema = Yup.object().shape({
   username: Yup
     .string()

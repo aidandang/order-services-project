@@ -5,12 +5,12 @@ const mongoose = require('mongoose'),
 autoIncrement.initialize(mongoose);
 
 const itemSchema = new Schema({
-  productId: {
-    type: String,
+  product: {
+    type: Object,
     required: true
   },
-  colorId: {
-    type: String,
+  color: {
+    type: Object,
     required: true
   },
   note: {
@@ -57,22 +57,22 @@ const revSchema = new Schema({
 });
 
 const orderSchema = new Schema({
-  customerId: {
-    type: String,
+  customer: {
+    type: Object,
     required: true
   },
-  addressId: {
-    type: String,
-    required: true
-  },
-  userId: {
-    type: String,
+  shippingAddress: {
+    type: Object,
     required: true
   },
   items: [itemSchema],
   paidAmount: {
     type: Number,
     default: 0
+  },
+  user: {
+    type: Object,
+    required: true
   },
   orderedDate: {
     type: Date

@@ -14,14 +14,14 @@ export const SIDEBAR_LIST = {
     },
     {
       id: 3,
-      text: 'Customers',
+      text: 'Customer',
       link: '/app/customer',
       icon: 'fas fa-address-card'
     },
     { 
       id: 4,
-      text: 'Orders',
-      link: '/app/orders',
+      text: 'Order',
+      link: '/app/order',
       icon: 'fas fa-folder'
     },
     {
