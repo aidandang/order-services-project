@@ -7,7 +7,7 @@ import queryString from 'query-string';
 // components
 import Title from '../title/title.component';
 import { useForm } from '../custom-hooks/use-form';
-import SubmitCard from './submit-card.component';
+import SubmitCard from '../submit-card/submit-card.component';
 import ProductStyleForm from './product-style-form.component';
 import PreviewColors from './preview-colors.component';
 import AddColor from './add-color.component';

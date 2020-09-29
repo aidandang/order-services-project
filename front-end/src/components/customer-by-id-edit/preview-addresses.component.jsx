@@ -55,8 +55,8 @@ const PreviewAddresses = ({
                     <span className="font-weight-bold">{address.fullname}</span><br />
                     <span>{`${address.streetAddress1},`}</span><br />
                     <span>{`${address.city}, ${address.state} ${address.zipcode}`}</span><br />
-                    <span>{address.phone}</span><br />
-                    <span className="on-click" onClick={e => removeAddress(e, index)}>Remove</span>
+                    <span>{address.phone}</span>
+                    <p className="on-click" onClick={e => removeAddress(e, index)}>Remove</p>
                   </div>
                 </div>
               </li>

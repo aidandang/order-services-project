@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 // dependencies
 import * as Yup from "yup";
-import { useLocation } from 'react-router-dom';
+import { useLocation, Redirect } from 'react-router-dom';
 import queryString from 'query-string';
 // components
 import Title from '../title/title.component';
@@ -10,7 +10,15 @@ import { useForm } from '../custom-hooks/use-form';
 import CustomerForm from './customer-form.component';
 import AddAddress from './add-address.component';
 import PreviewAddresses from './preview-addresses.component';
-import SubmitCard from '../product-by-id-edit/submit-card.component';
+import SubmitCard from '../submit-card/submit-card.component';
+import AlertMesg from '../alert-mesg/alert-mesg.component';
+// redux
+import { connect } from 'react-redux';
+import { createStructuredSelector } from 'reselect';
+import { patchReq } from '../../state/api/patch-request';
+import { postReq } from '../../state/api/post-request';
+import { CustomerActionTypes } from '../../state/customer/customer.types';
+import { selectAlertMessage } from '../../state/alert/alert.selectors';
 
 // set form schema
 // set form schema
@@ -75,8 +83,13 @@ const formState = {
 }
 
 const CustomerByIdEdit = ({
-  customer
+  customer,
+  patchReq,
+  postReq,
+  alertMessage
 }) => {
+
+  const [success, setSuccess] = useState(false);
 
   const location = useLocation();
 
@@ -101,35 +114,67 @@ const CustomerByIdEdit = ({
 
   const formSubmit = e => {
     e.preventDefault();
+
+    const fetchSuccess = CustomerActionTypes.CUSTOMER_FETCH_SUCCESS;
+
+    if (type === 'edit') {
+      patchReq('/customers/' + customer._id, fetchSuccess, formData, setSuccess)
+    }
+
+    if (type === 'add') {
+      postReq('/customers', fetchSuccess, formData, setSuccess)
+    }
   }
 
   return <>
+    { success && <Redirect to={location.pathname} />}
+
+
     <Title title={title} />
-    <div className="row">
-      <div className="col-xl-8 add-style-col">
-        { 
-          action !== 'add-address' && 
-            <CustomerForm
-              formSubmit={formSubmit}
-              formData={formData} 
-              errors={errors} 
-              onInputChange={onInputChange}
-            />
-        }
-        { action === 'add-address' && <AddAddress setNewAddress={setValues} /> }
-      </div>
-      <div className="col-xl-4 add-color-col">
-        <div className="row flex-column">
-          <div className="col">
-            <SubmitCard formSubmit={formSubmit} buttonDisabled={buttonDisabled} />
+    {
+      alertMessage
+      ? <AlertMesg />
+      : <>
+        <div className="row">
+          <div className="col-xl-8 add-style-col">
+            { 
+              action !== 'add-address' && 
+                <CustomerForm
+                  formSubmit={formSubmit}
+                  formData={formData} 
+                  errors={errors} 
+                  onInputChange={onInputChange}
+                />
+            }
+            { action === 'add-address' && <AddAddress setNewAddress={setValues} /> }
           </div>
-          <div className="col">
-            <PreviewAddresses addresses={formData.shippingInfo} setValues={setValues} />
+          <div className="col-xl-4 add-color-col">
+            <div className="row flex-column">
+              <div className="col">
+                <SubmitCard formSubmit={formSubmit} buttonDisabled={buttonDisabled} />
+              </div>
+              <div className="col">
+                <PreviewAddresses addresses={formData.shippingInfo} setValues={setValues} />
+              </div>
+            </div>        
           </div>
-        </div>        
-      </div>
-    </div>
+        </div>
+      </>
+    }
   </>
 }
 
-export default CustomerByIdEdit;
+const mapStateToProps = createStructuredSelector({
+  alertMessage: selectAlertMessage
+})
+
+const mapDispatchToProps = dispatch => ({
+  patchReq: (pathname, fetchSuccess, reqBody, setSuccess) => dispatch(
+    patchReq(pathname, fetchSuccess, reqBody, setSuccess)
+  ),
+  postReq: (pathname, fetchSuccess, reqBody, setSuccess) => dispatch(
+    postReq(pathname, fetchSuccess, reqBody, setSuccess)
+  )
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(CustomerByIdEdit);
