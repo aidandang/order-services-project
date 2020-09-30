@@ -111,7 +111,8 @@ const customerSchema = new Schema({
     type: [shippingInfoSchema]
   },
   shippingIsBilling: {
-    type: Boolean
+    type: String,
+    default: 'true'
   },
   active: {
     type: Boolean,

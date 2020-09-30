@@ -9,7 +9,7 @@ import { selectCustomerData } from '../../state/customer/customer.selectors';
 
 const SelectCustomer = ({ 
   data,
-  setSubmitData
+  setOrder
 }) => {
 
   const match = useRouteMatch()
@@ -19,7 +19,7 @@ const SelectCustomer = ({
 
   const handleOnClick = (e, customer) => {
     e.preventDefault();
-    setSubmitData(prevState => ({ ...prevState,
+    setOrder(prevState => ({ ...prevState,
       customer
     }))
   }
