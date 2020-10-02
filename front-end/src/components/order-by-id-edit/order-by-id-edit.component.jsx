@@ -1,36 +1,19 @@
 import React, { useState } from 'react';
 
 // dependencies
-import { useLocation, Redirect } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import queryString from 'query-string';
 // components
 import Title from '../title/title.component';
+import Stagebar from '../stagebar/stagebar.component';
 import OrderCustomerInfo from './order-customer-info.component';
-import OrderItems from './order-items.component';
-// redux
-import { connect } from 'react-redux';
-import { postReq } from '../../state/api/post-request';
-import { OrderActionTypes } from '../../state/order/order.types';
 
-// set the initial state
-const initialState = {
-  orderNumber: '',
-  customer: null,
-  address: null,
-  items: []
-}
-
-const OrderByIdEdit = ({
-  order,
-  postReq
-}) => {
-
-  const [success, setSuccess] = useState(false);
+const OrderByIdEdit = () => {
 
   const location = useLocation();
 
   const queryObj = queryString.parse(location.search);
-  const { type, action } = queryObj;
+  const { type, stage } = queryObj;
 
   let titleName = 'Edit Order';
   if (type === 'add') titleName = 'Add Order';
@@ -40,31 +23,46 @@ const OrderByIdEdit = ({
     message: 'Add or edit an order and its items.'
   }
 
-  const [submitData, setSubmitData] = useState(type === 'edit' ? order : initialState);
-
-  const handleSubmit = e => {
-    e.preventDefault();
-
-    const fetchSuccess = OrderActionTypes.ORDER_FETCH_SUCCESS;
-
-    if (type === 'add') {
-      postReq('/orders', fetchSuccess, submitData, setSuccess)
+  const stageList = [
+    {
+      name: 'select-customer',
+      text: '1. Select Customer'
+    },
+    {
+      name: 'add-items',
+      text: '2. Add Items'
+    },
+    {
+      name: 'preview-and-submit',
+      text: '3. Preview and Submit'
     }
+  ]
+
+  let active = "";
+  if (stage) { 
+    active = stage 
+  } else {
+    active = 'select-customer'
   }
 
-  return <>
-    { success && <Redirect to={location.pathname} /> }
+  const initialState = {
+    customer: null,
+    shippingAddress: null,
+    items: []
+  }
 
+  const [order, setOrder] = useState(initialState)
+
+  console.log(order)
+
+  return <>
     <Title title={title} />
-    <OrderCustomerInfo order={submitData} setSubmitData={setSubmitData} />
-    <OrderItems order={submitData} />
+    <Stagebar stageList={stageList} active={active} />
+    {
+      (!stage || stage === 'select-customer') &&
+      <OrderCustomerInfo order={order} setOrder={setOrder} />
+    }
   </>
 }
 
-const mapDispatchToProps = dispatch => ({
-  postReq: (pathname, fetchSuccess, reqBody, setSuccess) => dispatch(
-    postReq(pathname, fetchSuccess, reqBody, setSuccess)
-  )
-})
-
-export default connect(null, mapDispatchToProps)(OrderByIdEdit);
+export default OrderByIdEdit;

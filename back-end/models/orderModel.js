@@ -63,7 +63,7 @@ const orderSchema = new Schema({
   },
   shippingAddress: {
     type: Object,
-    required: true
+    default: {}
   },
   items: [itemSchema],
   paidAmount: {

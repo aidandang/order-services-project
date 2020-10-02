@@ -1,7 +1,5 @@
 import React from 'react';
 
-// dependencies
-import { useRouteMatch, useHistory } from 'react-router-dom';
 // redux
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
@@ -9,18 +7,18 @@ import { selectCustomerData } from '../../state/customer/customer.selectors';
 
 const SelectCustomer = ({ 
   data,
-  setSubmitData
+  setOrder
 }) => {
-
-  const match = useRouteMatch()
-  const history = useHistory()
 
   const { allIds } = data;
 
   const handleOnClick = (e, customer) => {
     e.preventDefault();
-    setSubmitData(prevState => ({ ...prevState,
-      customer
+    setOrder(prevState => ({ ...prevState,
+      customer,
+      shippingAddress: customer.shippingIsBilling === 'true' 
+        ? null 
+        : customer.shippingInfo.find(address => customer.shippingIsBilling === address._id)
     }))
   }
 
