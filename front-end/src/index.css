@@ -88,3 +88,14 @@ body {
 .product-img {
   width: 100%;
 }
+
+.btn-link {
+  border-radius: 20px;
+  background-color: #5D8C87;
+  border: 1px solid rgba(93, 140, 135, 1);
+  cursor: default;
+}
+
+.btn-link:hover {
+  text-decoration: none;
+}

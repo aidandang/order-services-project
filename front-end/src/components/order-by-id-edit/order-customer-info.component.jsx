@@ -2,7 +2,6 @@ import React from 'react';
 
 // dependencies
 import * as Yup from "yup";
-import { useHistory, useLocation } from 'react-router-dom';
 // components
 import { useForm } from '../custom-hooks/use-form';
 import { convertSearchFormToQueryString } from '../utils/convert-search-form-to-query-string';
@@ -34,10 +33,7 @@ const OrderCustomerInfo = ({
   setOrder
 }) => {
 
-  const history = useHistory();
-  const location = useLocation();
-
-  const { customer, address, orderNumber, createdAt } = order;
+  const { customer } = order;
 
   const [
     formData,
@@ -63,7 +59,7 @@ const OrderCustomerInfo = ({
     { 
       customer
       ?
-        <OrderShippingAddress customer={customer} setOrder={setOrder} />
+        <OrderShippingAddress order={order} setOrder={setOrder} />
       : <>
         <CustomerSearchForm
           formSubmit={formSubmit} 

@@ -53,6 +53,8 @@ const OrderByIdEdit = () => {
 
   const [order, setOrder] = useState(initialState)
 
+  console.log(order)
+
   return <>
     <Title title={title} />
     <Stagebar stageList={stageList} active={active} />

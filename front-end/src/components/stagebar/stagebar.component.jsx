@@ -32,7 +32,7 @@ const Stagebar = ({
                 : 
                   <span key={index} className="mr-2">
                     <Link  
-                      to={`${location.pathname}${location.search ? `?${search}` + `&stage=${element.name}` : `?stage=${element.name}`}`}
+                      to={location.pathname + location.search ? `?${search}&stage=${element.name}` : `?stage=${element.name}`}
                       className="stage-link-cs mr-2"
                     >
                       {element.text}
