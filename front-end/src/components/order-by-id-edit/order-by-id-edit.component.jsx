@@ -6,7 +6,8 @@ import queryString from 'query-string';
 // components
 import Title from '../title/title.component';
 import Stagebar from '../stagebar/stagebar.component';
-import OrderCustomerInfo from './order-customer-info.component';
+import OrderCustomers from './order-customers.component';
+import AddItems from './add-items.component';
 
 const OrderByIdEdit = () => {
 
@@ -60,7 +61,11 @@ const OrderByIdEdit = () => {
     <Stagebar stageList={stageList} active={active} />
     {
       (!stage || stage === 'select-customer') &&
-      <OrderCustomerInfo order={order} setOrder={setOrder} />
+      <OrderCustomers order={order} setOrder={setOrder} />
+    }
+    {
+      (stage === 'add-items') &&
+      <AddItems order={order} setOrder={setOrder} />
     }
   </>
 }

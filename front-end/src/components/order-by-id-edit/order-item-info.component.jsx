@@ -1,19 +1,63 @@
 import React from 'react';
 
+// dependencies
+import * as Yup from "yup";
+// components
+import { useForm } from '../custom-hooks/use-form';
 // ui settings
 const liClassName = "list-group-item bg-item-list-cs list-group-item-action";
 
-export default function SelectProductForm({ 
-  formData, 
-  formSubmit, 
-  errors, 
-  onInputChange, 
-  buttonDisabled
-}) {
+// set form schema
+const formSchema = Yup.object().shape({
+  size: Yup
+    .string(),
+  qty: Yup
+    .string()
+    .required(),
+  price: Yup
+    .string()
+    .required(),
+  saleTax: Yup
+    .string(),
+  localCharge: Yup
+    .string(),
+  shippingCost: Yup
+    .string(),
+  note: Yup
+    .string()
+})
+// set form state
+const formState = {
+  size: "",
+  qty: "",
+  price: "",
+  saleTax: "",
+  localCharge: "",
+  shippingCost: "",
+  note: ""
+};
+
+const OrderItemInfo = ({
+  order,
+  setSelectProduct
+}) => {
+
+  // set custom form hook
+  const [
+    formData,
+    errors, 
+    onInputChange, 
+    buttonDisabled
+  ] = useForm(formState, formState, formSchema);
+
+  // form submit function
+  const formSubmit = e => {
+    e.preventDefault();
+  }
 
   return <>
     <form onSubmit={formSubmit}>
-      <div className="row">
+      <div className="row my-3">
         <div className="col-12">
 
           {/* Product Information Card */}
@@ -29,6 +73,7 @@ export default function SelectProductForm({
                     name="closePage" 
                     onClick={(e) => { 
                       e.preventDefault();
+                      setSelectProduct(false)
                     }}
                   >
                     Close
@@ -227,3 +272,5 @@ export default function SelectProductForm({
     </form>
   </>
 }
+
+export default OrderItemInfo;

@@ -14,6 +14,14 @@ const OrderShippingAddress = ({
 
   const location = useLocation();
 
+  let queryStr = location.search;
+
+  if (queryStr.match(/select-customer/g)) {
+    queryStr = location.search.replace('select-customer', 'add-items')
+  } else {
+    queryStr = location.search + '&stage=add-items'
+  }
+
   const { customer, shippingAddress } = order;
 
   const handleChange = e => {
@@ -123,7 +131,7 @@ const OrderShippingAddress = ({
                   <div className="col mt-3">
                     <div className="form-group">
                       <Link 
-                        to={location.pathname + location.search.replace('select-customer', 'add-items')}
+                        to={location.pathname + queryStr}
                         className="btn btn-primary btn-link text-light"
                       >
                         Next

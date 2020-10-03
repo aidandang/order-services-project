@@ -96,6 +96,6 @@ body {
   cursor: default;
 }
 
-.btn-link:hover {
+.btn-link:hover, .btn-link:active {
   text-decoration: none;
 }
