@@ -26,7 +26,7 @@ const formState = {
   search: ''
 }
 
-const OrderCustomerInfo = ({ 
+const OrderCustomers = ({ 
   order,
   getReq,
   data,
@@ -90,4 +90,4 @@ const mapDispatchToProps = dispatch => ({
   getReq: (pathname, fetchSuccess, queryStr) => dispatch(getReq(pathname, fetchSuccess, queryStr))
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(OrderCustomerInfo)
+export default connect(mapStateToProps, mapDispatchToProps)(OrderCustomers)

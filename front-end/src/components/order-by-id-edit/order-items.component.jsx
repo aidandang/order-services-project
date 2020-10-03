@@ -1,26 +1,22 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 // dependecies
 import uuid from 'react-uuid';
 // components
 import { acctNumber } from '../utils/acctNumber';
 import { acctToString } from '../utils/acctToString';
-import SelectProduct from './select-product.component';
 
 const subTotal = (qty, price, saleTax, localCharge, shippingCost) => {
   const value = acctNumber(price, saleTax, localCharge, shippingCost) * qty;
   return acctToString(value);
 }
 
-const OrderItems = ({ 
-  order
+const OrderItems = ({
+  order,
+  setSelectProduct
 }) => {
-
-  const [active, setActive] = useState(false);
-
   return <>
-    {/* customer table */}
-    <div className="row my-3">
+    <div className="row mt-3">
       <div className="col">
         <div className="table-responsive">
           <table className="table table-hover">
@@ -69,7 +65,7 @@ const OrderItems = ({
                 className="table-row-cs" 
                 onClick={(e) => {
                   e.preventDefault();
-                  setActive(true)
+                  setSelectProduct(true)
                 }}
               >
                 <td colSpan="9" className="text-center"><span className="a-link-cs">Add a New Item (+)</span></td>
@@ -79,11 +75,6 @@ const OrderItems = ({
         </div>
       </div>
     </div>
-    {/* <!-- end of customer table --> */}
-    { 
-      active &&
-      <SelectProduct />
-    }
   </>
 }
 

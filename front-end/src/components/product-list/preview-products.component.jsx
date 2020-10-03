@@ -2,7 +2,6 @@ import React from 'react';
 
 // components
 import ProductCard from './product-card.component';
-
 // redux
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
