@@ -1,18 +1,14 @@
 import React from 'react';
 
-// dependencies
-import { useRouteMatch, useHistory } from 'react-router-dom';
 // redux
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { selectCustomerData } from '../../state/customer/customer.selectors';
 
 const PreviewCustomers = ({ 
-  data
+  data,
+  handleOnClick
 }) => {
-
-  const match = useRouteMatch()
-  const history = useHistory()
 
   const { allIds } = data;
 
@@ -36,10 +32,7 @@ const PreviewCustomers = ({
                 <tr 
                   key={customer._id}
                   className="table-row-cs" 
-                  onClick={(e) => {
-                    e.preventDefault();
-                    history.push(`${match.path}/${customer._id}`)
-                  }}
+                  onClick={(e) => handleOnClick(e, customer)}
                 >
                   <th scope="row">
                     <span className="mr-2">{customer.account}</span>

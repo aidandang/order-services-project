@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 // components
-import OrderProducts from './order-products.component';
+import SelectProduct from './select-product.component';
 import OrderItems from './order-items.component'
 
 const AddItems = ({ 
@@ -15,7 +15,7 @@ const AddItems = ({
     <OrderItems order={order} setSelectProduct={setSelectProduct} />
     {
       selectProduct &&
-        <OrderProducts order={order} setSelectProduct={setSelectProduct} />  
+        <SelectProduct order={order} setSelectProduct={setSelectProduct} />  
     }
   </>
 }
