@@ -1,16 +1,63 @@
-import React from 'react';
+import React, { useState } from 'react';
 
+// dependencies
+import * as Yup from "yup";
+// components
+import { useForm } from '../custom-hooks/use-form';
+import { convertSearchFormToQueryString } from '../utils/convert-search-form-to-query-string';
+import CustomerSearchForm from '../customer-list/customer-search-form.component';
+import PaginationBar from '../pagination-bar/pagination-bar.component';
+import OrderShippingAddress from './order-shipping-address.component';
+import PreviewCustomers from '../customer-list/preview-customers.component';
 // redux
 import { connect } from 'react-redux';
+import { getReq } from '../../state/api/get-request';
+import { CustomerActionTypes } from '../../state/customer/customer.types';
 import { createStructuredSelector } from 'reselect';
 import { selectCustomerData } from '../../state/customer/customer.selectors';
 
+// set form schema
+const formSchema = Yup.object().shape({
+  search: Yup
+    .string()
+});
+// set form state
+const formState = {
+  search: ''
+}
+
 const SelectCustomer = ({ 
+  order,
+  getReq,
   data,
   setOrder
 }) => {
 
-  const { allIds } = data;
+  const { customer } = order
+
+  const [
+    formData,
+    errors, 
+    onInputChange,
+    buttonDisabled
+  ] = useForm(formState, formState, formSchema);
+
+  const [active, setActive] = useState(null);
+
+  // handle search form 
+  const formSubmit = (e, page) => {
+    e.preventDefault();
+
+    const fetchSuccess = CustomerActionTypes.CUSTOMER_FETCH_SUCCESS;
+    
+    let queryStr = convertSearchFormToQueryString(e, formData);
+
+    if (queryStr !== undefined) {
+      if (page) queryStr = queryStr + `${queryStr === '' ? '?' : '&'}page=${page}`;
+      getReq('/customers', fetchSuccess, queryStr);
+      setActive(page)
+    }
+  }
 
   const handleOnClick = (e, customer) => {
     e.preventDefault();
@@ -23,46 +70,29 @@ const SelectCustomer = ({
   }
 
   return <>
-    {/* customer table */}
-    <div className="row mt-3">
-      <div className="col">
-        <div className="table-responsive-sm">
-          <table className="table table-hover">
-            <thead>
-              <tr>
-                <th scope="col">Account#</th>
-                <th scope="col">Nickname</th>
-                <th scope="col">Fullname</th>
-                <th scope="col">Address</th>
-                <th scope="col">Phone</th>
-              </tr>
-            </thead>
-            <tbody>
-              {
-                allIds.map(customer =>
-                  <tr 
-                    key={customer._id}
-                    className="table-row-cs" 
-                    onClick={e => handleOnClick(e, customer)}
-                  >
-                    <th scope="row">
-                      <span className="mr-2">{customer.account}</span>
-                      {customer.status === "na" && <a href="/" className="a-link-cs">A</a>}
-                    </th>
-                    <td>{customer.nickname}</td>
-                    <td>{customer.fullname}</td>
-                    <td>
-                      {`${customer.streetAddress1}, ${customer.city}, ${customer.state}`}{customer.streetAddress2 !== "" && `, (${customer.streetAddress2})`}
-                    </td>
-                    <td>{customer.phone}</td>
-                  </tr>
-              )}
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-    {/* <!-- end of customer table --> */}
+    { 
+      customer
+      ?
+        <OrderShippingAddress order={order} setOrder={setOrder} />
+      : <>
+        <CustomerSearchForm
+          formSubmit={formSubmit} 
+          formData={formData}
+          errors={errors}
+          onInputChange={onInputChange}
+          buttonDisabled={buttonDisabled}
+        />
+
+        {
+          data.allIds &&
+          <>
+            <PaginationBar numberOfPages={data.info.pages} onPageChange={formSubmit} page={active} />
+            <PreviewCustomers handleOnClick={handleOnClick} />
+            <PaginationBar numberOfPages={data.info.pages} onPageChange={formSubmit} page={active} />
+          </>
+        }
+      </>
+    }
   </>
 }
 
@@ -70,4 +100,8 @@ const mapStateToProps = createStructuredSelector({
   data: selectCustomerData
 })
 
-export default connect(mapStateToProps)(SelectCustomer);
+const mapDispatchToProps = dispatch => ({
+  getReq: (pathname, fetchSuccess, queryStr) => dispatch(getReq(pathname, fetchSuccess, queryStr))
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(SelectCustomer)

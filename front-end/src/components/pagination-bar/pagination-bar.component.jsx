@@ -1,8 +1,7 @@
 import React from 'react';
 
 // dependencies
-import { Link, useHistory, useLocation } from 'react-router-dom';
-import queryString from 'query-string';
+import { Link } from 'react-router-dom';
 import uuid from 'react-uuid';
 
 // ui settings
@@ -10,14 +9,12 @@ import './pagination-bar.styles.css';
 
 const PaginationBar = ({ 
   numberOfPages,
-  limit
+  limit,
+  onPageChange,
+  page
 }) => {
-  const location = useLocation();
-  const history = useHistory();
-  
-  const queryObj = queryString.parse(location.search);
-  const { page } = queryObj;  
-  let activeItem = Number(page) || 1;
+    
+  let activeItem = page || 1;
   const itemLimit = limit || 5;
 
   // set an array of total indexed items in the pagination bar, from 1 to the total pages in the query.
@@ -36,14 +33,6 @@ const PaginationBar = ({
     currItems = arrayOfItems.slice(firstItem, numberOfPages);
   } else {
     currItems = arrayOfItems.slice(firstItem, lastItem);
-  }
-
-  // handle pagination
-  const onPageChange = (page) => {
-    queryObj.page = page;
-    const queryStr = '?' + queryString.stringify(queryObj);
-
-    history.push(location.pathname + queryStr)
   }
 
   return <>
@@ -71,10 +60,7 @@ const PaginationBar = ({
                     className="page-link a-pagination-cs" 
                     to="/"
                     aria-label="Previous"
-                    onClick={e => {
-                      e.preventDefault();
-                      onPageChange(activeItem - 1)
-                    }} 
+                    onClick={e => onPageChange(e, activeItem - 1)}
                   >
                     <span aria-hidden="true">&laquo;</span>
                     <span className="sr-only">Previous</span>
@@ -87,10 +73,7 @@ const PaginationBar = ({
                 <Link 
                   className="page-link a-pagination-cs" 
                   to="/"
-                  onClick={e => {
-                    e.preventDefault();
-                    onPageChange(item)
-                  }} 
+                  onClick={e => onPageChange(e, item)}
                 >
                   {item}
                 </Link>
@@ -117,10 +100,8 @@ const PaginationBar = ({
                     className="page-link a-pagination-cs" 
                     to="/"
                     aria-label="Next"
-                    onClick={e => {
-                      e.preventDefault();
-                      onPageChange(activeItem + 1)
-                    }} 
+                    onClick={e => onPageChange(e, activeItem + 1)}
+
                   >
                     <span aria-hidden="true">&raquo;</span>
                     <span className="sr-only">Next</span>

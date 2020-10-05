@@ -1,18 +1,13 @@
 import React from 'react';
 
-// dependencies
-import { useRouteMatch, useHistory } from 'react-router-dom';
-
 // ui settings
 const liClassName = "list-group-item list-group-item-action bg-item-list-cs";
 
 const ProductCard = ({
-  product
+  product,
+  handleOnClick
 }) => {
-
-  const match = useRouteMatch()
-  const history = useHistory()
-
+  
   // Check if brand name was deleted or not to avoid system crash for undefined error.
   let brandName = "N/A";
   if (product.brand.length > 0 && product.brand[0].preferredName.length > 0) brandName = product.brand[0].preferredName;
@@ -30,10 +25,7 @@ const ProductCard = ({
       <ul className="list-group list-group-flush">
         <li 
           className={`${liClassName} li-link-cs`}
-          onClick={e => {
-            e.preventDefault();
-            history.push(`${match.path}/${product._id}`)
-          }} 
+          onClick={e => handleOnClick(e, product)} 
         >
           <div className="row"> 
             <div className="col-12 align-self-center text-center">

@@ -8,7 +8,8 @@ import { createStructuredSelector } from 'reselect';
 import { selectProductData } from '../../state/product/product.selectors';
 
 const PreviewProducts = ({
-  data
+  data,
+  handleOnClick
 }) => {
 
   const { allIds } = data;
@@ -18,7 +19,7 @@ const PreviewProducts = ({
       {
         allIds.map(product => 
           <div key={product._id} className="col-lg-6 col-xl-4"> 
-            <ProductCard product={product} />
+            <ProductCard product={product} handleOnClick={handleOnClick} />
           </div>
       )}
     </div>  
