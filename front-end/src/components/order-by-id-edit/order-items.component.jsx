@@ -5,6 +5,10 @@ import uuid from 'react-uuid';
 // components
 import { acctNumber } from '../utils/acctNumber';
 import { acctToString } from '../utils/acctToString';
+// redux
+import { connect } from 'react-redux';
+import { createStructuredSelector } from 'reselect';
+import { selectOrderTemp } from '../../state/order/order.selectors';
 
 const subTotal = (qty, price, saleTax, localCharge, shippingCost) => {
   const value = acctNumber(price, saleTax, localCharge, shippingCost) * qty;
@@ -12,8 +16,7 @@ const subTotal = (qty, price, saleTax, localCharge, shippingCost) => {
 }
 
 const OrderItems = ({
-  order,
-  setSelectProduct
+  orderTemp
 }) => {
   return <>
     <div className="row mt-3">
@@ -34,7 +37,7 @@ const OrderItems = ({
               </tr>
             </thead>
             <tbody>
-              {Object.keys(order.items).length > 0 && order.items.map((item, index) => 
+              {Object.keys(orderTemp.items).length > 0 && orderTemp.items.map((item, index) => 
               <tr 
                 key={uuid()} 
                 className="table-row-cs"
@@ -61,15 +64,6 @@ const OrderItems = ({
                   <span className="table-link-cs text-danger"><i className="fas fa-minus"></i></span>
                 </td>
               </tr>)}
-              <tr 
-                className="table-row-cs" 
-                onClick={(e) => {
-                  e.preventDefault();
-                  setSelectProduct(true)
-                }}
-              >
-                <td colSpan="9" className="text-center"><span className="a-link-cs">Add a New Item (+)</span></td>
-              </tr>
             </tbody>
           </table>
         </div>
@@ -78,4 +72,8 @@ const OrderItems = ({
   </>
 }
 
-export default OrderItems;
+const mapStateToProps = createStructuredSelector({
+  orderTemp: selectOrderTemp
+})
+
+export default connect(mapStateToProps)(OrderItems);

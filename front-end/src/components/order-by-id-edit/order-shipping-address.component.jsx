@@ -4,12 +4,18 @@ import React from 'react';
 import { useLocation, Link } from 'react-router-dom';
 // components 
 import Button from '../button/button.component';
+// redux
+import { connect } from 'react-redux';
+import { createStructuredSelector } from 'reselect';
+import { selectOrderTemp } from '../../state/order/order.selectors';
+import { updateShippingAddressToOrder, updateCustomerToOrder } from '../../state/order/order.actions';
 // ui settings
 const liClassName = "list-group-item bg-item-list-cs list-group-item-action";
 
 const OrderShippingAddress = ({
-  order,
-  setOrder
+  orderTemp,
+  updateShippingAddressToOrder,
+  updateCustomerToOrder
 }) => {
 
   const location = useLocation();
@@ -22,15 +28,12 @@ const OrderShippingAddress = ({
     queryStr = location.search + '&stage=add-items'
   }
 
-  const { customer, shippingAddress } = order;
+  const { customer, shippingAddress } = orderTemp;
 
   const handleChange = e => {
     e.stopPropagation();
     const id = e.target.value;
-    setOrder(prevState => ({
-      ...prevState,
-      shippingAddress: id === '' ? null : customer.shippingInfo.find(address => address._id === id) 
-    }));
+    updateShippingAddressToOrder(id);
   }
 
   return <>
@@ -86,7 +89,7 @@ const OrderShippingAddress = ({
                       </div>
                       <div className="col-8 align-self-center" onChange={handleChange}>
                         <div className="form-check">
-                          <input className="form-check-input" type="radio" name="shippingAddress" id='billing' value='' defaultChecked={shippingAddress === null} />
+                          <input className="form-check-input" type="radio" name="shippingAddress" id='billing' value='' defaultChecked={shippingAddress === ''} />
                           <label className="form-check-label" htmlFor='billing'>
                             Same as Billing Address
                           </label>
@@ -101,7 +104,7 @@ const OrderShippingAddress = ({
                                   name="shippingAddress" 
                                   id={address._id} 
                                   value={address._id}
-                                  defaultChecked={shippingAddress}
+                                  defaultChecked={shippingAddress === address._id}
                                 />
                                 <span>{customer.fullname}</span><br />
                                 <span>{customer.streetAddress1}, {customer.city}, {customer.state}</span><br />
@@ -140,11 +143,7 @@ const OrderShippingAddress = ({
                       <Button
                         onClick={e => {
                           e.preventDefault();
-                          setOrder(prevState => ({
-                            ...prevState,
-                            customer: null,
-                            shippingAddress: null
-                          }))
+                          updateCustomerToOrder(null, null)
                         }}
                       >
                         Remove
@@ -160,4 +159,13 @@ const OrderShippingAddress = ({
   </>
 }
 
-export default OrderShippingAddress;
+const mapStateToProps = createStructuredSelector({
+  orderTemp: selectOrderTemp
+})
+
+const mapDispatchToProps = dispatch => ({
+  updateShippingAddressToOrder: id => dispatch(updateShippingAddressToOrder(id)),
+  updateCustomerToOrder: (customer, shippingAddress) => dispatch(updateCustomerToOrder(customer, shippingAddress))
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(OrderShippingAddress);

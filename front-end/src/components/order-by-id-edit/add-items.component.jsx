@@ -1,22 +1,14 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 // components
 import SelectProduct from './select-product.component';
 import OrderItems from './order-items.component'
 
-const AddItems = ({ 
-  order,
-  setOrder
-}) => {
-
-  const [selectProduct, setSelectProduct] = useState(false);
+const AddItems = () => {
 
   return <>
-    <OrderItems order={order} setSelectProduct={setSelectProduct} />
-    {
-      selectProduct &&
-        <SelectProduct order={order} setSelectProduct={setSelectProduct} />  
-    }
+    <OrderItems />
+    <SelectProduct />  
   </>
 }
 
