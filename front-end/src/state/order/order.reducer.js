@@ -6,8 +6,27 @@ const INITIAL_STATE = {
     customer: null,
     shippingAddress: null,
     item: {},
+    index: null,
     items: []
   }
+}
+
+function updateObjectInArray(array, action) {
+  return array.map((item, index) => {
+    if (index !== action.index) {
+      return item
+    }
+    return {
+      ...item,
+      ...action.item
+    }
+  })
+}
+
+function removeItem(array, action) {
+  let newArray = array.slice()
+  newArray.splice(action.index, 1)
+  return newArray
 }
 
 const orderReducer = (state = INITIAL_STATE, action) => {
@@ -45,7 +64,7 @@ const orderReducer = (state = INITIAL_STATE, action) => {
           }
         }
       }
-    case OrderActionTypes.UPDATE_ITEM_TO_ORDER:
+    case OrderActionTypes.ADD_ITEM_TO_ORDER:
       return {
         ...state,
         orderTemp: {
@@ -59,7 +78,27 @@ const orderReducer = (state = INITIAL_STATE, action) => {
         ...state,
         orderTemp: {
           ...state.orderTemp,
-          item: action.payload
+          item: action.payload.item,
+          index: action.payload.index
+        }
+      }
+    case OrderActionTypes.UPDATE_ITEM_TO_ORDER:
+      return {
+        ...state,
+        orderTemp: {
+          ...state.orderTemp,
+          items: updateObjectInArray(state.orderTemp.items, action.payload),
+          index: null
+        }
+      }
+    case OrderActionTypes.REMOVE_ITEM_FROM_ORDER:
+      return {
+        ...state,
+        orderTemp: {
+          ...state.orderTemp,
+          items: removeItem(state.orderTemp.items, { index: action.payload }),
+          item: {},
+          index: null
         }
       }
     default:

@@ -35,7 +35,6 @@ const OrderItems = ({
                 <th scope="col" className="text-right">Local Charge</th>
                 <th scope="col" className="text-right">Shipping Cost</th>
                 <th scope="col" className="text-right">Subtotal</th>
-                <th scope="col" className="text-right"></th>
               </tr>
             </thead>
             <tbody>
@@ -45,7 +44,7 @@ const OrderItems = ({
                   className="table-row-cs"
                   onClick={(e) => {
                     e.stopPropagation();
-                    editOrderItem(item);
+                    editOrderItem(item, index);
                   }}
                 >
                   <td>{item.product.styleCode}/{item.color.color}</td>
@@ -58,14 +57,6 @@ const OrderItems = ({
                   <th scope="row" className="text-right">
                     {subTotal(item.qty, item.price, item.saleTax, item.localCharge, item.shippingCost)}
                   </th>
-                  <td 
-                    className="text-right"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                    }}
-                  >
-                    <span className="table-link-cs text-danger"><i className="fas fa-minus"></i></span>
-                  </td>
                 </tr>
               )}
             </tbody>
@@ -81,7 +72,7 @@ const mapStateToProps = createStructuredSelector({
 })
 
 const mapDispatchToProps = dispatch => ({
-  editOrderItem: product => dispatch(editOrderItem(product))
+  editOrderItem: (item, index) => dispatch(editOrderItem(item, index))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(OrderItems);

@@ -18,12 +18,28 @@ export const updateProductToItem = (product) => ({
   payload: product
 })
 
-export const updateItemToOrder = (item) => ({
-  type: OrderActionTypes.UPDATE_ITEM_TO_ORDER,
+export const addItemToOrder = (item) => ({
+  type: OrderActionTypes.ADD_ITEM_TO_ORDER,
   payload: item
 })
 
-export const editOrderItem = (item) => ({
+export const editOrderItem = (item, index) => ({
   type: OrderActionTypes.EDIT_ORDER_ITEM,
-  payload: item
+  payload: {
+    item,
+    index
+  }
+})
+
+export const updateItemToOrder = (item, index) => ({
+  type: OrderActionTypes.UPDATE_ITEM_TO_ORDER,
+  payload: {
+    item,
+    index
+  }
+})
+
+export const removeItemFromOrder = (index) => ({
+  type: OrderActionTypes.REMOVE_ITEM_FROM_ORDER,
+  payload: index
 })

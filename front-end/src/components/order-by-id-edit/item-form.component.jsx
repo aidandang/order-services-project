@@ -9,7 +9,7 @@ import Button from '../button/button.component';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { selectOrderTemp } from '../../state/order/order.selectors';
-import { updateItemToOrder } from '../../state/order/order.actions';
+import { addItemToOrder, removeItemFromOrder, updateItemToOrder, updateProductToItem } from '../../state/order/order.actions';
 // ui settings
 const liClassName = "list-group-item bg-item-list-cs list-group-item-action";
 
@@ -38,16 +38,20 @@ const formSchema = Yup.object().shape({
 
 const ItemForm = ({
   orderTemp,
-  updateItemToOrder
+  addItemToOrder,
+  updateItemToOrder,
+  removeItemFromOrder,
+  updateProductToItem
 }) => {
 
-  const { item } = orderTemp;
+  const { item, index } = orderTemp;
 
   // Check if brand name was deleted or not to avoid system crash for undefined error.
   let brandName = "N/A";
   if (item.product && item.product.brand && item.product.brand[0].preferredName.length > 0) brandName = item.product.brand[0].preferredName;
 
   const formState = {
+    product: item.product || "",
     color: item.color || "",
     size: item.size || "",
     qty: item.qty || "",
@@ -79,8 +83,20 @@ const ItemForm = ({
   const formSubmit = e => {
     e.preventDefault();
     const newItem = formData;
-    newItem.product = item.product;
-    updateItemToOrder(newItem);
+    if (index !== null) {
+      updateItemToOrder(newItem, index)
+    } else {
+      addItemToOrder(newItem);
+    }
+  }
+
+  const handleRemoveButton = e => {
+    e.preventDefault();
+    if (index !== null) {
+      removeItemFromOrder(index)
+    } else {
+      updateProductToItem(null)
+    }
   }
 
   return <>
@@ -90,7 +106,7 @@ const ItemForm = ({
           <div className="card my-3">
             <div className="card-header bg-card-cs">
               <div className="row">
-                <div className="col text-uppercase font-weight-bold">Product Information</div>
+                <div className="col text-uppercase font-weight-bold">Item Information</div>
               </div>
             </div>
             <ul className="list-group list-group-flush">
@@ -275,9 +291,7 @@ const ItemForm = ({
                       </Button>
                       <span className="mr-3"></span>
                       <Button
-                        onClick={e => {
-                          e.preventDefault();
-                        }}
+                        onClick={handleRemoveButton}
                       >
                         Remove
                       </Button>
@@ -298,7 +312,10 @@ const mapStateToProps = createStructuredSelector({
 })
 
 const mapDispatchToProps = dispatch => ({
-  updateItemToOrder: item => dispatch(updateItemToOrder(item))
+  addItemToOrder: item => dispatch(addItemToOrder(item)),
+  updateItemToOrder: (item, index) => dispatch(updateItemToOrder(item, index)),
+  removeItemFromOrder: (index) => dispatch(removeItemFromOrder(index)),
+  updateProductToItem: (product) => dispatch(updateProductToItem(product))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(ItemForm);
