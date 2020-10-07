@@ -16,7 +16,7 @@ import { selectProductData } from '../../state/product/product.selectors';
 import { selectOrderTemp } from '../../state/order/order.selectors';
 import { getReq } from '../../state/api/get-request';
 import { ProductActionTypes } from '../../state/product/product.types';
-import { updateProductToOrder } from '../../state/order/order.actions';
+import { updateProductToItem } from '../../state/order/order.actions';
 
 // set form schema
 const formSchema = Yup.object().shape({
@@ -32,10 +32,10 @@ const SelectProduct = ({
   orderTemp,
   getReq, 
   data,
-  updateProductToOrder
+  updateProductToItem
 }) => {
 
-  const { product } = orderTemp
+  const { item } = orderTemp
   
   const [
     formData,
@@ -63,11 +63,11 @@ const SelectProduct = ({
 
   const handleOnClick = (e, product) => {
     e.preventDefault();
-    updateProductToOrder(product)
+    updateProductToItem(product)
   }
   
   return <>
-    { product
+    { item.product
       ?
         <ItemForm />
       : <>
@@ -107,7 +107,7 @@ const mapStateToProps = createStructuredSelector({
 
 const mapDispatchToProps = dispatch => ({
   getReq: (pathname, fetchSuccess, queryStr) => dispatch(getReq(pathname, fetchSuccess, queryStr)),
-  updateProductToOrder: product => dispatch(updateProductToOrder(product))
+  updateProductToItem: product => dispatch(updateProductToItem(product))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(SelectProduct);

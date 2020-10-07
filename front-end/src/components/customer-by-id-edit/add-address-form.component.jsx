@@ -52,7 +52,7 @@ const AddAddressForm = ({
                       <input 
                         type="text"
                         className="form-control" 
-                        id="fullname"
+                        name="fullname"
                         value={formData.fullname}
                         onChange={onInputChange}
                       />
@@ -66,7 +66,7 @@ const AddAddressForm = ({
                       <input 
                         type="text" 
                         className="form-control" 
-                        id="othername" 
+                        name="othername" 
                         value={formData.othername}
                         onChange={onInputChange}
                       />
@@ -84,7 +84,7 @@ const AddAddressForm = ({
                       <label htmlFor="country">Country (*)</label>
                       <select 
                         className="custom-select" 
-                        id="country"
+                        name="country"
                         value={formData.country ? formData.country : ""}
                         onChange={onInputChange}
                       >
@@ -107,7 +107,7 @@ const AddAddressForm = ({
                       <input 
                         type="text" 
                         className="form-control" 
-                        id="streetAddress1" 
+                        name="streetAddress1" 
                         value={formData.streetAddress1}
                         onChange={onInputChange}
                       />
@@ -121,7 +121,7 @@ const AddAddressForm = ({
                       <input 
                         type="text" 
                         className="form-control" 
-                        id="streetAddress2" 
+                        name="streetAddress2" 
                         value={formData.streetAddress2}
                         onChange={onInputChange}
                       />
@@ -140,7 +140,7 @@ const AddAddressForm = ({
                       <input 
                         type="text" 
                         className="form-control" 
-                        id="city"
+                        name="city"
                         value={formData.city}
                         onChange={onInputChange}
                       />
@@ -153,7 +153,7 @@ const AddAddressForm = ({
                       <label htmlFor="state">State/Province (*)</label>
                       <select 
                         className="custom-select" 
-                        id="state"
+                        name="state"
                         value={formData.state ? formData.state : ""}
                         onChange={onInputChange}
                       >
@@ -177,7 +177,7 @@ const AddAddressForm = ({
                         maskChar=" " 
                         type="text" 
                         className="form-control" 
-                        id="zipcode"
+                        name="zipcode"
                         value={formData.zipcode}
                         onChange={onInputChange}
                       />
@@ -198,7 +198,7 @@ const AddAddressForm = ({
                         maskChar=" "
                         type="text" 
                         className="form-control" 
-                        id="phone"
+                        name="phone"
                         value={formData.phone}
                         onChange={onInputChange}
                       />

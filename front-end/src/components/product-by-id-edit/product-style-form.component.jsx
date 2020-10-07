@@ -36,7 +36,7 @@ const ProductStyleForm = ({
                       <label htmlFor="brandId">Brand (*)</label>
                       <select 
                         className="custom-select text-capitalize"
-                        id="brandId"
+                        name="brandId"
                         value={formData.brandId ? formData.brandId : ""}
                         onChange={onInputChange}
                       >
@@ -56,7 +56,7 @@ const ProductStyleForm = ({
                       <input 
                         type="text"
                         className="form-control" 
-                        id="name"
+                        name="name"
                         value={formData.name}
                         onChange={onInputChange}
                       />
@@ -75,7 +75,7 @@ const ProductStyleForm = ({
                       <input 
                         type="text"
                         className="form-control" 
-                        id="styleCode"
+                        name="styleCode"
                         value={formData.styleCode}
                         onChange={onInputChange}
                       />
@@ -89,7 +89,7 @@ const ProductStyleForm = ({
                       <input 
                         type="text" 
                         className="form-control" 
-                        id="sku" 
+                        name="sku" 
                         value={formData.sku}
                         onChange={onInputChange}
                       />
@@ -108,7 +108,7 @@ const ProductStyleForm = ({
                       <input 
                         type="text" 
                         className="form-control" 
-                        id="styleImage" 
+                        name="styleImage" 
                         value={formData.styleImage}
                         onChange={onInputChange} 
                       />
@@ -127,7 +127,7 @@ const ProductStyleForm = ({
                       <textarea 
                         type="text" 
                         className="form-control" 
-                        id="desc" 
+                        name="desc" 
                         value={formData.desc}
                         onChange={onInputChange} 
                       />
