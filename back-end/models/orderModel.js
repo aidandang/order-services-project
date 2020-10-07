@@ -10,7 +10,7 @@ const itemSchema = new Schema({
     required: true
   },
   color: {
-    type: Object,
+    type: String,
     required: true
   },
   note: {
@@ -62,8 +62,8 @@ const orderSchema = new Schema({
     required: true
   },
   shippingAddress: {
-    type: Object,
-    default: {}
+    type: String,
+    required: true
   },
   items: [itemSchema],
   paidAmount: {

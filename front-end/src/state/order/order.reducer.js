@@ -5,7 +5,7 @@ const INITIAL_STATE = {
   orderTemp: {
     customer: null,
     shippingAddress: null,
-    product: null,
+    item: {},
     items: []
   }
 }
@@ -34,12 +34,32 @@ const orderReducer = (state = INITIAL_STATE, action) => {
           shippingAddress: action.payload 
         }
       }
-    case OrderActionTypes.UPDATE_PRODUCT_TO_ORDER:
+    case OrderActionTypes.UPDATE_PRODUCT_TO_ITEM:
       return {
         ...state,
         orderTemp: {
           ...state.orderTemp,
-          product: action.payload
+          item: { 
+            ...state.orderTemp.item,
+            product: action.payload
+          }
+        }
+      }
+    case OrderActionTypes.UPDATE_ITEM_TO_ORDER:
+      return {
+        ...state,
+        orderTemp: {
+          ...state.orderTemp,
+          items: [...state.orderTemp.items, action.payload],
+          item: {}
+        }
+      }
+    case OrderActionTypes.EDIT_ORDER_ITEM:
+      return {
+        ...state,
+        orderTemp: {
+          ...state.orderTemp,
+          item: action.payload
         }
       }
     default:

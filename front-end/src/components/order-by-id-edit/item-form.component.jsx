@@ -1,7 +1,6 @@
 import React from 'react';
 
 // dependencies
-import { Link } from 'react-router-dom';
 import * as Yup from "yup";
 // components
 import { useForm } from '../custom-hooks/use-form';
@@ -10,6 +9,7 @@ import Button from '../button/button.component';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { selectOrderTemp } from '../../state/order/order.selectors';
+import { updateItemToOrder } from '../../state/order/order.actions';
 // ui settings
 const liClassName = "list-group-item bg-item-list-cs list-group-item-action";
 
@@ -31,25 +31,34 @@ const formSchema = Yup.object().shape({
     .string(),
   note: Yup
     .string(),
-  product: Yup
-    .object(),
   color: Yup
     .string()
     .required()
 })
 
 const ItemForm = ({
-  orderTemp
+  orderTemp,
+  updateItemToOrder
 }) => {
 
-  const { product } = orderTemp;
+  const { item } = orderTemp;
 
   // Check if brand name was deleted or not to avoid system crash for undefined error.
   let brandName = "N/A";
-  if (product && product.brand && product.brand[0].preferredName.length > 0) brandName = product.brand[0].preferredName;
+  if (item.product && item.product.brand && item.product.brand[0].preferredName.length > 0) brandName = item.product.brand[0].preferredName;
 
   const formState = {
-    product: {},
+    color: item.color || "",
+    size: item.size || "",
+    qty: item.qty || "",
+    price: item.price || "",
+    saleTax: item.saleTax || "",
+    localCharge: item.localCharge || "",
+    shippingCost: item.shippingCost || "",
+    note: item.note || ""
+  };
+
+  const initialErrorState = {
     color: "",
     size: "",
     qty: "",
@@ -65,10 +74,13 @@ const ItemForm = ({
     errors, 
     onInputChange, 
     buttonDisabled
-  ] = useForm(formState, formState, formSchema);
+  ] = useForm(formState, initialErrorState, formSchema);
 
   const formSubmit = e => {
     e.preventDefault();
+    const newItem = formData;
+    newItem.product = item.product;
+    updateItemToOrder(newItem);
   }
 
   return <>
@@ -85,7 +97,7 @@ const ItemForm = ({
               <li className={liClassName}>
                 <div className="row">
                   <div className="col-4 align-self-center"><span className="font-weight-bold">Name</span></div>
-                  <div className="col-8">{product.name}</div>
+                  <div className="col-8">{item.product.name}</div>
                 </div>
               </li>
               <li className={liClassName}>
@@ -97,22 +109,22 @@ const ItemForm = ({
               <li className={liClassName}>
                 <div className="row">
                   <div className="col-4 align-self-center"><span className="font-weight-bold">Style No.</span></div>
-                  <div className="col-8">{product.styleCode}</div>
+                  <div className="col-8">{item.product.styleCode}</div>
                 </div>
               </li>
               <li className={liClassName}>
                 <div className="row">
                   <div className="col-4 align-self-center"><span className="font-weight-bold">Description</span></div>
-                  <div className="col-8">{product.desc}</div>
+                  <div className="col-8">{item.product.desc}</div>
                 </div>
               </li>
               <li className={liClassName}>
                 <div className="row">
                   <div className="col-4 align-self-center">
-                    <span className="font-weight-bold">Color</span>
+                    <span className="font-weight-bold">Color (*)</span>
                   </div>
                   <div className="col-8 align-self-center" onChange={onInputChange}>
-                    {product.colors.map(color =>
+                    {item.product.colors.map(color =>
                       <div key={color._id} className="form-check">
                         <label className="form-check-label" htmlFor={color._id}>
                           <input 
@@ -121,6 +133,7 @@ const ItemForm = ({
                             name="color" 
                             id={color._id} 
                             value={color._id}
+                            defaultChecked={item.color && item.color === color._id}
                           />
                           <span>{color.color}</span>
                         </label>
@@ -137,11 +150,12 @@ const ItemForm = ({
                       <input 
                         type="text" 
                         className="form-control" 
-                        id="size" 
+                        name="size" 
                         value={formData.size}
                         onChange={onInputChange}
                       />
                       <small>Product's size.</small>
+                      {errors.size.length > 0 ? <p className="mt-2 text-danger">{errors.size}</p> : null}
                     </div>
                   </div>
                   <div className="col-xl-3">
@@ -150,12 +164,12 @@ const ItemForm = ({
                       <input 
                         type="text" 
                         className="form-control" 
-                        id="qty" 
-                        name="integerInput"
-                        value=""
-                        onChange=""
+                        name="qty"
+                        value={formData.qty}
+                        onChange={onInputChange}
                       />
                       <small>Qty of that size.</small>
+                      {errors.qty.length > 0 ? <p className="mt-2 text-danger">{errors.qty}</p> : null}
                     </div>
                   </div>
                   <div className="col-xl-6">
@@ -164,12 +178,12 @@ const ItemForm = ({
                       <input 
                         type="text" 
                         className="form-control" 
-                        id="price"
-                        name="currencyInput"
-                        value=""
-                        onChange=""
+                        name="price"
+                        value={formData.price}
+                        onChange={onInputChange}
                       />
                       <small>Price per unit.</small>
+                      {errors.price.length > 0 ? <p className="mt-2 text-danger">{errors.price}</p> : null}
                     </div>
                   </div>
                 </div>
@@ -182,12 +196,12 @@ const ItemForm = ({
                       <input 
                         type="text" 
                         className="form-control" 
-                        id="saleTax"
-                        name="currencyInput" 
-                        value=""
-                        onChange=""
+                        name="saleTax"
+                        value={formData.saleTax}
+                        onChange={onInputChange}
                       />
                       <small>Sale tax per unit.</small>
+                      {errors.saleTax.length > 0 ? <p className="mt-2 text-danger">{errors.saleTax}</p> : null}
                     </div>
                   </div>
                   <div className="col-lg-4">
@@ -196,12 +210,12 @@ const ItemForm = ({
                       <input 
                         type="text" 
                         className="form-control" 
-                        id="localCharge"
-                        name="currencyInput" 
-                        value=""
-                        onChange=""
+                        name="localCharge"
+                        value={formData.localCharge}
+                        onChange={onInputChange}
                       />
                       <small>Local charge per unit.</small>
+                      {errors.localCharge.length > 0 ? <p className="mt-2 text-danger">{errors.localCharge}</p> : null}
                     </div>
                   </div>
                   <div className="col-lg-4">
@@ -210,12 +224,12 @@ const ItemForm = ({
                       <input 
                         type="text" 
                         className="form-control" 
-                        id="shippingCost"
-                        name="currencyInput" 
-                        value=""
-                        onChange=""
+                        name="shippingCost" 
+                        value={formData.shippingCost}
+                        onChange={onInputChange}
                       />
                       <small>Shipping cost per unit.</small>
+                      {errors.shippingCost.length > 0 ? <p className="mt-2 text-danger">{errors.shippingCost}</p> : null}
                     </div>
                   </div>
                 </div>
@@ -228,11 +242,12 @@ const ItemForm = ({
                       <input 
                         type="text" 
                         className="form-control" 
-                        id="note" 
-                        value=""
-                        onChange=""
+                        name="note" 
+                        value={formData.note}
+                        onChange={onInputChange}
                       />
                       <small>Additional Note.</small>
+                      {errors.note.length > 0 ? <p className="mt-2 text-danger">{errors.note}</p> : null}
                     </div>
                   </div>
                 </div>
@@ -252,12 +267,12 @@ const ItemForm = ({
                 <div className="row">
                   <div className="col mt-3">
                     <div className="form-group">
-                      <Link 
-                        to="/"
-                        className="btn btn-primary btn-link text-light"
+                      <Button
+                        type="submit"
+                        disabled={buttonDisabled}
                       >
-                        Next
-                      </Link>
+                        {item.color ? 'Update Item' : 'Add Item'}
+                      </Button>
                       <span className="mr-3"></span>
                       <Button
                         onClick={e => {
@@ -282,4 +297,8 @@ const mapStateToProps = createStructuredSelector({
   orderTemp: selectOrderTemp
 })
 
-export default connect(mapStateToProps)(ItemForm);
+const mapDispatchToProps = dispatch => ({
+  updateItemToOrder: item => dispatch(updateItemToOrder(item))
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(ItemForm);

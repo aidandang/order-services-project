@@ -27,7 +27,7 @@ const CustomerSearchForm = ({
                       <input 
                         type="text" 
                         className="form-control" 
-                        id="search" 
+                        name="search" 
                         placeholder="Search"
                         onChange={onInputChange}
                         value={formData.search}

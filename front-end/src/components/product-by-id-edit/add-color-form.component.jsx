@@ -49,7 +49,7 @@ export default function AddColorForm({
                       <input 
                         type="text" 
                         className="form-control" 
-                        id="color" 
+                        name="color" 
                         value={formData.color}
                         onChange={onInputChange}
                       />
@@ -68,7 +68,7 @@ export default function AddColorForm({
                       <input 
                         type="text" 
                         className="form-control" 
-                        id="url" 
+                        name="url" 
                         value={formData.url}
                         onChange={onInputChange}
                       />
@@ -87,7 +87,7 @@ export default function AddColorForm({
                       <input 
                         type="text" 
                         className="form-control" 
-                        id="image" 
+                        name="image" 
                         value={formData.image}
                         onChange={onInputChange}
                       />

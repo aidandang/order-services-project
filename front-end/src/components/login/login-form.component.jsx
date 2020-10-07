@@ -35,7 +35,7 @@ export default function LoginForm({
                       <input 
                         type="email" 
                         className="form-control" 
-                        id="email" 
+                        name="email" 
                         value={formData.email}
                         onChange={onInputChange} 
                       />
@@ -48,7 +48,7 @@ export default function LoginForm({
                       <input 
                         type="password" 
                         className="form-control" 
-                        id="password" 
+                        name="password" 
                         value={formData.password}
                         onChange={onInputChange}
                       />

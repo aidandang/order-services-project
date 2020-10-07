@@ -9,6 +9,7 @@ import { acctToString } from '../utils/acctToString';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { selectOrderTemp } from '../../state/order/order.selectors';
+import { editOrderItem } from '../../state/order/order.actions';
 
 const subTotal = (qty, price, saleTax, localCharge, shippingCost) => {
   const value = acctNumber(price, saleTax, localCharge, shippingCost) * qty;
@@ -16,7 +17,8 @@ const subTotal = (qty, price, saleTax, localCharge, shippingCost) => {
 }
 
 const OrderItems = ({
-  orderTemp
+  orderTemp,
+  editOrderItem
 }) => {
   return <>
     <div className="row mt-3">
@@ -38,32 +40,34 @@ const OrderItems = ({
             </thead>
             <tbody>
               {Object.keys(orderTemp.items).length > 0 && orderTemp.items.map((item, index) => 
-              <tr 
-                key={uuid()} 
-                className="table-row-cs"
-                onClick={(e) => {
-                  e.preventDefault();
-                }}
-              >
-                <td>{item.product.styleCode}/{item.color.color}</td>
-                <td>{`${item.product.name}/Size:${item.size}${item.note && `/${item.note}`}`}</td>
-                <td className="text-right">{item.qty}</td>
-                <td className="text-right">{item.price}</td>
-                <td className="text-right">{item.saleTax}</td>
-                <td className="text-right">{item.localCharge}</td>
-                <td className="text-right">{item.shippingCost}</td>
-                <th scope="row" className="text-right">
-                  {subTotal(item.qty, item.price, item.saleTax, item.localCharge, item.shippingCost)}
-                </th>
-                <td 
-                  className="text-right"
+                <tr 
+                  key={uuid()} 
+                  className="table-row-cs"
                   onClick={(e) => {
                     e.stopPropagation();
+                    editOrderItem(item);
                   }}
                 >
-                  <span className="table-link-cs text-danger"><i className="fas fa-minus"></i></span>
-                </td>
-              </tr>)}
+                  <td>{item.product.styleCode}/{item.color.color}</td>
+                  <td>{`${item.product.name}/Size:${item.size}${item.note && `/${item.note}`}`}</td>
+                  <td className="text-right">{item.qty}</td>
+                  <td className="text-right">{item.price}</td>
+                  <td className="text-right">{item.saleTax}</td>
+                  <td className="text-right">{item.localCharge}</td>
+                  <td className="text-right">{item.shippingCost}</td>
+                  <th scope="row" className="text-right">
+                    {subTotal(item.qty, item.price, item.saleTax, item.localCharge, item.shippingCost)}
+                  </th>
+                  <td 
+                    className="text-right"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                    }}
+                  >
+                    <span className="table-link-cs text-danger"><i className="fas fa-minus"></i></span>
+                  </td>
+                </tr>
+              )}
             </tbody>
           </table>
         </div>
@@ -76,4 +80,8 @@ const mapStateToProps = createStructuredSelector({
   orderTemp: selectOrderTemp
 })
 
-export default connect(mapStateToProps)(OrderItems);
+const mapDispatchToProps = dispatch => ({
+  editOrderItem: product => dispatch(editOrderItem(product))
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(OrderItems);

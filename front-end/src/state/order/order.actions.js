@@ -13,7 +13,17 @@ export const updateShippingAddressToOrder = (id) => ({
   payload: id
 })
 
-export const updateProductToOrder = (product) => ({
-  type: OrderActionTypes.UPDATE_PRODUCT_TO_ORDER,
+export const updateProductToItem = (product) => ({
+  type: OrderActionTypes.UPDATE_PRODUCT_TO_ITEM,
   payload: product
+})
+
+export const updateItemToOrder = (item) => ({
+  type: OrderActionTypes.UPDATE_ITEM_TO_ORDER,
+  payload: item
+})
+
+export const editOrderItem = (item) => ({
+  type: OrderActionTypes.EDIT_ORDER_ITEM,
+  payload: item
 })

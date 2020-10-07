@@ -31,7 +31,7 @@ const SignUpForm = ({
                       <input 
                         type="text" 
                         className="form-control" 
-                        id="displayName" 
+                        name="displayName" 
                         value={formData.displayName}
                         onChange={onInputChange} 
                       />
@@ -44,7 +44,7 @@ const SignUpForm = ({
                       <input 
                         type="email" 
                         className="form-control" 
-                        id="email" 
+                        name="email" 
                         value={formData.email}
                         onChange={onInputChange} 
                       />
@@ -61,7 +61,7 @@ const SignUpForm = ({
                       <input 
                         type="password" 
                         className="form-control" 
-                        id="password" 
+                        name="password" 
                         value={formData.password}
                         onChange={onInputChange}
                       />
@@ -74,7 +74,7 @@ const SignUpForm = ({
                       <input 
                         type="password" 
                         className="form-control" 
-                        id="passwordConfirm" 
+                        name="passwordConfirm" 
                         value={formData.passwordConfirm}
                         onChange={onInputChange}
                       />
