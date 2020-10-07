@@ -11,7 +11,7 @@ export const useForm = (initialValues, initialErrors, schema) => {
     e.persist();
 
     let value = null;
-    const key = e.target.id;
+    const key = e.target.name;
 
     // if checkbox set value to be checked otherwise set value to input value
     if (e.target.type === "checkbox") {

@@ -8,6 +8,7 @@ import navbarReducer from './navbar/navbar.reducer';
 import productReducer from './product/product.reducer';
 import brandReducer from './brand/brand.reducer';
 import customerReducer from './customer/customer.reducer';
+import orderReducer from './order/order.reducer';
 import alertReducer from './alert/alert.reducer';
 import isFetchingReducer from './is-fetching/is-fetching.reducer';
 
@@ -25,7 +26,8 @@ const appReducer = combineReducers({
   product: productReducer,
   brand: brandReducer,
   customer: customerReducer,
-  isFetching: isFetchingReducer
+  isFetching: isFetchingReducer,
+  order: orderReducer
 });
 
 const rootReducer = (state, action) => {

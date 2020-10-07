@@ -15,6 +15,8 @@ import { getReq } from '../../state/api/get-request';
 import { CustomerActionTypes } from '../../state/customer/customer.types';
 import { createStructuredSelector } from 'reselect';
 import { selectCustomerData } from '../../state/customer/customer.selectors';
+import { selectOrderTemp } from '../../state/order/order.selectors';
+import { updateCustomerToOrder } from '../../state/order/order.actions';
 
 // set form schema
 const formSchema = Yup.object().shape({
@@ -27,13 +29,13 @@ const formState = {
 }
 
 const SelectCustomer = ({ 
-  order,
+  orderTemp,
   getReq,
   data,
-  setOrder
+  updateCustomerToOrder
 }) => {
 
-  const { customer } = order
+  const { customer } = orderTemp
 
   const [
     formData,
@@ -61,19 +63,14 @@ const SelectCustomer = ({
 
   const handleOnClick = (e, customer) => {
     e.preventDefault();
-    setOrder(prevState => ({ ...prevState,
-      customer,
-      shippingAddress: customer.shippingIsBilling === 'true' 
-        ? null 
-        : customer.shippingInfo.find(address => customer.shippingIsBilling === address._id)
-    }))
+    updateCustomerToOrder(customer, customer.defaultAddress)
   }
 
   return <>
     { 
       customer
       ?
-        <OrderShippingAddress order={order} setOrder={setOrder} />
+        <OrderShippingAddress />
       : <>
         <CustomerSearchForm
           formSubmit={formSubmit} 
@@ -97,11 +94,13 @@ const SelectCustomer = ({
 }
 
 const mapStateToProps = createStructuredSelector({
-  data: selectCustomerData
+  data: selectCustomerData,
+  orderTemp: selectOrderTemp
 })
 
 const mapDispatchToProps = dispatch => ({
-  getReq: (pathname, fetchSuccess, queryStr) => dispatch(getReq(pathname, fetchSuccess, queryStr))
+  getReq: (pathname, fetchSuccess, queryStr) => dispatch(getReq(pathname, fetchSuccess, queryStr)),
+  updateCustomerToOrder: (customer, shippingAddress) => dispatch(updateCustomerToOrder(customer, shippingAddress))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(SelectCustomer)

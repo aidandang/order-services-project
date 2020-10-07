@@ -1,9 +1,15 @@
 import React from 'react';
 
 // dependencies
+import { Link } from 'react-router-dom';
 import * as Yup from "yup";
 // components
 import { useForm } from '../custom-hooks/use-form';
+import Button from '../button/button.component';
+// redux
+import { connect } from 'react-redux';
+import { createStructuredSelector } from 'reselect';
+import { selectOrderTemp } from '../../state/order/order.selectors';
 // ui settings
 const liClassName = "list-group-item bg-item-list-cs list-group-item-action";
 
@@ -24,25 +30,36 @@ const formSchema = Yup.object().shape({
   shippingCost: Yup
     .string(),
   note: Yup
+    .string(),
+  product: Yup
+    .object(),
+  color: Yup
     .string()
+    .required()
 })
-// set form state
-const formState = {
-  size: "",
-  qty: "",
-  price: "",
-  saleTax: "",
-  localCharge: "",
-  shippingCost: "",
-  note: ""
-};
 
-const OrderItemInfo = ({
-  order,
-  setSelectProduct
+const ItemForm = ({
+  orderTemp
 }) => {
 
-  // set custom form hook
+  const { product } = orderTemp;
+
+  // Check if brand name was deleted or not to avoid system crash for undefined error.
+  let brandName = "N/A";
+  if (product && product.brand && product.brand[0].preferredName.length > 0) brandName = product.brand[0].preferredName;
+
+  const formState = {
+    product: {},
+    color: "",
+    size: "",
+    qty: "",
+    price: "",
+    saleTax: "",
+    localCharge: "",
+    shippingCost: "",
+    note: ""
+  };
+
   const [
     formData,
     errors, 
@@ -50,85 +67,71 @@ const OrderItemInfo = ({
     buttonDisabled
   ] = useForm(formState, formState, formSchema);
 
-  // form submit function
   const formSubmit = e => {
     e.preventDefault();
   }
 
   return <>
     <form onSubmit={formSubmit}>
-      <div className="row my-3">
-        <div className="col-12">
-
-          {/* Product Information Card */}
-          <div className="card mb-3">
-
+      <div className="row">
+        <div className="col-xl-8"> 
+          <div className="card my-3">
             <div className="card-header bg-card-cs">
               <div className="row">
-                <div className="col text-uppercase font-weight-bold">Item Description</div>
-                <div className="col text-right">
-                  <a 
-                    href="/" 
-                    className="a-link-cs" 
-                    name="closePage" 
-                    onClick={(e) => { 
-                      e.preventDefault();
-                      setSelectProduct(false)
-                    }}
-                  >
-                    Close
-                  </a>
-                </div>
+                <div className="col text-uppercase font-weight-bold">Product Information</div>
               </div>
             </div>
-
             <ul className="list-group list-group-flush">
-
               <li className={liClassName}>
                 <div className="row">
-                  <div className="col-12">
-                    <div className="form-group">
-                      <label htmlFor="productName">Item Name</label>
-                      <input 
-                        type="text"
-                        className="form-control" 
-                        id="productName"
-                        readOnly
-                      />
-                    </div>
+                  <div className="col-4 align-self-center"><span className="font-weight-bold">Name</span></div>
+                  <div className="col-8">{product.name}</div>
+                </div>
+              </li>
+              <li className={liClassName}>
+                <div className="row">
+                  <div className="col-4 align-self-center"><span className="font-weight-bold">Brand</span></div>
+                  <div className="col-8">{brandName}</div>
+                </div>
+              </li>
+              <li className={liClassName}>
+                <div className="row">
+                  <div className="col-4 align-self-center"><span className="font-weight-bold">Style No.</span></div>
+                  <div className="col-8">{product.styleCode}</div>
+                </div>
+              </li>
+              <li className={liClassName}>
+                <div className="row">
+                  <div className="col-4 align-self-center"><span className="font-weight-bold">Description</span></div>
+                  <div className="col-8">{product.desc}</div>
+                </div>
+              </li>
+              <li className={liClassName}>
+                <div className="row">
+                  <div className="col-4 align-self-center">
+                    <span className="font-weight-bold">Color</span>
+                  </div>
+                  <div className="col-8 align-self-center" onChange={onInputChange}>
+                    {product.colors.map(color =>
+                      <div key={color._id} className="form-check">
+                        <label className="form-check-label" htmlFor={color._id}>
+                          <input 
+                            className="form-check-input" 
+                            type="radio" 
+                            name="color" 
+                            id={color._id} 
+                            value={color._id}
+                          />
+                          <span>{color.color}</span>
+                        </label>
+                      </div>
+                    )}
                   </div>
                 </div>
               </li>
               <li className={liClassName}>
                 <div className="row">
-                  <div className="col-md-6">
-                    <div className="form-group">
-                      <label htmlFor="styleCode">Style Code</label>
-                      <input 
-                        type="text"
-                        className="form-control" 
-                        id="styleCode"
-                        readOnly
-                      />
-                    </div>
-                  </div>
-                  <div className="col-md-6">
-                    <div className="form-group">
-                      <label htmlFor="color">Color</label>
-                      <input 
-                        type="text"
-                        className="form-control" 
-                        id="color"
-                        readOnly
-                      />
-                    </div>
-                  </div>
-                </div>
-              </li>
-
-              <li className={liClassName}>
-                <div className="row">
-                  <div className="col-lg-2">
+                  <div className="col-xl-3">
                     <div className="form-group">
                       <label htmlFor="size">Size</label>
                       <input 
@@ -139,10 +142,9 @@ const OrderItemInfo = ({
                         onChange={onInputChange}
                       />
                       <small>Product's size.</small>
-                      {errors.size.length > 0 ? <p className="mt-2 text-danger">{errors.size}</p> : null}
                     </div>
                   </div>
-                  <div className="col-lg-2">
+                  <div className="col-xl-3">
                     <div className="form-group">
                       <label htmlFor="qty">Qty (*)</label>
                       <input 
@@ -150,14 +152,13 @@ const OrderItemInfo = ({
                         className="form-control" 
                         id="qty" 
                         name="integerInput"
-                        value={formData.qty}
-                        onChange={onInputChange}
+                        value=""
+                        onChange=""
                       />
                       <small>Qty of that size.</small>
-                      {errors.qty.length > 0 ? <p className="mt-2 text-danger">{errors.qty}</p> : null}
                     </div>
                   </div>
-                  <div className="col-lg-4">
+                  <div className="col-xl-6">
                     <div className="form-group">
                       <label htmlFor="price">Price (*)</label>
                       <input 
@@ -165,13 +166,16 @@ const OrderItemInfo = ({
                         className="form-control" 
                         id="price"
                         name="currencyInput"
-                        value={formData.price}
-                        onChange={onInputChange}
+                        value=""
+                        onChange=""
                       />
                       <small>Price per unit.</small>
-                      {errors.price.length > 0 ? <p className="mt-2 text-danger">{errors.price}</p> : null}
                     </div>
                   </div>
+                </div>
+              </li>
+              <li className={liClassName}>
+                <div className="row">
                   <div className="col-lg-4">
                     <div className="form-group">
                       <label htmlFor="saleTax">Sale Tax</label>
@@ -180,19 +184,12 @@ const OrderItemInfo = ({
                         className="form-control" 
                         id="saleTax"
                         name="currencyInput" 
-                        value={formData.saleTax}
-                        onChange={onInputChange}
+                        value=""
+                        onChange=""
                       />
                       <small>Sale tax per unit.</small>
-                      {errors.saleTax.length > 0 ? <p className="mt-2 text-danger">{errors.saleTax}</p> : null}
                     </div>
                   </div>
-                </div>
-              </li>
-
-              <li className={liClassName}>
-                <div className="row">
-                
                   <div className="col-lg-4">
                     <div className="form-group">
                       <label htmlFor="localCharge">Local Charge</label>
@@ -201,11 +198,10 @@ const OrderItemInfo = ({
                         className="form-control" 
                         id="localCharge"
                         name="currencyInput" 
-                        value={formData.localCharge}
-                        onChange={onInputChange}
+                        value=""
+                        onChange=""
                       />
                       <small>Local charge per unit.</small>
-                      {errors.localCharge.length > 0 ? <p className="mt-2 text-danger">{errors.localCharge}</p> : null}
                     </div>
                   </div>
                   <div className="col-lg-4">
@@ -216,16 +212,14 @@ const OrderItemInfo = ({
                         className="form-control" 
                         id="shippingCost"
                         name="currencyInput" 
-                        value={formData.shippingCost}
-                        onChange={onInputChange}
+                        value=""
+                        onChange=""
                       />
-                      <small>ShippingCost per unit.</small>
-                      {errors.shippingCost.length > 0 ? <p className="mt-2 text-danger">{errors.shippingCost}</p> : null}
+                      <small>Shipping cost per unit.</small>
                     </div>
                   </div>
                 </div>
               </li>
-
               <li className={liClassName}>
                 <div className="row">
                   <div className="col">
@@ -235,42 +229,57 @@ const OrderItemInfo = ({
                         type="text" 
                         className="form-control" 
                         id="note" 
-                        value={formData.note}
-                        onChange={onInputChange}
+                        value=""
+                        onChange=""
                       />
                       <small>Additional Note.</small>
-                      {errors.note.length > 0 ? <p className="mt-2 text-danger">{errors.note}</p> : null}
                     </div>
                   </div>
                 </div>
               </li>
-
-              <li className={liClassName}>
-                <div className="row mt-3">
-                  <div className="col-md-4">
+            </ul>
+          </div>           
+        </div>
+        <div className="col-xl-4"> 
+          <div className="card my-3">
+            <div className="card-header bg-card-cs">
+              <div className="row">
+                <div className="col text-uppercase font-weight-bold">Action</div>
+              </div>
+            </div>
+            <ul className="list-group list-group-flush">
+              <li className={liClassName}>      
+                <div className="row">
+                  <div className="col mt-3">
                     <div className="form-group">
-                      {/* Submit button */}
-                      <button 
-                        type="submit" 
-                        className={`btn btn-${buttonDisabled ? "secondary btn-custom-disabled" : "primary btn-custom"}`}
-                        disabled={buttonDisabled}
+                      <Link 
+                        to="/"
+                        className="btn btn-primary btn-link text-light"
                       >
-                        Save
-                      </button>
-                      {/* End of submit button */}
+                        Next
+                      </Link>
+                      <span className="mr-3"></span>
+                      <Button
+                        onClick={e => {
+                          e.preventDefault();
+                        }}
+                      >
+                        Remove
+                      </Button>
                     </div>
                   </div>
                 </div>
-              </li>  
-      
+              </li>
             </ul>
           </div>
-          {/* End of Product Information Card */}
-
-        </div>
+        </div>    
       </div>
     </form>
   </>
 }
 
-export default OrderItemInfo;
+const mapStateToProps = createStructuredSelector({
+  orderTemp: selectOrderTemp
+})
+
+export default connect(mapStateToProps)(ItemForm);

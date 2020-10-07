@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 // dependencies
 import { useLocation } from 'react-router-dom';
@@ -40,30 +40,18 @@ const OrderByIdEdit = () => {
   ]
 
   let active = "";
-  if (stage) { 
-    active = stage 
-  } else {
-    active = 'select-customer'
-  }
-
-  const initialState = {
-    customer: null,
-    shippingAddress: null,
-    items: []
-  }
-
-  const [order, setOrder] = useState(initialState);
+  if (stage) active = stage;
 
   return <>
     <Title title={title} />
     <Stagebar stageList={stageList} active={active} />
     {
       (stage === 'select-customer') &&
-      <SelectCustomer order={order} setOrder={setOrder} />
+      <SelectCustomer />
     }
     {
       (stage === 'add-items') &&
-      <AddItems order={order} setOrder={setOrder} />
+      <AddItems />
     }
   </>
 }
