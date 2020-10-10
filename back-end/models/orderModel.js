@@ -62,8 +62,7 @@ const orderSchema = new Schema({
     required: true
   },
   shippingAddress: {
-    type: String,
-    required: true
+    type: String
   },
   items: [itemSchema],
   paidAmount: {
@@ -71,8 +70,7 @@ const orderSchema = new Schema({
     default: 0
   },
   user: {
-    type: Object,
-    required: true
+    type: Object
   },
   orderedDate: {
     type: Date

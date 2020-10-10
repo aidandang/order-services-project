@@ -10,7 +10,7 @@ const CustomerSearchForm = ({
 }) => {
   return <>
     <div className="row">
-      <div className="col-lg-6">
+      <div className="col">
         <div className="card my-3">
           <div className="card-header bg-card-cs">
             <div className="row">

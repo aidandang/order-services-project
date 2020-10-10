@@ -1,8 +1,29 @@
 import React from 'react';
 
-const OrderByIdInfo = () => {
+// dependencies
+import { useLocation } from 'react-router-dom';
+
+// components
+import Title from '../title/title.component';
+import OrderInfo from './order-info.component';
+
+const title = {
+  name: 'Order Information',
+  message: 'Detail information about the order. The information can be edited.',
+}
+
+const OrderByIdInfo = ({ order }) => {
+
+  const location = useLocation();
+
+  title.button = {
+    text: 'Edit',
+    link: `${location.pathname}?type=edit`
+  }
+
   return <>
-    <div>ORDER BY ID INFO</div>
+    <Title title={title} />
+    <OrderInfo order={order} />
   </>
 }
 

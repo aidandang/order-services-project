@@ -3,6 +3,7 @@ const ObjectId = mongoose.Types.ObjectId;
 const Order = require('../models/orderModel');
 const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/appError');
+const { orderAggregate } = require('../utils/aggregation');
 
 exports.createOrder = catchAsync(async (req, res, next) => {
   const newOrder = await Order.create(req.body);
@@ -28,7 +29,7 @@ exports.readOrders = catchAsync(async (req, res, next) => {
     match = {}
   }
 
-  let query = Product.aggregate(productAggregate(match))
+  let query = Order.aggregate(orderAggregate(match))
 
   if (req.query.sort) {
     const sortBy = req.query.sort.split(',').join(' ');
@@ -38,7 +39,7 @@ exports.readOrders = catchAsync(async (req, res, next) => {
   }
 
   const page = req.query.page * 1 || 1;
-  const limit = req.query.limit * 1 || 6;
+  const limit = req.query.limit * 1 || 20;
   const skip = (page - 1) * limit;
 
   const arr = await query;
@@ -47,14 +48,29 @@ exports.readOrders = catchAsync(async (req, res, next) => {
 
   query = query.skip(skip).limit(limit);
   
-  const products = await query;
+  const orders = await query;
 
   res.status(200).json({
-    status: 'GET_SUCCESS',
+    status: 'success',
     info: {
       count,
       pages
     },
-    products
+    allIds: orders
+  });
+});
+
+exports.readOrderById = catchAsync(async (req, res, next) => {
+  const id = req.params.id;
+  const match = { _id: ObjectId(id) }
+  const order = await Order.aggregate(orderAggregate(match))
+
+  if (order.length === 0) {
+    return next(new AppError('No order found with that Id', 404))
+  }
+  
+  res.status(200).json({
+    status: 'success',
+    byId: order[0]
   });
 });

@@ -3,7 +3,7 @@ import React from 'react';
 // ui settings
 const liClassName = "list-group-item list-group-item-action bg-item-list-cs";
 
-const ProductSearchForm = ({ 
+const OrderSearchForm = ({ 
   formData, 
   formSubmit,  
   onInputChange
@@ -14,7 +14,7 @@ const ProductSearchForm = ({
         <div className="card my-3">
           <div className="card-header bg-card-cs">
             <div className="row">
-              <div className="col text-uppercase font-weight-bold align-self-center">Search For Products</div>
+              <div className="col text-uppercase font-weight-bold align-self-center">Search For Orders</div>
             </div>
           </div>
           <ul className="list-group list-group-flush">
@@ -48,9 +48,10 @@ const ProductSearchForm = ({
                       </a>
                       <div className="dropdown-menu" aria-labelledby="dropdownMenuLink">
                         {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-                        <a href="" name="name" className="dropdown-item dropdown-item-cs" onClick={formSubmit}>Name</a>
+                        <a href="" name="orderNumber" className="dropdown-item dropdown-item-cs" onClick={formSubmit}>Order Number</a>
                         {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-                        <a href="" name="styleCode" className="dropdown-item dropdown-item-cs" onClick={formSubmit}>Style</a>
+                        <a href="" name="createdAt" className="dropdown-item dropdown-item-cs" onClick={formSubmit}>Created At</a>
+                        {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                       </div>
                     </div>
                   </form>
@@ -64,4 +65,4 @@ const ProductSearchForm = ({
   </>
 }
 
-export default ProductSearchForm;
+export default OrderSearchForm;
