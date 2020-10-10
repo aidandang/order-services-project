@@ -16,19 +16,22 @@ const liClassName = "list-group-item bg-item-list-cs list-group-item-action";
 // set form schema
 const formSchema = Yup.object().shape({
   size: Yup
-    .string(),
-  qty: Yup
     .string()
+    .required(),
+  qty: Yup
+    .number()
+    .moreThan(0)
     .required(),
   price: Yup
-    .string()
+    .number()
+    .moreThan(0)
     .required(),
   saleTax: Yup
-    .string(),
+    .number(),
   localCharge: Yup
-    .string(),
+    .number(),
   shippingCost: Yup
-    .string(),
+    .number(),
   note: Yup
     .string(),
   color: Yup
@@ -162,7 +165,7 @@ const ItemForm = ({
                 <div className="row">
                   <div className="col-xl-3">
                     <div className="form-group">
-                      <label htmlFor="size">Size</label>
+                      <label htmlFor="size">Size (*)</label>
                       <input 
                         type="text" 
                         className="form-control" 
@@ -181,6 +184,7 @@ const ItemForm = ({
                         type="text" 
                         className="form-control" 
                         name="qty"
+                        placeholder="0"
                         value={formData.qty}
                         onChange={onInputChange}
                       />
@@ -195,6 +199,7 @@ const ItemForm = ({
                         type="text" 
                         className="form-control" 
                         name="price"
+                        placeholder="0"
                         value={formData.price}
                         onChange={onInputChange}
                       />
@@ -213,6 +218,7 @@ const ItemForm = ({
                         type="text" 
                         className="form-control" 
                         name="saleTax"
+                        placeholder="0"
                         value={formData.saleTax}
                         onChange={onInputChange}
                       />
@@ -227,6 +233,7 @@ const ItemForm = ({
                         type="text" 
                         className="form-control" 
                         name="localCharge"
+                        placeholder="0"
                         value={formData.localCharge}
                         onChange={onInputChange}
                       />
@@ -240,7 +247,8 @@ const ItemForm = ({
                       <input 
                         type="text" 
                         className="form-control" 
-                        name="shippingCost" 
+                        name="shippingCost"
+                        placeholder="0" 
                         value={formData.shippingCost}
                         onChange={onInputChange}
                       />

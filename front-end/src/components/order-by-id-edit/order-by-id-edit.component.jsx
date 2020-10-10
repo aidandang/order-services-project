@@ -8,6 +8,7 @@ import Title from '../title/title.component';
 import Stagebar from '../stagebar/stagebar.component';
 import SelectCustomer from './select-customer.component';
 import AddItems from './add-items.component';
+import PreviewAndSubmit from './preview-and-submit.component';
 
 const OrderByIdEdit = () => {
 
@@ -52,6 +53,10 @@ const OrderByIdEdit = () => {
     {
       (stage === 'add-items') &&
       <AddItems />
+    }
+    {
+      (stage === 'preview-and-submit') &&
+      <PreviewAndSubmit />
     }
   </>
 }
