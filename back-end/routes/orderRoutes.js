@@ -9,6 +9,7 @@ router
 
 router
   .route('/:id')
-  .get(orderController.readOrderById);
+  .get(orderController.readOrderById)
+  .patch(orderController.updateOrderById);
 
 module.exports = router;

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 // dependencies
 import { useLocation } from 'react-router-dom';
@@ -9,8 +9,16 @@ import Stagebar from '../stagebar/stagebar.component';
 import SelectCustomer from './select-customer.component';
 import AddItems from './add-items.component';
 import PreviewAndSubmit from './preview-and-submit.component';
+// redux
+import { connect } from 'react-redux';
+import { createStructuredSelector } from 'reselect';
+import { copyToOrderTemplate } from '../../state/order/order.actions';
+import { selectOrderData } from '../../state/order/order.selectors';
 
-const OrderByIdEdit = () => {
+const OrderByIdEdit = ({
+  data,
+  copyToOrderTemplate
+}) => {
 
   const location = useLocation();
 
@@ -43,6 +51,11 @@ const OrderByIdEdit = () => {
   let active = "";
   if (stage) active = stage;
 
+  useEffect(() => {
+    if (type === 'edit') copyToOrderTemplate(data.byId)
+    // eslint-disable-next-line
+  }, [])
+
   return <>
     <Title title={title} />
     <Stagebar stageList={stageList} active={active} />
@@ -61,4 +74,12 @@ const OrderByIdEdit = () => {
   </>
 }
 
-export default OrderByIdEdit;
+const mapStateToProps = createStructuredSelector({
+  data: selectOrderData
+})
+
+const mapDispatchToProps = dispatch => ({
+  copyToOrderTemplate: order => dispatch(copyToOrderTemplate(order))
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(OrderByIdEdit);

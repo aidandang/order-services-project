@@ -2,41 +2,35 @@ import React, { useState, useEffect } from 'react';
 
 // dependencies
 import uuid from 'react-uuid';
-import { useLocation, Redirect } from 'react-router-dom';
+import { useLocation, Redirect, useParams } from 'react-router-dom';
+import queryString from 'query-string';
 // components
 import Button from '../button/button.component';
-import { acctNumber } from '../utils/acctNumber';
-import { acctToString } from '../utils/acctToString';
 // redux
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { selectOrderTemp } from '../../state/order/order.selectors';
 import { postReq } from '../../state/api/post-request';
+import { patchReq } from '../../state/api/patch-request';
 import { OrderActionTypes } from '../../state/order/order.types';
 // ui settings
 const liClassName = "list-group-item bg-item-list-cs list-group-item-action";
 
 const PreviewAndSubmit = ({
   orderTemp,
-  postReq
+  postReq,
+  patchReq
 }) => {
 
   const [success, setSuccess] = useState(false);
   const [buttonDisabled, setButtonDisabled] = useState(true)
 
   const location = useLocation();
+  const params = useParams();
+  const queryObj = queryString.parse(location.search);
+  const { type } = queryObj;
 
   const { customer, shippingAddress } = orderTemp;
-
-  let sum = 0;
-
-  const total = () => (qty, price, saleTax, localCharge, shippingCost) => {
-    const value = acctNumber(price, saleTax, localCharge, shippingCost) * qty;
-    sum = sum + value;
-    return acctToString(value);
-  }
-
-  const subTotal = total();
 
   const formSubmit = e => {
     e.preventDefault();
@@ -45,7 +39,8 @@ const PreviewAndSubmit = ({
     delete orderTemp.index;
     
     const fetchSuccess = OrderActionTypes.ORDER_FETCH_SUCCESS;
-    postReq('/orders', fetchSuccess, orderTemp, setSuccess)
+    if (type === 'add') postReq('/orders', fetchSuccess, orderTemp, setSuccess);
+    if (type === 'edit') patchReq('/orders/' + params.id, fetchSuccess, orderTemp, setSuccess);
   }
 
   useEffect(() => {
@@ -217,7 +212,7 @@ const PreviewAndSubmit = ({
                       <td className="text-right">{item.localCharge}</td>
                       <td className="text-right">{item.shippingCost}</td>
                       <th scope="row" className="text-right">
-                        {subTotal(item.qty, item.price, item.saleTax, item.localCharge, item.shippingCost)}
+                        --
                       </th>
                     </tr>
                   ) 
@@ -235,7 +230,7 @@ const PreviewAndSubmit = ({
                       <td className="text-right"></td>
                       <td colSpan="2" className="text-right">Subtotal</td>
                       <td className="text-right"></td>
-                      <td className="text-right">{acctToString(sum)}</td>
+                      <td className="text-right">--</td>
                     </tr>
                     <tr className="table-row-no-link-cs">
                       <td className="text-right"></td>
@@ -253,7 +248,7 @@ const PreviewAndSubmit = ({
                       <td className="text-right"></td>
                       <th scope="row" colSpan="2" className="text-right">Total</th>
                       <td className="text-right"></td>
-                      <th scope="row" className="text-right">{acctToString(sum)}</th>
+                      <th scope="row" className="text-right">--</th>
                     </tr>
                   </>
                 }
@@ -274,6 +269,9 @@ const mapStateToProps = createStructuredSelector({
 const mapDispatchToProps = dispatch => ({
   postReq: (pathname, fetchSuccess, reqBody, setSuccess) => dispatch(
     postReq(pathname, fetchSuccess, reqBody, setSuccess)
+  ),
+  patchReq: (pathname, fetchSuccess, reqBody, setSuccess) => dispatch(
+    patchReq(pathname, fetchSuccess, reqBody, setSuccess)
   )
 })
 

@@ -9,7 +9,7 @@ exports.createOrder = catchAsync(async (req, res, next) => {
   const newOrder = await Order.create(req.body);
   res.status(201).json({
     status: 'POST_SUCCESS',
-    order: newOrder
+    byId: newOrder
   });
 });
 
@@ -73,4 +73,29 @@ exports.readOrderById = catchAsync(async (req, res, next) => {
     status: 'success',
     byId: order[0]
   });
+});
+
+exports.updateOrderById = catchAsync(async (req, res, next) => {
+  const id = req.params.id;
+  const queryObj = {...req.body};
+
+  const updateOrder = await Order.findByIdAndUpdate(
+    id, 
+    queryObj, 
+    { new: true, runValidators: true }
+  );
+
+  if (!updateOrder) {
+    return next(new AppError('No product found with that Id', 404))
+  }
+
+  const match = { _id: ObjectId(id) }
+  const order = await Order.aggregate(orderAggregate(match))
+
+  res
+    .status(200)
+    .json({
+      status: 'success',
+      byId: order[0]
+    });
 });

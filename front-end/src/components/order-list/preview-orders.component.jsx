@@ -47,7 +47,7 @@ const PreviewOrders = ({
                   </td>
                   <td>
                     {
-                      order.shippingAddress === '' 
+                      (order.shippingAddress === '' || order.shippingAddress === null)
                       ? 'Same as Billing Address' 
                       : `${order.shippingAddress.fullname}, 
                         ${order.shippingAddress.streetAddress1}, 
