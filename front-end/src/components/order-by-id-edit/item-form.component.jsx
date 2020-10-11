@@ -59,9 +59,9 @@ const ItemForm = ({
     size: item.size || "",
     qty: item.qty || "",
     price: item.price || "",
-    saleTax: item.saleTax || "",
-    localCharge: item.localCharge || "",
-    shippingCost: item.shippingCost || "",
+    saleTax: item.saleTax || 0,
+    localCharge: item.localCharge || 0,
+    shippingCost: item.shippingCost || 0,
     note: item.note || ""
   };
 
@@ -218,7 +218,6 @@ const ItemForm = ({
                         type="text" 
                         className="form-control" 
                         name="saleTax"
-                        placeholder="0"
                         value={formData.saleTax}
                         onChange={onInputChange}
                       />
@@ -233,7 +232,6 @@ const ItemForm = ({
                         type="text" 
                         className="form-control" 
                         name="localCharge"
-                        placeholder="0"
                         value={formData.localCharge}
                         onChange={onInputChange}
                       />
@@ -248,7 +246,6 @@ const ItemForm = ({
                         type="text" 
                         className="form-control" 
                         name="shippingCost"
-                        placeholder="0" 
                         value={formData.shippingCost}
                         onChange={onInputChange}
                       />

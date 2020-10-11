@@ -43,3 +43,8 @@ export const removeItemFromOrder = (index) => ({
   type: OrderActionTypes.REMOVE_ITEM_FROM_ORDER,
   payload: index
 })
+
+export const copyToOrderTemplate = (order) => ({
+  type: OrderActionTypes.COPY_TO_ORDER_TEMPLATE,
+  payload: order
+})

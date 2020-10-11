@@ -88,6 +88,7 @@ const orderReducer = (state = INITIAL_STATE, action) => {
         orderTemp: {
           ...state.orderTemp,
           items: updateObjectInArray(state.orderTemp.items, action.payload),
+          item: {},
           index: null
         }
       }
@@ -99,6 +100,28 @@ const orderReducer = (state = INITIAL_STATE, action) => {
           items: removeItem(state.orderTemp.items, { index: action.payload }),
           item: {},
           index: null
+        }
+      }
+    case OrderActionTypes.REMOVE_ORDER_TEMPLATE:
+      return {
+        ...state,
+        orderTemp: {
+          ...state.orderTemp,
+          customer: null,
+          shippingAddress: null,
+          item: {},
+          index: null,
+          items: []
+        }
+      }
+    case OrderActionTypes.COPY_TO_ORDER_TEMPLATE:
+      return {
+        ...state,
+        orderTemp: {
+          ...state.orderTemp,
+          customer: action.payload.customer,
+          shippingAddress: action.payload.shippingAddress === "" ? null : action.payload.shippingAddress,
+          items: action.payload.items
         }
       }
     default:
