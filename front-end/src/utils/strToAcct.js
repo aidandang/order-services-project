@@ -1,4 +1,4 @@
-export const acctNumber = (...items) => {
+export const strToAcct = (...items) => {
   let sum = 0;
   
   for (let i = 0; i < items.length; i++) {
@@ -12,7 +12,7 @@ export const acctNumber = (...items) => {
 const convertStrToNum = str => {
   let number = 0;
   
-  if (str === undefined) return number;
+  if (str === undefined || !typeof stringValue) return number;
   if (str.length < 3) return number;
   if (str.length === 3) {
     if (!str.match(/^[.]{1}[0-9]{2}$/)) return number

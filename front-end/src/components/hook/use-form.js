@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import * as Yup from 'yup';
+import { currencyMask, integerMask } from '../utils/helpers';
 
 export const useForm = (initialValues, initialErrors, schema) => {
   // set state for form inputs and errors
@@ -20,7 +21,26 @@ export const useForm = (initialValues, initialErrors, schema) => {
       value = e.target.value;
     }
 
-    handleChanges(key, value)
+    let id = null
+
+    if (e.target.id) {
+      id = e.target.id.split('-')[0]
+    }
+
+    // currency number mask
+    if (id === 'currencyMask') {
+      if (value !== '' && value !== undefined) {
+        value = currencyMask(e.target.value, 12);
+      }
+    }
+    // integer number mask
+    if (id === 'integerMask') {
+      if (value !== '' && value !== undefined) {
+        value = integerMask(e.target.value, 7);
+      }
+    }
+
+    if (value !== undefined) handleChanges(key, value)
   }
 
   // handle function to set values to a formState

@@ -1,12 +1,3 @@
-export const getPhoneStr = (string) => {
-  let phoneStr = string.replace(/\D/g,'').substring(0, 10);
-  if (phoneStr.length > 0) {
-    return phoneStr.replace(/(\d{3})(\d{3})(\d{4})/, "$1-$2-$3");
-  } else { 
-    return string
-  }
-}
-
 export const currencyMask = (value, limit) => {
   let str = value;
   // remove (,) and (.) from the string
@@ -97,3 +88,4 @@ export const integerMask = (value, limit) => {
   // if all other conditions then return null to prevent any action events.
   return undefined;
 }
+

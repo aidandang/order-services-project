@@ -3,7 +3,7 @@ import React from 'react';
 // dependencies
 import * as Yup from "yup";
 // customs and utils
-import { useForm } from '../custom-hooks/use-form';
+import { useForm } from '../hook/use-form';
 // components
 import SignUpForm from './sign-up-form.component';
 import AlertMesg from '../alert-mesg/alert-mesg.component';

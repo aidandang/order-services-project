@@ -1,4 +1,5 @@
 import { OrderActionTypes } from './order.types';
+import { acctToStr } from '../../components/utils/acctToStr';
 
 const INITIAL_STATE = {
   data: {},
@@ -27,6 +28,17 @@ function removeItem(array, action) {
   let newArray = array.slice()
   newArray.splice(action.index, 1)
   return newArray
+}
+
+function convertAccountNumberToString(array) {
+  return array.map(item => ({
+      ...item,
+      qty: String(item.qty),
+      price: acctToStr(item.price),
+      saleTax: acctToStr(item.saleTax),
+      localCharge: acctToStr(item.localCharge),
+      shippingCost: acctToStr(item.shippingCost)
+  })) 
 }
 
 const orderReducer = (state = INITIAL_STATE, action) => {
@@ -121,7 +133,7 @@ const orderReducer = (state = INITIAL_STATE, action) => {
           ...state.orderTemp,
           customer: action.payload.customer,
           shippingAddress: action.payload.shippingAddress === "" ? null : action.payload.shippingAddress,
-          items: action.payload.items
+          items: convertAccountNumberToString(action.payload.items)
         }
       }
     default:

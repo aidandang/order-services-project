@@ -1,4 +1,4 @@
-export const acctToString = (number) => {
+export const acctToStr = (number) => {
   let str = '';
   
   if (!Number.isInteger(number)) return '-';

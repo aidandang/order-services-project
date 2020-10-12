@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 // dependencies
 import * as Yup from "yup";
 // components
-import { useForm } from '../custom-hooks/use-form';
+import { useForm } from '../hook/use-form';
 import { convertSearchFormToQueryString } from '../utils/convert-search-form-to-query-string';
 import CustomerSearchForm from '../customer-list/customer-search-form.component';
 import PaginationBar from '../pagination-bar/pagination-bar.component';
