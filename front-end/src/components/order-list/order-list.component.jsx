@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { useLocation, useHistory } from 'react-router-dom';
 import * as Yup from "yup";
 // components
-import { useForm } from '../custom-hooks/use-form';
+import { useForm } from '../hook/use-form';
 import Title from '../title/title.component';
 import OrderSearchForm from './order-search-form.component';
 import PreviewOrders from './preview-orders.component';

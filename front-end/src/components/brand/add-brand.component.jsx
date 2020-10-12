@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import * as Yup from "yup";
 import { Redirect, useLocation } from 'react-router-dom';
 // components
-import { useForm } from '../custom-hooks/use-form';
+import { useForm } from '../hook/use-form';
 import AddBrandForm from './add-brand-form.component';
 import AlertMesg from '../../components/alert-mesg/alert-mesg.component';
 // redux

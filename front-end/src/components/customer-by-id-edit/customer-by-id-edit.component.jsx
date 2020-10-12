@@ -6,7 +6,7 @@ import { useLocation, Redirect } from 'react-router-dom';
 import queryString from 'query-string';
 // components
 import Title from '../title/title.component';
-import { useForm } from '../custom-hooks/use-form';
+import { useForm } from '../hook/use-form';
 import CustomerForm from './customer-form.component';
 import AddAddress from './add-address.component';
 import PreviewAddresses from './preview-addresses.component';

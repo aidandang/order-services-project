@@ -2,11 +2,19 @@ import React from 'react';
 
 // dependecies
 import uuid from 'react-uuid';
+// components
+import { strToAcct } from '../utils/strToAcct';
+import { acctToStr } from '../utils/acctToStr';
 // redux
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { selectOrderTemp } from '../../state/order/order.selectors';
 import { editOrderItem } from '../../state/order/order.actions';
+
+const subTotal = (qty, price, saleTax, localCharge, shippingCost) => {
+  const value = strToAcct(price, saleTax, localCharge, shippingCost)*Number(qty)
+  return acctToStr(value);
+}
 
 const OrderItems = ({
   orderTemp,
@@ -47,7 +55,7 @@ const OrderItems = ({
                   <td className="text-right">{item.localCharge}</td>
                   <td className="text-right">{item.shippingCost}</td>
                   <th scope="row" className="text-right">
-                    --
+                    {subTotal(item.qty, item.price, item.saleTax, item.localCharge, item.shippingCost)}
                   </th>
                 </tr>
               )}

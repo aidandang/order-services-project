@@ -6,6 +6,8 @@ import { useLocation, Redirect, useParams } from 'react-router-dom';
 import queryString from 'query-string';
 // components
 import Button from '../button/button.component';
+import { strToAcct } from '../utils/strToAcct';
+import { acctToStr } from '../utils/acctToStr';
 // redux
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
@@ -22,6 +24,16 @@ const PreviewAndSubmit = ({
   patchReq
 }) => {
 
+  let sum = 0;
+
+  const total = () => (qty, price, saleTax, localCharge, shippingCost) => {
+    const value = strToAcct(price, saleTax, localCharge, shippingCost) * Number(qty);
+    sum = sum + value;
+    return acctToStr(value);
+  }
+  
+  const subTotal = total();
+
   const [success, setSuccess] = useState(false);
   const [buttonDisabled, setButtonDisabled] = useState(true)
 
@@ -37,10 +49,22 @@ const PreviewAndSubmit = ({
 
     delete orderTemp.item;
     delete orderTemp.index;
+
+    const reqBody = {
+      ...orderTemp,
+      items: orderTemp.items.map(item => ({
+        ...item,
+        qty: Number(item.qty),
+        price: strToAcct(item.price),
+        saleTax: strToAcct(item.saleTax),
+        localCharge: strToAcct(item.localCharge),
+        shippingCost: strToAcct(item.shippingCost)
+      }))
+    }
     
     const fetchSuccess = OrderActionTypes.ORDER_FETCH_SUCCESS;
-    if (type === 'add') postReq('/orders', fetchSuccess, orderTemp, setSuccess);
-    if (type === 'edit') patchReq('/orders/' + params.id, fetchSuccess, orderTemp, setSuccess);
+    if (type === 'add') postReq('/orders', fetchSuccess, reqBody, setSuccess);
+    if (type === 'edit') patchReq('/orders/' + params.id, fetchSuccess, reqBody, setSuccess);
   }
 
   useEffect(() => {
@@ -212,7 +236,7 @@ const PreviewAndSubmit = ({
                       <td className="text-right">{item.localCharge}</td>
                       <td className="text-right">{item.shippingCost}</td>
                       <th scope="row" className="text-right">
-                        --
+                        {subTotal(item.qty, item.price, item.saleTax, item.localCharge, item.shippingCost)}
                       </th>
                     </tr>
                   ) 
@@ -228,9 +252,9 @@ const PreviewAndSubmit = ({
                       <td className="text-right"></td>
                       <td className="text-right"></td>
                       <td className="text-right"></td>
-                      <td colSpan="2" className="text-right">Subtotal</td>
+                      <td colSpan="2" className="text-right">Subtotals</td>
                       <td className="text-right"></td>
-                      <td className="text-right">--</td>
+                      <td className="text-right">{acctToStr(sum)}</td>
                     </tr>
                     <tr className="table-row-no-link-cs">
                       <td className="text-right"></td>
@@ -239,7 +263,7 @@ const PreviewAndSubmit = ({
                       <td className="text-right"></td>
                       <td colSpan="2" className="text-right">Discount</td>
                       <td className="text-right"></td>
-                      <td className="text-right">-</td>
+                      <td className="text-right">.00</td>
                     </tr>
                     <tr className="table-row-no-link-cs">
                       <td className="text-right"></td>
@@ -248,7 +272,7 @@ const PreviewAndSubmit = ({
                       <td className="text-right"></td>
                       <th scope="row" colSpan="2" className="text-right">Total</th>
                       <td className="text-right"></td>
-                      <th scope="row" className="text-right">--</th>
+                      <th scope="row" className="text-right">{acctToStr(sum)}</th>
                     </tr>
                   </>
                 }

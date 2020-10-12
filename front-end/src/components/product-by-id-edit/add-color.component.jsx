@@ -3,7 +3,7 @@ import React from 'react';
 // dependencies
 import * as Yup from "yup";
 // components
-import { useForm } from '../custom-hooks/use-form';
+import { useForm } from '../hook/use-form';
 import AddColorForm from './add-color-form.component';
 
 // set form schema

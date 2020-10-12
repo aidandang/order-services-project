@@ -3,7 +3,7 @@ import React from 'react';
 // dependencies
 import * as Yup from "yup";
 // components
-import { useForm } from '../custom-hooks/use-form';
+import { useForm } from '../hook/use-form';
 import Button from '../button/button.component';
 // redux
 import { connect } from 'react-redux';
@@ -19,19 +19,17 @@ const formSchema = Yup.object().shape({
     .string()
     .required(),
   qty: Yup
-    .number()
-    .moreThan(0)
+    .string()
     .required(),
   price: Yup
-    .number()
-    .moreThan(0)
+    .string()
     .required(),
   saleTax: Yup
-    .number(),
+    .string(),
   localCharge: Yup
-    .number(),
+    .string(),
   shippingCost: Yup
-    .number(),
+    .string(),
   note: Yup
     .string(),
   color: Yup
@@ -59,9 +57,9 @@ const ItemForm = ({
     size: item.size || "",
     qty: item.qty || "",
     price: item.price || "",
-    saleTax: item.saleTax || 0,
-    localCharge: item.localCharge || 0,
-    shippingCost: item.shippingCost || 0,
+    saleTax: item.saleTax || "",
+    localCharge: item.localCharge || "",
+    shippingCost: item.shippingCost || "",
     note: item.note || ""
   };
 
@@ -182,7 +180,8 @@ const ItemForm = ({
                       <label htmlFor="qty">Qty (*)</label>
                       <input 
                         type="text" 
-                        className="form-control" 
+                        className="form-control"
+                        id="integerMask-itemForm-qty" 
                         name="qty"
                         placeholder="0"
                         value={formData.qty}
@@ -195,9 +194,10 @@ const ItemForm = ({
                   <div className="col-xl-6">
                     <div className="form-group">
                       <label htmlFor="price">Price (*)</label>
-                      <input 
+                      <input
                         type="text" 
-                        className="form-control" 
+                        className="form-control"
+                        id="currencyMask-itemForm-price" 
                         name="price"
                         placeholder="0"
                         value={formData.price}
@@ -216,7 +216,8 @@ const ItemForm = ({
                       <label htmlFor="saleTax">Sale Tax</label>
                       <input 
                         type="text" 
-                        className="form-control" 
+                        className="form-control"
+                        id="currencyMask-itemForm-saleTax" 
                         name="saleTax"
                         value={formData.saleTax}
                         onChange={onInputChange}
@@ -231,6 +232,7 @@ const ItemForm = ({
                       <input 
                         type="text" 
                         className="form-control" 
+                        id="currencyMask-itemForm-localCharge"
                         name="localCharge"
                         value={formData.localCharge}
                         onChange={onInputChange}
@@ -244,7 +246,8 @@ const ItemForm = ({
                       <label htmlFor="shippingCost">Shipping Cost</label>
                       <input 
                         type="text" 
-                        className="form-control" 
+                        className="form-control"
+                        id="currencyMask-itemForm-shippingCost" 
                         name="shippingCost"
                         value={formData.shippingCost}
                         onChange={onInputChange}
