@@ -8,6 +8,7 @@ import Title from '../title/title.component';
 import Stagebar from '../stagebar/stagebar.component';
 import SelectCustomer from './select-customer.component';
 import AddItems from './add-items.component';
+import AddReference from './add-reference.component';
 import PreviewAndSubmit from './preview-and-submit.component';
 // redux
 import { connect } from 'react-redux';
@@ -43,8 +44,12 @@ const OrderByIdEdit = ({
       text: '2. Add Items'
     },
     {
+      name: 'add-reference',
+      text: '3. Add Reference'
+    },
+    {
       name: 'preview-and-submit',
-      text: '3. Preview and Submit'
+      text: '4. Preview and Submit'
     }
   ]
 
@@ -52,6 +57,13 @@ const OrderByIdEdit = ({
   if (stage) active = stage;
 
   useEffect(() => {
+    if (type === 'add') copyToOrderTemplate({
+      customer: null,
+      shippingAddress: null,
+      item: {},
+      index: null,
+      items: []
+    })
     if (type === 'edit') copyToOrderTemplate(data.byId)
     // eslint-disable-next-line
   }, [])
@@ -66,6 +78,10 @@ const OrderByIdEdit = ({
     {
       (stage === 'add-items') &&
       <AddItems />
+    }
+    {
+      (stage === 'add-reference') &&
+      <AddReference />
     }
     {
       (stage === 'preview-and-submit') &&

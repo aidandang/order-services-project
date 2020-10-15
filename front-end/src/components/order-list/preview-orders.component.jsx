@@ -1,5 +1,7 @@
 import React from 'react';
 
+// dependencies
+import moment from 'moment';
 // redux
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
@@ -12,6 +14,11 @@ const PreviewOrders = ({
 
   const { allIds } = data;
 
+  const handleShippingAddress = (order) => {
+    const result = order.customer.shippingInfo.find(address => address._id === order.shippingAddress)
+    return `${result.fullname}, ${result.streetAddress1}, ${result.city}, ${result.state}, ${result.phone}`
+  }
+
   return <>
     {/* customer table */}
     <div className="row mt-3">
@@ -21,11 +28,11 @@ const PreviewOrders = ({
             <thead>
               <tr>
                 <th scope="col">Order#</th>
-                <th scope="col">Created At</th>
+                <th scope="col">Date</th>
                 <th scope="col">Customer</th>
                 <th scope="col">Items</th>
                 <th scope="col">Shipping Address</th>
-                <th scope="col">Paid Ammount</th>
+                <th scope="col">Paid</th>
               </tr>
             </thead>
             <tbody>
@@ -36,7 +43,7 @@ const PreviewOrders = ({
                   onClick={(e) => handleOnClick(e, order)}
                 >
                   <th scope="row">{order.orderNumber}</th>
-                  <td>{order.createdAt}</td>
+                  <td>{order.ref.refDate ? moment(order.ref.refDate).format("MM/DD/YY") : moment(order.createdAt).format("MM/DD/YY")}</td>
                   <td>
                     {`${order.customer.nickname} - ${order.customer.account}`}
                   </td>
@@ -49,11 +56,7 @@ const PreviewOrders = ({
                     {
                       (order.shippingAddress === '' || order.shippingAddress === null)
                       ? 'Same as Billing Address' 
-                      : `${order.shippingAddress.fullname}, 
-                        ${order.shippingAddress.streetAddress1}, 
-                        ${order.shippingAddress.city},
-                        ${order.shippingAddress.state},
-                        ${order.shippingAddress.phone}`
+                      : handleShippingAddress(order)
                     }
                   </td>
                   <td>{order.paidAmount}</td>

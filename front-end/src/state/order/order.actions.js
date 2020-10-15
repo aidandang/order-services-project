@@ -48,3 +48,8 @@ export const copyToOrderTemplate = (order) => ({
   type: OrderActionTypes.COPY_TO_ORDER_TEMPLATE,
   payload: order
 })
+
+export const updateReferenceToOrder = (ref) => ({
+  type: OrderActionTypes.UPDATE_REFERENCE_TO_ORDER,
+  payload: ref
+})

@@ -99,7 +99,7 @@ const OrderShippingAddress = ({
                     </div>
                     <div className="col-8 align-self-center" onChange={handleChange}>
                       <div className="form-check">
-                        <input className="form-check-input" type="radio" name="shippingAddress" id='billing' value='' defaultChecked={shippingAddress === ''} />
+                        <input className="form-check-input" type="radio" name="shippingAddress" id='billing' value='' defaultChecked={shippingAddress === '' || shippingAddress === null} />
                         <label className="form-check-label" htmlFor='billing'>
                           Same as Billing Address
                         </label>

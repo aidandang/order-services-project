@@ -49,6 +49,30 @@ const itemSchema = new Schema({
   }
 });
 
+const refSchema = new Schema({
+  refNumber: {
+    type: String,
+    required: true
+  },
+  refDate: {
+    type: Date,
+    required: true
+  },
+  refInfo: {
+    type: String,
+    required: true
+  },
+  refAttachFile: {
+    type: String
+  },
+  refStatus: {
+    type: String
+  },
+  paymentMethod: {
+    type: String
+  }
+});
+
 const revSchema = new Schema({
   modifiedAt: {
     type: Date,
@@ -72,9 +96,6 @@ const orderSchema = new Schema({
   user: {
     type: Object
   },
-  orderedDate: {
-    type: Date
-  },
   createdAt: {
     type: Date,
     default: Date.now
@@ -83,6 +104,7 @@ const orderSchema = new Schema({
     type: Boolean,
     default: false
   },
+  ref: refSchema,
   rev: [revSchema]
 });
 

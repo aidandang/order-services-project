@@ -3,20 +3,35 @@ import React from 'react';
 // dependencies
 import { useLocation } from 'react-router-dom';
 import queryString from 'query-string';
-// components
-import CustomerList from '../../components/customer-list/customer-list.component';
-import CustomerByIdEdit from '../../components/customer-by-id-edit/customer-by-id-edit.component';
 
+// components
+import Title from '../../components/title/title.component';
+import CustomerList from '../../components/customer-list/customer-list.component';
+import AddCustomer from '../../components/add-customer/add-customer.component';
+
+// initial values
+const title = {
+  name: 'Customer List',
+  message: 'Search for customer(s) by account, nickname and address.'
+}
+
+// main component
 const CustomerListPage = () => {
 
   const location = useLocation();
 
   const queryObj = queryString.parse(location.search);
-  const { type } = queryObj;
+  const { action } = queryObj;
   
   return <>
-    { type !== 'add' && <CustomerList /> }
-    { type === 'add' && <CustomerByIdEdit />}
+
+    <Title title={title} />
+    
+    { 
+      action === 'add-customer' 
+      ? <AddCustomer /> 
+      : <CustomerList />
+    }
   </>
 }
 
