@@ -1,5 +1,8 @@
 import React from 'react';
 
+// dependencies
+import { Link, useLocation } from 'react-router-dom';
+
 // ui settings
 const liClassName = "list-group-item list-group-item-action bg-item-list-cs";
 
@@ -8,6 +11,9 @@ const CustomerSearchForm = ({
   formSubmit,  
   onInputChange
 }) => {
+
+  const location = useLocation()
+
   return <>
     <div className="row">
       <div className="col">
@@ -63,6 +69,20 @@ const CustomerSearchForm = ({
                 </div>
               </div>
             </li>
+
+            <li className={liClassName}>
+              <div className="row">
+                <div className="col">
+                  <Link 
+                    to={`${location.pathname}?action=add-customer`}
+                    className="a-link-cs"
+                  >
+                    ( + ) Add a New Customer
+                  </Link>
+                </div>
+              </div>
+            </li>
+
           </ul>
         </div>
       </div>

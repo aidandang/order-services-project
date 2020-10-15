@@ -40,6 +40,9 @@ const shippingInfoSchema = new Schema({
   phone: {
     type: String,
     required: true
+  },
+  shippingAddress: {
+    type: String
   }
 });
 

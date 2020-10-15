@@ -9,6 +9,7 @@
     "axios": "^0.19.2",
     "firebase": "^7.20.0",
     "jwt-decode": "^2.2.0",
+    "moment": "^2.29.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-input-mask": "^2.0.4",

@@ -1,41 +1,44 @@
 import React, { useState } from 'react';
 
 // dependencies
+import { useLocation, useHistory } from 'react-router-dom';
 import * as Yup from "yup";
+
 // components
 import { useForm } from '../hook/use-form';
-import { convertSearchFormToQueryString } from '../utils/convert-search-form-to-query-string';
-import CustomerSearchForm from '../customer-search/customer-search-form.component';
+import CustomerSearchForm from './customer-search-form.component';
+import PreviewCustomers from './preview-customers.component';
 import PaginationBar from '../pagination-bar/pagination-bar.component';
-import OrderShippingAddress from './order-shipping-address.component';
-import PreviewCustomers from '../customer-search/preview-customers.component';
+import AlertMesg from '../alert-mesg/alert-mesg.component';
+import { convertSearchFormToQueryString } from '../utils/convert-search-form-to-query-string';
+
 // redux
 import { connect } from 'react-redux';
-import { getReq } from '../../state/api/get-request';
-import { CustomerActionTypes } from '../../state/customer/customer.types';
 import { createStructuredSelector } from 'reselect';
 import { selectCustomerData } from '../../state/customer/customer.selectors';
-import { selectOrderTemp } from '../../state/order/order.selectors';
-import { updateCustomerToOrder } from '../../state/order/order.actions';
+import { getReq } from '../../state/api/get-request';
+import { CustomerActionTypes } from '../../state/customer/customer.types';
+import { selectAlertMessage } from '../../state/alert/alert.selectors';
 
-// set form schema
+// initial values
 const formSchema = Yup.object().shape({
   search: Yup
     .string()
 });
-// set form state
+
 const formState = {
   search: ''
 }
 
-const SelectCustomer = ({ 
-  orderTemp,
-  getReq,
-  data,
-  updateCustomerToOrder
+// main component
+const CustomerSearch = ({ 
+  getReq, 
+  data, 
+  alertMessage
 }) => {
-
-  const { customer } = orderTemp
+  
+  const location = useLocation();
+  const history = useHistory();
 
   const [
     formData,
@@ -45,7 +48,7 @@ const SelectCustomer = ({
   ] = useForm(formState, formState, formSchema);
 
   const [active, setActive] = useState(null);
-
+  
   // handle search form 
   const formSubmit = (e, page) => {
     e.preventDefault();
@@ -63,15 +66,14 @@ const SelectCustomer = ({
 
   const handleOnClick = (e, customer) => {
     e.preventDefault();
-    updateCustomerToOrder(customer, customer.defaultAddress)
+    history.push(location.pathname + '/' + customer._id)
   }
-
+  
   return <>
     { 
-      customer
-      ?
-        <OrderShippingAddress />
-      : <>
+      alertMessage 
+      ? <AlertMesg />
+      : <> 
         <CustomerSearchForm
           formSubmit={formSubmit} 
           formData={formData}
@@ -79,13 +81,21 @@ const SelectCustomer = ({
           onInputChange={onInputChange}
           buttonDisabled={buttonDisabled}
         />
-
         {
-          data.allIds &&
-          <>
-            <PaginationBar numberOfPages={data.info.pages} onPageChange={formSubmit} page={active} />
+          data && data.info && <>
+            <PaginationBar  
+              numberOfPages={data.info.pages}
+              limit={5}
+              onPageChange={formSubmit}
+              page={active}
+            />
             <PreviewCustomers handleOnClick={handleOnClick} />
-            <PaginationBar numberOfPages={data.info.pages} onPageChange={formSubmit} page={active} />
+            <PaginationBar 
+              numberOfPages={data.info.pages}
+              limit={5}
+              onPageChange={formSubmit}
+              page={active}
+            /> 
           </>
         }
       </>
@@ -94,13 +104,12 @@ const SelectCustomer = ({
 }
 
 const mapStateToProps = createStructuredSelector({
-  data: selectCustomerData,
-  orderTemp: selectOrderTemp
+  alertMessage: selectAlertMessage,
+  data: selectCustomerData
 })
 
 const mapDispatchToProps = dispatch => ({
-  getReq: (pathname, fetchSuccess, queryStr) => dispatch(getReq(pathname, fetchSuccess, queryStr)),
-  updateCustomerToOrder: (customer, shippingAddress) => dispatch(updateCustomerToOrder(customer, shippingAddress))
+  getReq: (pathname, fetchSuccess, queryStr) => dispatch(getReq(pathname, fetchSuccess, queryStr))
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(SelectCustomer)
+export default connect(mapStateToProps, mapDispatchToProps)(CustomerSearch);

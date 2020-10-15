@@ -8,7 +8,8 @@ const INITIAL_STATE = {
     shippingAddress: null,
     item: {},
     index: null,
-    items: []
+    items: [],
+    ref: {}
   }
 }
 
@@ -131,9 +132,19 @@ const orderReducer = (state = INITIAL_STATE, action) => {
         ...state,
         orderTemp: {
           ...state.orderTemp,
+          orderNumber: action.payload.orderNumber ? action.payload.orderNumber : null, 
           customer: action.payload.customer,
           shippingAddress: action.payload.shippingAddress === "" ? null : action.payload.shippingAddress,
-          items: convertAccountNumberToString(action.payload.items)
+          items: convertAccountNumberToString(action.payload.items),
+          ref: action.payload.ref ? action.payload.ref : {}
+        }
+      }
+    case OrderActionTypes.UPDATE_REFERENCE_TO_ORDER:
+      return {
+        ...state,
+        orderTemp: {
+          ...state.orderTemp,
+          ref: action.payload
         }
       }
     default:

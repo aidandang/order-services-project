@@ -51,7 +51,7 @@ export default function BrandForm({
                       <input 
                         type="text"
                         className="form-control" 
-                        id="name"
+                        name="name"
                         value={formData.name}
                         onChange={onInputChange}
                       />
@@ -65,7 +65,7 @@ export default function BrandForm({
                       <input 
                         type="text" 
                         className="form-control" 
-                        id="preferredName" 
+                        name="preferredName" 
                         value={formData.preferredName}
                         onChange={onInputChange}
                       />

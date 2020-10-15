@@ -20,6 +20,12 @@ const OrderItems = ({
   orderTemp,
   editOrderItem
 }) => {
+
+  const handleColor = (product, selectedColor) => {
+    const result = product.colors.find(color => color._id === selectedColor);
+    return result.color
+  }
+
   return <>
     <div className="row mt-3">
       <div className="col">
@@ -27,7 +33,7 @@ const OrderItems = ({
           <table className="table table-hover">
             <thead>
               <tr>
-                <th scope="col">Style#/Color</th>
+                <th scope="col">Style#</th>
                 <th scope="col">Item/Description</th>
                 <th scope="col" className="text-right">Qty</th>
                 <th scope="col" className="text-right">Price</th>
@@ -47,8 +53,8 @@ const OrderItems = ({
                     editOrderItem(item, index);
                   }}
                 >
-                  <td>{item.product.styleCode}/{item.color.color}</td>
-                  <td>{`${item.product.name}/Size:${item.size}${item.note && `/${item.note}`}`}</td>
+                  <td>{item.product.styleCode}</td>
+                  <td>{`${item.product.name}/Color:${handleColor(item.product, item.color)}/Size:${item.size}${item.note && `/${item.note}`}`}</td>
                   <td className="text-right">{item.qty}</td>
                   <td className="text-right">{item.price}</td>
                   <td className="text-right">{item.saleTax}</td>

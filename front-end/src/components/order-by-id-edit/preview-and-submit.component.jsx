@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import uuid from 'react-uuid';
 import { useLocation, Redirect, useParams } from 'react-router-dom';
 import queryString from 'query-string';
+import moment from 'moment';
 // components
 import Button from '../button/button.component';
 import { strToAcct } from '../utils/strToAcct';
@@ -42,13 +43,21 @@ const PreviewAndSubmit = ({
   const queryObj = queryString.parse(location.search);
   const { type } = queryObj;
 
-  const { customer, shippingAddress } = orderTemp;
+  const { customer, shippingAddress, orderNumber, createdAt } = orderTemp;
+
+  let address = null;
+
+  if (customer) {
+    address = customer.shippingInfo.find(address => shippingAddress === address._id)
+  }
 
   const formSubmit = e => {
     e.preventDefault();
 
     delete orderTemp.item;
     delete orderTemp.index;
+    delete orderTemp.createdAt;
+    delete orderTemp.orderNumber;
 
     const reqBody = {
       ...orderTemp,
@@ -67,8 +76,13 @@ const PreviewAndSubmit = ({
     if (type === 'edit') patchReq('/orders/' + params.id, fetchSuccess, reqBody, setSuccess);
   }
 
+  const handleColor = (product, selectedColor) => {
+    const result = product.colors.find(color => color._id === selectedColor);
+    return result.color
+  }
+
   useEffect(() => {
-    if (orderTemp.customer && Object.keys(orderTemp.items).length > 0) {
+    if (orderTemp.customer && orderTemp.items.length > 0 && Object.keys(orderTemp.ref).length > 0) {
       setButtonDisabled(false)
     }
   }, [orderTemp])
@@ -88,6 +102,32 @@ const PreviewAndSubmit = ({
               </div>
             </div>
             <ul className="list-group list-group-flush">
+              {
+                orderNumber && createdAt && <>
+                  <li className={liClassName}>
+                    <div className="row">
+                      <div className="col">
+                        <div className="row">
+                          <div className="col-4">
+                            <span>Order Number:</span>
+                          </div>
+                          <div className="col-8">
+                            <span>{orderNumber}</span>
+                          </div>
+                        </div>
+                        <div className="row">
+                          <div className="col-4">
+                            <span>Created At:</span>
+                          </div>
+                          <div className="col-8">
+                            <span>{moment(createdAt).format("dddd, MMMM Do YYYY, h:mm:ss a")}</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                </>
+              }
               {
                 customer ? <>
                   <li className={liClassName}>
@@ -130,30 +170,15 @@ const PreviewAndSubmit = ({
                             <span>Shipping Address:</span>
                           </div>
                           <div className="col-8 align-self-center">
-                            <div className="form-check">
-                              <input className="form-check-input" type="radio" name="shippingAddress" id='billing' value='' defaultChecked={shippingAddress === ''} />
-                              <label className="form-check-label" htmlFor='billing'>
-                                Same as Billing Address
-                              </label>
-                            </div>
                             {
-                              customer.shippingInfo && customer.shippingInfo.map(address => 
-                                <div key={address._id} className="form-check">
-                                  <label className="form-check-label" htmlFor={address._id}>
-                                    <input 
-                                      className="form-check-input" 
-                                      type="radio" 
-                                      name="shippingAddress" 
-                                      id={address._id} 
-                                      value={address._id}
-                                      defaultChecked={shippingAddress === address._id}
-                                    />
-                                    <span>{customer.fullname}</span><br />
-                                    <span>{customer.streetAddress1}, {customer.city}, {customer.state}</span><br />
-                                    <span>Phone# {customer.phone}</span>
-                                  </label>
-                                </div>
-                              )
+                              (shippingAddress === null || shippingAddress === '') 
+                              ? 
+                                <span>Same as Billing Address</span>
+                              : <>
+                                <span>{address.fullname}</span><br />
+                                <span>{address.streetAddress1}, {address.city}, {address.state}</span><br />
+                                <span>Phone# {address.phone}</span>
+                              </>
                             }
                           </div>
                         </div>
@@ -214,7 +239,7 @@ const PreviewAndSubmit = ({
             <table className="table table-hover">
               <thead>
                 <tr>
-                  <th scope="col">Style#/Color</th>
+                  <th scope="col">Style#</th>
                   <th scope="col">Item/Description</th>
                   <th scope="col" className="text-right">Qty</th>
                   <th scope="col" className="text-right">Price</th>
@@ -228,8 +253,8 @@ const PreviewAndSubmit = ({
                 {Object.keys(orderTemp.items).length > 0
                   ? orderTemp.items.map((item, index) => 
                     <tr key={uuid()} className="table-row-no-link-cs">
-                      <td>{item.product.styleCode}/{item.color.color}</td>
-                      <td>{`${item.product.name}/Size:${item.size}${item.note && `/${item.note}`}`}</td>
+                      <td>{item.product.styleCode}</td>
+                      <td>{`${item.product.name}/Color:${handleColor(item.product, item.color)}/Size:${item.size}${item.note && `/${item.note}`}`}</td>
                       <td className="text-right">{item.qty}</td>
                       <td className="text-right">{item.price}</td>
                       <td className="text-right">{item.saleTax}</td>
