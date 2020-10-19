@@ -1,14 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 
 // dependencies
 import * as Yup from "yup";
-import { useLocation, Redirect } from 'react-router-dom';
 
 // components
+import { Container } from '../tag/tag.component';
 import { useForm } from '../hook/use-form';
 import ProductForm from '../product-form/product-form.component';
-import ProductBrandsUpdate from '../product-brands-update/product-brands-update.component';
-import AlertMesg from '../alert-mesg/alert-mesg.component';
+import ProductBrand from '../product-brand/product-brand.component';
 
 // redux
 import { connect } from 'react-redux';
@@ -18,7 +17,6 @@ import { getReq } from '../../state/api/get-request';
 import { postReq } from '../../state/api/post-request';
 import { BrandActionTypes } from '../../state/brand/brand.types';
 import { ProductActionTypes } from '../../state/product/product.types';
-import { selectAlertMessage } from '../../state/alert/alert.selectors';
 
 // inital values
 const formSchema = Yup.object().shape({
@@ -58,12 +56,8 @@ const ProductAdd = ({
   getReq,
   postReq,
   brandData,
-  alertMessage
+  setAction
 }) => {
-
-  const [success, setSuccess] = useState(false);
-
-  const location = useLocation();
 
   const [
     formData,
@@ -83,7 +77,8 @@ const ProductAdd = ({
     };
     delete newProduct.brandId;
  
-    postReq('/products', fetchSuccess, newProduct, setSuccess) 
+    postReq('/products', fetchSuccess, newProduct)
+    setAction('')
   }
 
   const formReset = () => {
@@ -97,15 +92,7 @@ const ProductAdd = ({
   }, [])
 
   return <>
-    {
-      success && <Redirect to={`${location.pathname}?action=product-list`} />
-    }
-
-    { 
-      alertMessage 
-      ? 
-      <AlertMesg />
-      :
+    <Container width="col" setAction={setAction}>
       <div className="row">
         <div className="col-12 col-xl-8">
           <form onSubmit={formSubmit}>
@@ -123,16 +110,15 @@ const ProductAdd = ({
           </form>  
         </div>
         <div className="col-12 col-xl-4">
-          <ProductBrandsUpdate />
+          <ProductBrand />
         </div>
       </div> 
-    }
+    </Container>
   </>
 }
 
 const mapStateToProps = createStructuredSelector({
-  brandData: selectBrandData,
-  alertMessage: selectAlertMessage
+  brandData: selectBrandData
 })
 
 const mapDispatchToProps = dispatch => ({

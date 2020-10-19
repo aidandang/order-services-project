@@ -3,7 +3,7 @@ import React from 'react';
 // components
 import { Card, Ul, Li } from '../tag/tag.component';
 
-const ProductStyleInfo = ({ 
+const ProductStyle = ({ 
   product,
   setAction
 }) => {
@@ -69,4 +69,4 @@ const ProductStyleInfo = ({
   </>
 }
 
-export default ProductStyleInfo;
+export default ProductStyle;

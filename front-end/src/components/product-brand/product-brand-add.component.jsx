@@ -6,7 +6,7 @@ import * as Yup from "yup";
 // components
 import { Ul, Li, Button } from '../tag/tag.component';
 import { useForm } from '../hook/use-form';
-import ProductBrandForm from '../product-brand-form/product-brand-form.component';
+import ProductBrandForm from './product-brand-form.component';
 import AlertMesg from '../../components/alert-mesg/alert-mesg.component';
 
 // redux

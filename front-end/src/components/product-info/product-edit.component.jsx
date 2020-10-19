@@ -8,7 +8,7 @@ import { useLocation, Redirect } from 'react-router-dom';
 import { Container } from '../tag/tag.component';
 import { useForm } from '../hook/use-form';
 import ProductForm from '../product-form/product-form.component';
-import ProductBrandsUpdate from '../product-brands-update/product-brands-update.component';
+import ProductBrand from '../product-brand/product-brand.component';
 import AlertMesg from '../alert-mesg/alert-mesg.component';
 
 // redux
@@ -134,7 +134,7 @@ const ProductEdit = ({
             </form>  
           </div>
           <div className="col-12 col-xl-4">
-            <ProductBrandsUpdate />
+            <ProductBrand />
           </div>
         </div>
       </Container>

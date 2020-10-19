@@ -3,9 +3,9 @@ import React, { useEffect, useState } from 'react';
 // components
 import { Card, Ul, Li, SelectInput } from '../tag/tag.component';
 import AlertMesg from '../alert-mesg/alert-mesg.component';
-import ProductBrandEdit from '../product-brand-edit/product-brand-edit.component';
-import ProductBrandRemove from '../product-brand-remove/product-brand-remove.component';
-import ProductBrandAdd from '../product-brand-add/product-brand-add.component';
+import ProductBrandEdit from './product-brand-edit.component';
+import ProductBrandRemove from './product-brand-remove.component';
+import ProductBrandAdd from './product-brand-add.component';
 
 // redux
 import { connect } from 'react-redux';
@@ -16,7 +16,7 @@ import { getReq } from '../../state/api/get-request';
 import { BrandActionTypes } from '../../state/brand/brand.types';
 
 // main component
-const ProductBrandsUpdate = ({
+const ProductBrand = ({
   getReq,
   alertMessage,
   data
@@ -87,12 +87,14 @@ const ProductBrandsUpdate = ({
                   brand._id !== "" && allIds.find(item => item._id === brand._id) &&
                   <Li>
                     <div className="row">
-                      <div className="col-8">
+                      <div className="col">
                         {allIds.find(item => item._id === brand._id).name},
                         <span>{' '}</span> 
                         {allIds.find(item => item._id === brand._id).preferredName}
                       </div>
-                      <div className="col-4 text-right">
+                    </div>
+                    <div className="row">
+                      <div className="col">
                         <a href="/" className="a-link-cs" onClick={e => {
                           e.preventDefault();
                           setAction('edit')
@@ -144,4 +146,4 @@ const mapDispatchToProps = dispatch => ({
   )
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(ProductBrandsUpdate);
+export default connect(mapStateToProps, mapDispatchToProps)(ProductBrand);

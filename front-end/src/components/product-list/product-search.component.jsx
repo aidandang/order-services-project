@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 
 // dependencies
-import { useLocation, useHistory } from 'react-router-dom';
 import * as Yup from "yup";
 
 // components
+import { Card, Ul, Li } from '../tag/tag.component';
 import { useForm } from '../hook/use-form';
 import ProductSearchForm from './product-search-form.component';
 import PreviewProducts from './preview-products.component';
@@ -31,15 +31,12 @@ const formState = {
 }
 
 // main component
-const ProductList = ({ 
+const ProductSearch = ({ 
   getReq, 
   data, 
   alertMessage,
   setAction
 }) => {
-  
-  const location = useLocation();
-  const history = useHistory();
 
   const [
     formData,
@@ -64,25 +61,42 @@ const ProductList = ({
       setActive(page)
     }
   }
-
-  const handleOnClick = (e, product) => {
-    e.preventDefault();
-    history.push(location.pathname + '/' + product._id)
-  }
   
   return <>
     { 
       alertMessage 
       ? <AlertMesg />
-      : <> 
-        <ProductSearchForm 
-          formSubmit={formSubmit} 
-          formData={formData}
-          errors={errors}
-          onInputChange={onInputChange}
-          buttonDisabled={buttonDisabled}
-          setAction={setAction}
-        />
+      : <>
+        <Card width="col" title="Search For Products" >
+          <Ul>
+
+            <ProductSearchForm 
+              formSubmit={formSubmit} 
+              formData={formData}
+              errors={errors}
+              onInputChange={onInputChange}
+              buttonDisabled={buttonDisabled}
+            />
+
+            <Li>
+              <div className="row">
+                <div className="col">
+                  <a 
+                    href="/"
+                    className="a-link-cs"
+                    onClick={e => {
+                      e.preventDefault();
+                      setAction('add')
+                    }}
+                  >
+                    ( + ) Add a New Product
+                  </a>
+                </div>
+              </div>
+            </Li>
+
+          </Ul>
+        </Card>
         {
           data && data.allIds && data.allIds.length > 0 && data.info && <>
             <PaginationBar  
@@ -91,7 +105,7 @@ const ProductList = ({
               onPageChange={formSubmit}
               page={active}
             />
-            <PreviewProducts handleOnClick={handleOnClick} />
+            <PreviewProducts />
             <PaginationBar 
               numberOfPages={data.info.pages}
               limit={5}
@@ -114,4 +128,4 @@ const mapDispatchToProps = dispatch => ({
   getReq: (pathname, fetchSuccess, queryStr) => dispatch(getReq(pathname, fetchSuccess, queryStr))
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(ProductList);
+export default connect(mapStateToProps, mapDispatchToProps)(ProductSearch);
