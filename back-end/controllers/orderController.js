@@ -50,6 +50,8 @@ exports.readOrders = catchAsync(async (req, res, next) => {
   
   const orders = await query;
 
+  if (orders.length === 0) return next(new AppError('No order found.', 404))
+
   res.status(200).json({
     status: 'success',
     info: {

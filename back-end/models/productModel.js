@@ -18,30 +18,19 @@ const colorSchema = new Schema({
   } 
 });
 
-const revSchema = new Schema({
-  modifiedAt: {
-    type: Date,
-    default: Date.now
-  }
-});
-
 const productSchema = new Schema({
   name: {
     type: String,
     unique: true,
     required: true
   },
-  brandId: {
-    type: String,
+  brand: {
+    type: Object,
     required: true
   },
   styleCode: {
     type: String,
     required: true
-  },
-  cat: {
-    type: String,
-    default: "N"
   },
   sku: {
     type: String,
@@ -52,45 +41,22 @@ const productSchema = new Schema({
     required: true
   },
   desc: {
-    type: String
+    type: String,
+    required: true
+  },
+  url: {
+    type: String,
+    trim: true,
+    default: ''
   },
   colors: {
     type: [colorSchema]
-  },
-  rev: {
-    type: [revSchema]
-  },
-  active: {
-    type: Boolean,
-    default: true
   },
   createdAt: {
     type: Date,
     default: Date.now
   }
 });
-
-// Query Middleware
-productSchema.pre(/^find/, function(next) {
-  this.find({ 
-    active: { 
-      $eq: true 
-    }
-  });
-  next();
-})
-
-// Aggregation Middleware
-productSchema.pre('aggregate', function(next) {
-  this.pipeline().unshift({ 
-    $match: { 
-      active: { 
-        $eq: true 
-      }
-    }
-  });
-  next();
-})
 
 const Product = mongoose.model('Product', productSchema);
 

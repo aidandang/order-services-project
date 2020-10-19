@@ -3,20 +3,32 @@ import React from 'react';
 // dependencies
 import { useLocation } from 'react-router-dom';
 import queryString from 'query-string';
+
 // components
+import Title from '../../components/title/title.component';
 import ProductList from '../../components/product-list/product-list.component';
-import ProductByIdEdit from '../../components/product-by-id-edit/product-by-id-edit.component';
+import ProductAdd from '../../components/product-add/product-add.component';
+
+// initial values
+const title = {
+  name: 'Product List',
+  message: 'Search for product(s) by name, style code and brand.'
+}
 
 const ProductListPage = () => {
 
   const location = useLocation();
 
   const queryObj = queryString.parse(location.search);
-  const { type } = queryObj;
+  const { action } = queryObj;
   
   return <>
-    { type !== 'add' && <ProductList /> }
-    { type === 'add' && <ProductByIdEdit />}
+
+    <Title title={title} />
+
+    { action === 'product-add' && <ProductAdd /> }
+    { action === 'product-list' && <ProductList /> }
+    { action === undefined && <ProductList /> }
   </>
 }
 

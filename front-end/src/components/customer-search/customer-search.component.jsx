@@ -82,7 +82,7 @@ const CustomerSearch = ({
           buttonDisabled={buttonDisabled}
         />
         {
-          data && data.info && <>
+          data && data.allIds && data.allIds.length > 0 && data.info && <>
             <PaginationBar  
               numberOfPages={data.info.pages}
               limit={5}

@@ -6,8 +6,3 @@ export const selectCustomerData = createSelector(
   [selectCustomer],
   customer => customer.data
 )
-
-export const selectCustomerTemp = createSelector(
-  [selectCustomer],
-  customer => customer.customerTemp
-)

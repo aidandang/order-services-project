@@ -74,7 +74,7 @@ const CustomerSearchForm = ({
               <div className="row">
                 <div className="col">
                   <Link 
-                    to={`${location.pathname}?action=add-customer`}
+                    to={`${location.pathname}?action=customer-add`}
                     className="a-link-cs"
                   >
                     ( + ) Add a New Customer

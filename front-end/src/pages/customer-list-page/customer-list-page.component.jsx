@@ -7,7 +7,7 @@ import queryString from 'query-string';
 // components
 import Title from '../../components/title/title.component';
 import CustomerList from '../../components/customer-list/customer-list.component';
-import AddCustomer from '../../components/add-customer/add-customer.component';
+import CustomerAdd from '../../components/customer-add/customer-add.component';
 
 // initial values
 const title = {
@@ -27,11 +27,9 @@ const CustomerListPage = () => {
 
     <Title title={title} />
     
-    { 
-      action === 'add-customer' 
-      ? <AddCustomer /> 
-      : <CustomerList />
-    }
+    { action === 'customer-add' && <CustomerAdd /> }
+    { action === 'customer-list' && <CustomerList /> } 
+    { action === undefined && <CustomerList /> } 
   </>
 }
 

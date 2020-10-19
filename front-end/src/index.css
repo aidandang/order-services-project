@@ -99,3 +99,7 @@ body {
 .btn-link:hover, .btn-link:active {
   text-decoration: none;
 }
+
+.span-link-cs {
+  cursor: pointer;
+}
