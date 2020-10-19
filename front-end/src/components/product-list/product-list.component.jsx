@@ -1,7 +1,8 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
 // components
-import ProductSearch from '../product-search/product-search.component';
+import ProductSearch from './product-search.component';
+import ProductAdd from './product-add.component';
 import AlertMesg from '../alert-mesg/alert-mesg.component';
 
 // redux
@@ -17,6 +18,8 @@ const ProductList = ({
   alertMessage
 }) => {
 
+  const [action, setAction] = useState('');
+
   useEffect(() => {
     const fetchSuccess = ProductActionTypes.PRODUCT_FETCH_SUCCESS;
     getReq('/products', fetchSuccess);
@@ -26,8 +29,13 @@ const ProductList = ({
   return <>
     { 
       alertMessage 
-      ? <AlertMesg />
-      : <ProductSearch />
+      ? 
+      <AlertMesg />
+      : 
+      <>
+        { action === 'add' && <ProductAdd setAction={setAction} />}
+        { action === '' && <ProductSearch setAction={setAction} />}
+      </>
     }
   </>
 }

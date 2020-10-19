@@ -4,8 +4,8 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 // components
-import ProductStyleInfo from './product-style-info.component';
-import ProductColorInfo from './product-color-info.component';
+import ProductStyle from './product-style.component';
+import ProductColor from './product-color.component';
 import ProductEdit from './product-edit.component';
 import AlertMesg from '../alert-mesg/alert-mesg.component';
 
@@ -44,10 +44,10 @@ const ProductInfo = ({
           byId && action === '' && 
           <div className="row">
             <div className="col-xl-8 add-style-col">
-              <ProductStyleInfo product={byId} setAction={setAction} />
+              <ProductStyle product={byId} setAction={setAction} />
             </div>
             <div className="col-xl-4 add-color-col">
-              <ProductColorInfo product={byId}/>
+              <ProductColor/>
             </div>
           </div>
         }
