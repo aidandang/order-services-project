@@ -40,9 +40,6 @@ const shippingInfoSchema = new Schema({
   phone: {
     type: String,
     required: true
-  },
-  shippingAddress: {
-    type: String
   }
 });
 
@@ -113,7 +110,7 @@ const customerSchema = new Schema({
   shippingInfo: {
     type: [shippingInfoSchema]
   },
-  defaultAddress: {
+  shippingAddress: {
     type: String,
     default: ''
   },

@@ -1,8 +1,5 @@
 import React, { useEffect } from 'react';
 
-// dependencies
-import { useLocation, useHistory } from 'react-router-dom';
-
 // components
 import CustomerSearch from '../customer-search/customer-search.component';
 import AlertMesg from '../alert-mesg/alert-mesg.component';
@@ -20,14 +17,6 @@ const CustomerList = ({
   alertMessage
 }) => {
 
-  const location = useLocation();
-  const history = useHistory();
-
-  const handleOnClick = (e, customer) => {
-    e.preventDefault();
-    history.push(location.pathname + '/' + customer._id)
-  }
-
   useEffect(() => {
     const fetchSuccess = CustomerActionTypes.CUSTOMER_FETCH_SUCCESS;
     getReq('/customers', fetchSuccess);
@@ -38,7 +27,7 @@ const CustomerList = ({
     { 
       alertMessage 
       ? <AlertMesg />
-      : <CustomerSearch handleOnClick={handleOnClick} />
+      : <CustomerSearch />
     }
   </>
 }

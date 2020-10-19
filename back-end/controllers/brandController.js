@@ -22,9 +22,17 @@ exports.readBrands = catchAsync(async (req, res, next) => {
 
 exports.createBrand = catchAsync(async (req, res, next) => {
   const newBrand = await Brand.create(req.body);
+
+  let brands = null;
+
+  if (newBrand) {
+    brands = await Brand.find().sort('name');
+  }
+
   res.status(201).json({
     status: 'success',
-    byId: newBrand
+    byId: newBrand,
+    allIds: brands
   });
 });
 
@@ -34,11 +42,19 @@ exports.updateBrand = catchAsync(async (req, res, next) => {
     req.body,
     { new: true, runValidators: true }
   );
+
+  let brands = null;
+
+  if (brand) {
+    brands = await Brand.find().sort('name');
+  }
+
   res
     .status(200)
     .json({
       status: 'PATCH_SUCCESS',
-      brand
+      byId: brand,
+      allIds: brands
     });
 })
 
@@ -47,10 +63,16 @@ exports.deleteBrand = catchAsync(async (req, res, next) => {
   
   const brand = await Brand.findByIdAndDelete(id);
 
+  let brands = null;
+
+  if (brand) {
+    brands = await Brand.find().sort('name');
+  }
+
   res
     .status(200)
     .json({
       status: 'DELETE_SUCCESS',
-      brand
+      allIds: brands
     });
 });

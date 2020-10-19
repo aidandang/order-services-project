@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 // firebase
 import { signInWithGoogle } from '../../firebase/firebase.utils';
 // components
-import Button from '../button/button.component';
+import { Button } from '../tag/tag.component';
 // ui settings
 const liClassName = "list-group-item list-group-item-action bg-item-list-cs";
 

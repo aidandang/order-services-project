@@ -1,10 +1,7 @@
 import { CustomerActionTypes } from './customer.types';
 
 const INITIAL_STATE = {
-  data: {},
-  customerTemp: {
-    shippingInfo: []
-  }
+  data: {}
 }
 
 const customerReducer = (state = INITIAL_STATE, action) => {
@@ -14,19 +11,6 @@ const customerReducer = (state = INITIAL_STATE, action) => {
         ...state,
         data: { ...state.data, ...action.payload }
       } 
-    case CustomerActionTypes.ADD_CUSTOMER:
-      return {
-        ...state,
-        customerTemp: { ...state.customerTemp, ...action.payload }
-      }
-    case CustomerActionTypes.ADD_CUSTOMER_ADDRESS:
-      return {
-        ...state,
-        customerTemp: { 
-          ...state.customerTemp,
-          shippingInfo: [ ...state.customerTemp.shippingInfo, action.payload]
-        }
-      }
     default:
       return state
   }

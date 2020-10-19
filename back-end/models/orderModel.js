@@ -6,29 +6,48 @@ autoIncrement.initialize(mongoose);
 
 const itemSchema = new Schema({
   product: {
-    type: Object,
-    required: true
+    type: Object
   },
   color: {
-    type: String,
-    required: true
-  },
-  note: {
     type: String
   },
   size: {
-    type: String,
-    required: true
+    type: String
   },
   qty: {
-    type: Number,
-    required: true
+    type: Number
   },
   price: {
-    type: Number,
-    required: true
+    type: Number
   },
-  discount: {
+  recvDate: {
+    type: Date
+  },
+  dlvdDate: {
+    type: Date
+  },
+  note: {
+    type: String
+  }
+});
+
+const orderSchema = new Schema({
+  merchant: {
+    type: Object
+  },
+  origOrderNumber: {
+    type: String
+  },
+  status: {
+    type: String
+  },
+  orderedDate: {
+    type: Date
+  },
+  items: {
+    type: [itemSchema]
+  },
+  recvShippingCost: {
     type: Number,
     default: 0
   },
@@ -36,76 +55,31 @@ const itemSchema = new Schema({
     type: Number,
     default: 0
   },
-  localCharge: {
-    type: Number,
-    default: 0
-  },
-  receivedDate: {
-    type: Date
-  },
-  shippingCost: {
-    type: Number,
-    default: 0
-  }
-});
-
-const refSchema = new Schema({
-  refNumber: {
-    type: String,
-    required: true
-  },
-  refDate: {
-    type: Date,
-    required: true
-  },
-  refInfo: {
-    type: String,
-    required: true
-  },
-  refAttachFile: {
-    type: String
-  },
-  refStatus: {
-    type: String
-  },
-  paymentMethod: {
-    type: String
-  }
-});
-
-const revSchema = new Schema({
-  modifiedAt: {
-    type: Date,
-    default: Date.now
-  }
-});
-
-const orderSchema = new Schema({
-  customer: {
-    type: Object,
-    required: true
-  },
-  shippingAddress: {
-    type: String
-  },
-  items: [itemSchema],
-  paidAmount: {
-    type: Number,
-    default: 0
-  },
-  user: {
+  recvAddress: {
     type: Object
+  },
+  customer: {
+    type: Object
+  },
+  orderSalePrice: {
+    type: Number
+  },
+  dlvdShippingCost: {
+    type: Number
+  },
+  dlvdAddress: {
+    type: Object
+  },
+  attachments: {
+    type: Array
   },
   createdAt: {
     type: Date,
     default: Date.now
   },
-  active: {
-    type: Boolean,
-    default: false
+  createdBy: {
+    type: Object
   },
-  ref: refSchema,
-  rev: [revSchema]
 });
 
 orderSchema.plugin(autoIncrement.plugin, {

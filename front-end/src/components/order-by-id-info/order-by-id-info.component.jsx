@@ -13,7 +13,7 @@ const liClassName = "list-group-item bg-item-list-cs list-group-item-action";
 
 const title = {
   name: 'Order Information',
-  message: 'Detail information about the order. The information can be edited.',
+  message: 'Detail information about the order. The information can be edited.'
 }
 
 const OrderByIdInfo = ({ order }) => {
