@@ -2,11 +2,12 @@ import React, { useState } from 'react';
 
 // dependencies
 import * as Yup from "yup";
-import { useLocation, Link, Redirect } from 'react-router-dom';
+import { useLocation, Redirect } from 'react-router-dom';
 
 // components
+import { Container } from '../tag/tag.component';
 import { useForm } from '../hook/use-form';
-import { Button } from '../tag/tag.component';
+import SubmitCard from '../submit-card/submit-card.component';
 import CustomerForm from '../customer-form/customer-form.component';
 import AlertMesg from '../alert-mesg/alert-mesg.component';
 
@@ -17,9 +18,6 @@ import { patchReq } from '../../state/api/patch-request';
 import { CustomerActionTypes } from '../../state/customer/customer.types';
 import { selectAlertMessage } from '../../state/alert/alert.selectors';
 import { selectCustomerData } from '../../state/customer/customer.selectors';
-
-// ui settings
-const liClassName = "list-group-item bg-item-list-cs list-group-item-action";
 
 // initial values
 const formSchema = Yup.object().shape({
@@ -94,7 +92,8 @@ const CustomerEdit = ({
     formData,
     errors, 
     onInputChange, 
-    buttonDisabled
+    buttonDisabled,
+    setValues
   ] = useForm(customerTemp, formState, formSchema);
 
   const formSubmit = () => {
@@ -103,64 +102,46 @@ const CustomerEdit = ({
     patchReq(`/customers/${updatedCustomer._id}`, fetchSuccess, updatedCustomer, setSuccess);
   }
 
+  const formReset = () => {
+    setValues(formState);
+  }
+
   return <>
+
     {
-      success && <Redirect to={`${location.pathname}?action=customer-info`} />
+      success && <Redirect to={{
+        pathname: location.state.path,
+        state: {
+          key: location.key,
+          path: location.pathname + location.search
+        }
+      }} />
     }
 
-    { 
-      alertMessage 
-      ? <AlertMesg />
-      : <form onSubmit={formSubmit}>
-          <div className="row">
-            <div className="col-12">
-              <div className="card my-3">
-                <div className="card-header bg-card-cs">
-                  <div className="row">
-                    <div className="col text-uppercase font-weight-bold">Edit Customer</div>
-                    <div className="col font-weight-bold text-right">
-                      <Link 
-                        to={`${location.pathname}?action=customer-info`} 
-                        className="a-link-cs"
-                      >
-                        Close
-                      </Link>
-                    </div>
-                  </div>
-                </div>
-                <ul className="list-group list-group-flush">
+    { alertMessage && <AlertMesg /> }
 
-                  <CustomerForm
-                    formData={formData} 
-                    errors={errors} 
-                    onInputChange={onInputChange}
-                  />
-
-                  <li className={liClassName}>      
-                    <div className="row">
-                      <div className="col mt-3">
-                        <div className="form-group">
-                          <Button
-                            type="submit" 
-                            onClick={e => {
-                              e.preventDefault();
-                              formSubmit();
-                            }}
-                            disabled={buttonDisabled}
-                          >
-                            Update
-                          </Button>
-                        </div>
-                      </div>
-                    </div>
-                  </li>
-
-                </ul>
-              </div>
-            </div>        
+    <Container width="col">
+      <form onSubmit={formSubmit}>  
+        <div className="row">
+          <div className="col-12 col-xl-8">
+            <CustomerForm
+              formData={formData} 
+              errors={errors} 
+              onInputChange={onInputChange}
+              formTitle={"Edit Customer"}
+            />
           </div>
-        </form>   
-    }
+          <div className="col-12 col-xl-4">
+            <SubmitCard
+              formSubmit={formSubmit}
+              handleSecond={formReset}
+              buttonDisabled={buttonDisabled}
+              buttonText={['Update', 'Reset']}
+            />
+          </div>
+        </div>
+      </form>
+    </Container> 
   </>
 }
 

@@ -52,11 +52,6 @@ const revSchema = new Schema({
 });
 
 const customerSchema = new Schema({
-  username: {
-    type: String,
-    required: true,
-    unique: true
-  },
   email: {
     type: String,
     required: false,

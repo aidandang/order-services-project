@@ -80,7 +80,8 @@ const ProductBrand = ({
                     value={brand._id}
                     onChange={onInputChange}
                     data={allIds ? allIds : []}
-                    optionKey="name" 
+                    valueKey={'_id'}
+                    textKey={'name'}
                   />
                 </Li>
                 {

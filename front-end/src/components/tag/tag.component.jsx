@@ -1,27 +1,27 @@
 import React from 'react';
 
+import { Link } from 'react-router-dom';
+import uuid from 'react-uuid';
 import './tag.styles.css';
 
 export const Container = ({
   children,
-  width,
-  setAction
+  width
 }) => {
+
   return (
     <div className="card mt-3">
       <div className="card-body pb-2">
         <div className="row my-0 py-0">
-          <div className={`${width} text-right`}>
-            <a
-              href="/"
-              className="a-link-cs"
-              onClick={e => {
-                e.preventDefault()
-                setAction('')
+          <div className={`${width ? width : 'col'} text-right`}>
+            <Link
+              to={{
+                key: 'goBack'
               }}
+              className="a-link-cs"
             >
               Close ( x )
-            </a>
+            </Link>
           </div>
         </div>
         {children}
@@ -83,7 +83,8 @@ export const SelectInput = ({
   defaultValue,
   defaultText,
   data,
-  optionKey,
+  valueKey,
+  textKey,
   ...otherProps
 }) => {
   return <>
@@ -97,7 +98,7 @@ export const SelectInput = ({
             {...otherProps}
           >
             <option value={defaultValue}>{defaultText}</option>
-            {data && data.map(item => <option key={item._id} value={item._id}>{item[optionKey]}</option>)}
+            {data && data.map(item => <option key={uuid()} value={item[valueKey]}>{item[textKey]}</option>)}
           </select>
           <small>{smallText}</small>
           {errors && errors[name].length > 0 ? <p className="mt-2 text-danger">{errors[name]}</p> : null}

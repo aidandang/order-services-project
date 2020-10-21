@@ -1,559 +1,493 @@
 export const stateList = [
   {
-      "name": "Alabama",
-      "abbreviation": "AL"
+      name: "Alabama",
+      code: "AL"
   },
   {
-      "name": "Alaska",
-      "abbreviation": "AK"
+      name: "Alaska",
+      code: "AK"
   },
   {
-      "name": "American Samoa",
-      "abbreviation": "AS"
+      name: "American Samoa",
+      code: "AS"
   },
   {
-      "name": "Arizona",
-      "abbreviation": "AZ"
+      name: "Arizona",
+      code: "AZ"
   },
   {
-      "name": "Arkansas",
-      "abbreviation": "AR"
+      name: "Arkansas",
+      code: "AR"
   },
   {
-      "name": "California",
-      "abbreviation": "CA"
+      name: "California",
+      code: "CA"
   },
   {
-      "name": "Colorado",
-      "abbreviation": "CO"
+      name: "Colorado",
+      code: "CO"
   },
   {
-      "name": "Connecticut",
-      "abbreviation": "CT"
+      name: "Connecticut",
+      code: "CT"
   },
   {
-      "name": "Delaware",
-      "abbreviation": "DE"
+      name: "Delaware",
+      code: "DE"
   },
   {
-      "name": "District Of Columbia",
-      "abbreviation": "DC"
+      name: "District Of Columbia",
+      code: "DC"
   },
   {
-      "name": "Federated States Of Micronesia",
-      "abbreviation": "FM"
+      name: "Federated States Of Micronesia",
+      code: "FM"
   },
   {
-      "name": "Florida",
-      "abbreviation": "FL"
+      name: "Florida",
+      code: "FL"
   },
   {
-      "name": "Georgia",
-      "abbreviation": "GA"
+      name: "Georgia",
+      code: "GA"
   },
   {
-      "name": "Guam",
-      "abbreviation": "GU"
+      name: "Guam",
+      code: "GU"
   },
   {
-      "name": "Hawaii",
-      "abbreviation": "HI"
+      name: "Hawaii",
+      code: "HI"
   },
   {
-      "name": "Idaho",
-      "abbreviation": "ID"
+      name: "Idaho",
+      code: "ID"
   },
   {
-      "name": "Illinois",
-      "abbreviation": "IL"
+      name: "Illinois",
+      code: "IL"
   },
   {
-      "name": "Indiana",
-      "abbreviation": "IN"
+      name: "Indiana",
+      code: "IN"
   },
   {
-      "name": "Iowa",
-      "abbreviation": "IA"
+      name: "Iowa",
+      code: "IA"
   },
   {
-      "name": "Kansas",
-      "abbreviation": "KS"
+      name: "Kansas",
+      code: "KS"
   },
   {
-      "name": "Kentucky",
-      "abbreviation": "KY"
+      name: "Kentucky",
+      code: "KY"
   },
   {
-      "name": "Louisiana",
-      "abbreviation": "LA"
+      name: "Louisiana",
+      code: "LA"
   },
   {
-      "name": "Maine",
-      "abbreviation": "ME"
+      name: "Maine",
+      code: "ME"
   },
   {
-      "name": "Marshall Islands",
-      "abbreviation": "MH"
+      name: "Marshall Islands",
+      code: "MH"
   },
   {
-      "name": "Maryland",
-      "abbreviation": "MD"
+      name: "Maryland",
+      code: "MD"
   },
   {
-      "name": "Massachusetts",
-      "abbreviation": "MA"
+      name: "Massachusetts",
+      code: "MA"
   },
   {
-      "name": "Michigan",
-      "abbreviation": "MI"
+      name: "Michigan",
+      code: "MI"
   },
   {
-      "name": "Minnesota",
-      "abbreviation": "MN"
+      name: "Minnesota",
+      code: "MN"
   },
   {
-      "name": "Mississippi",
-      "abbreviation": "MS"
+      name: "Mississippi",
+      code: "MS"
   },
   {
-      "name": "Missouri",
-      "abbreviation": "MO"
+      name: "Missouri",
+      code: "MO"
   },
   {
-      "name": "Montana",
-      "abbreviation": "MT"
+      name: "Montana",
+      code: "MT"
   },
   {
-      "name": "Nebraska",
-      "abbreviation": "NE"
+      name: "Nebraska",
+      code: "NE"
   },
   {
-      "name": "Nevada",
-      "abbreviation": "NV"
+      name: "Nevada",
+      code: "NV"
   },
   {
-      "name": "New Hampshire",
-      "abbreviation": "NH"
+      name: "New Hampshire",
+      code: "NH"
   },
   {
-      "name": "New Jersey",
-      "abbreviation": "NJ"
+      name: "New Jersey",
+      code: "NJ"
   },
   {
-      "name": "New Mexico",
-      "abbreviation": "NM"
+      name: "New Mexico",
+      code: "NM"
   },
   {
-      "name": "New York",
-      "abbreviation": "NY"
+      name: "New York",
+      code: "NY"
   },
   {
-      "name": "North Carolina",
-      "abbreviation": "NC"
+      name: "North Carolina",
+      code: "NC"
   },
   {
-      "name": "North Dakota",
-      "abbreviation": "ND"
+      name: "North Dakota",
+      code: "ND"
   },
   {
-      "name": "Northern Mariana Islands",
-      "abbreviation": "MP"
+      name: "Northern Mariana Islands",
+      code: "MP"
   },
   {
-      "name": "Ohio",
-      "abbreviation": "OH"
+      name: "Ohio",
+      code: "OH"
   },
   {
-      "name": "Oklahoma",
-      "abbreviation": "OK"
+      name: "Oklahoma",
+      code: "OK"
   },
   {
-      "name": "Oregon",
-      "abbreviation": "OR"
+      name: "Oregon",
+      code: "OR"
   },
   {
-      "name": "Palau",
-      "abbreviation": "PW"
+      name: "Palau",
+      code: "PW"
   },
   {
-      "name": "Pennsylvania",
-      "abbreviation": "PA"
+      name: "Pennsylvania",
+      code: "PA"
   },
   {
-      "name": "Puerto Rico",
-      "abbreviation": "PR"
+      name: "Puerto Rico",
+      code: "PR"
   },
   {
-      "name": "Rhode Island",
-      "abbreviation": "RI"
+      name: "Rhode Island",
+      code: "RI"
   },
   {
-      "name": "South Carolina",
-      "abbreviation": "SC"
+      name: "South Carolina",
+      code: "SC"
   },
   {
-      "name": "South Dakota",
-      "abbreviation": "SD"
+      name: "South Dakota",
+      code: "SD"
   },
   {
-      "name": "Tennessee",
-      "abbreviation": "TN"
+      name: "Tennessee",
+      code: "TN"
   },
   {
-      "name": "Texas",
-      "abbreviation": "TX"
+      name: "Texas",
+      code: "TX"
   },
   {
-      "name": "Utah",
-      "abbreviation": "UT"
+      name: "Utah",
+      code: "UT"
   },
   {
-      "name": "Vermont",
-      "abbreviation": "VT"
+      name: "Vermont",
+      code: "VT"
   },
   {
-      "name": "Virgin Islands",
-      "abbreviation": "VI"
+      name: "Virgin Islands",
+      code: "VI"
   },
   {
-      "name": "Virginia",
-      "abbreviation": "VA"
+      name: "Virginia",
+      code: "VA"
   },
   {
-      "name": "Washington",
-      "abbreviation": "WA"
+      name: "Washington",
+      code: "WA"
   },
   {
-      "name": "West Virginia",
-      "abbreviation": "WV"
+      name: "West Virginia",
+      code: "WV"
   },
   {
-      "name": "Wisconsin",
-      "abbreviation": "WI"
+      name: "Wisconsin",
+      code: "WI"
   },
   {
-      "name": "Wyoming",
-      "abbreviation": "WY"
+      name: "Wyoming",
+      code: "WY"
   }
-]
-
-export const provinceList1 = [
-  "Hà Nội",
-  "TP HCM",
-  "Đà Nẵng",
-  "An Giang",
-  "Bà Rịa - Vũng Tàu",
-  "Bắc Giang",
-  "Bắc Kạn",
-  "Bạc Liêu",
-  "Bắc Ninh",
-  "Bến Tre",
-  "Bình Định",
-  "Bình Dương",
-  "Bình Phước",
-  "Bình Thuận",
-  "Cà Mau",
-  "Cao Bằng",
-  "Cần Thơ",
-  "Đắk Lắk",
-  "Đắk Nông",
-  "Điện Biên",
-  "Đồng Nai",
-  "Đồng Tháp",
-  "Gia Lai",
-  "Hà Giang",	
-  "Hà Nam",
-  "Hà Tĩnh",
-  "Hải Dương",
-  "Hải Phòng",
-  "Hậu Giang",
-  "Hòa Bình",
-  "Hưng Yên",
-  "Khánh Hòa",
-  "Kiên Giang",
-  "Kon Tum",
-  "Lai Châu",
-  "Lâm Đồng",
-  "Lạng Sơn",
-  "Lào Cai",
-  "Long An",
-  "Nam Định",
-  "Nghệ An",
-  "Ninh Bình",
-  "Ninh Thuận",
-  "Phú Thọ",
-  "Phú Yên",	
-  "Quảng Bình",	
-  "Quảng Nam",
-  "Quảng Ngãi",
-  "Quảng Ninh",
-  "Quảng Trị",
-  "Sóc Trăng",
-  "Sơn La",
-  "Tây Ninh",
-  "Thái Bình",
-  "Thái Nguyên",
-  "Thanh Hóa",
-  "Thừa Thiên Huế",
-  "Tiền Giang",
-  "Trà Vinh",
-  "Tuyên Quang",
-  "Vĩnh Long",
-  "Vĩnh Phúc",
-  "Yên Bái"
 ]
 
 export const provinceList = [
   {
-    province: "Hà Nội",	
+    name: "Hà Nội",	
     code: "10000"
   },
   {
-    province: "TP HCM",	
+    name: "TP HCM",	
     code: "70000"
   },
   {
-    province: "Đà Nẵng",	
+    name: "Đà Nẵng",	
     code: "50000"
   },
   {
-    province: "An Giang",	
+    name: "An Giang",	
     code: "90000"
   },
   {
-    province: "Bắc Giang",	
+    name: "Bắc Giang",	
     code: "26000"
   },
   {
-    province: "Bắc Kạn",	
+    name: "Bắc Kạn",	
     code: "23000"
   },
   {
-    province: "Bạc Liêu",	
+    name: "Bạc Liêu",	
     code: "97000"
   },
   {
-    province: "Bắc Ninh",	
+    name: "Bắc Ninh",	
     code: "16000"
   },
   {
-    province: "Bà Rịa - Vũng Tàu",	
+    name: "Bà Rịa - Vũng Tàu",	
     code: "78000"
   },
   {
-    province: "Bến Tre",	
+    name: "Bến Tre",	
     code: "86000"
   },
   {
-    province: "Bình Định",	
+    name: "Bình Định",	
     code: "55000"
   },
   {
-    province: "Bình Dương",	
+    name: "Bình Dương",	
     code: "75000"
   },
   {
-    province: "Bình Phước",	
+    name: "Bình Phước",	
     code: "67000"
   },
   {
-    province: "Bình Thuận",	
+    name: "Bình Thuận",	
     code: "77000"
   },
   {
-    province: "Cà Mau",	
+    name: "Cà Mau",	
     code: "98000"
   },
   {
-    province: "Cần Thơ",	
+    name: "Cần Thơ",	
     code: "94000"
   },
   {
-    province: "Cao Bằng",	
+    name: "Cao Bằng",	
     code: "21000"
   },
   {
-    province: "Đắk Lắk",	
+    name: "Đắk Lắk",	
     code: "63000"
   },
   {
-    province: "Đắk Nông",	
+    name: "Đắk Nông",	
     code: "65000"
   },
   {
-    province: "Điện Biên",	
+    name: "Điện Biên",	
     code: "32000"
   },
   {
-    province: "Đồng Nai",	
+    name: "Đồng Nai",	
     code: "76000"
   },
   {
-    province: "Đồng Tháp",	
+    name: "Đồng Tháp",	
     code: "81000"
   },
   {
-    province: "Gia Lai",	
+    name: "Gia Lai",	
     code: "61000"
   },
   {
-    province: "Hà Giang",	
+    name: "Hà Giang",	
     code: "20000"
   },
   {
-    province: "Hà Nam",	
+    name: "Hà Nam",	
     code: "18000"
   },
   {
-    province: "Hà Tĩnh",	
+    name: "Hà Tĩnh",	
     code: "45000"
   },
   {
-    province: "Hải Dương",	
+    name: "Hải Dương",	
     code: "03000"
   },
   {
-    province: "Hải Phòng",	
+    name: "Hải Phòng",	
     code: "04000"
   },
   {
-    province: "Hậu Giang",	
+    name: "Hậu Giang",	
     code: "95000"
   },
   {
-    province: "Hòa Bình",	
+    name: "Hòa Bình",	
     code: "36000"
   },
   {
-    province: "Hưng Yên",	
+    name: "Hưng Yên",	
     code: "17000"
   },
   {
-    province: "Khánh Hòa",	
+    name: "Khánh Hòa",	
     code: "57000"
   },
   {
-    province: "Kiên Giang",	
+    name: "Kiên Giang",	
     code: "91000"
   },
   {
-    province: "Kon Tum",	
+    name: "Kon Tum",	
     code: "60000"
   },
   {
-    province: "Lai Châu",	
+    name: "Lai Châu",	
     code: "30000"
   },
   {
-    province: "Lâm Đồng",	
+    name: "Lâm Đồng",	
     code: "66000"
   },
 	{
-    province: "Lạng Sơn",	
+    name: "Lạng Sơn",	
     code: "25000"
   },
   {
-    province: "Lào Cai",	
+    name: "Lào Cai",	
     code: "31000"
   },
   {
-    province: "Long An",	
+    name: "Long An",	
     code: "82000"
   },
   {
-    province: "Nam Định",	
+    name: "Nam Định",	
     code: "07000"
   },
   {
-    province: "Nghệ An",	
+    name: "Nghệ An",	
     code: "43000"
   },
   {
-    province: "Ninh Bình",	
+    name: "Ninh Bình",	
     code: "08000"
   },
   {
-    province: "Ninh Thuận",	
+    name: "Ninh Thuận",	
     code: "59000"
   },
   {
-    province: "Phú Thọ",	
+    name: "Phú Thọ",	
     code: "35000"
   },
   {
-    province: "Phú Yên",	
+    name: "Phú Yên",	
     code: "56000"
   },
   {
-    province: "Quảng Bình",	
+    name: "Quảng Bình",	
     code: "47000"
   },
   {
-    province: "Quảng Nam",	
+    name: "Quảng Nam",	
     code: "51000"
   },
   {
-    province: "Quảng Ngãi",	
+    name: "Quảng Ngãi",	
     code: "53000"
   },
   {
-    province: "Quảng Ninh",	
+    name: "Quảng Ninh",	
     code: "01000"
   },
   {
-    province: "Quảng Trị",	
+    name: "Quảng Trị",	
     code: "48000"
   },
   {
-    province: "Sóc Trăng",	
+    name: "Sóc Trăng",	
     code: "96000"
   },
   {
-    province: "Sơn La",	
+    name: "Sơn La",	
     code: "34000"
   },
   {
-    province: "Tây Ninh",	
+    name: "Tây Ninh",	
     code: "80000"
   },
   {
-    province: "Thái Bình",	
+    name: "Thái Bình",	
     code: "06000"
   },
   {
-    province: "Thái Nguyên",	
+    name: "Thái Nguyên",	
     code: "24000"
   },
   {
-    province: "Thanh Hóa",	
+    name: "Thanh Hóa",	
     code: "40000"
   },
   {
-    province: "Thừa Thiên Huế",	
+    name: "Thừa Thiên Huế",	
     code: "49000"
   },
   {
-    province: "Tiền Giang",	
+    name: "Tiền Giang",	
     code: "84000"
   },
   {
-    province: "Trà Vinh",	
+    name: "Trà Vinh",	
     code: "87000"
   },
   {
-    province: "Tuyên Quang",	
+    name: "Tuyên Quang",	
     code: "22000"
   },
   {
-    province: "Vĩnh Long",	
+    name: "Vĩnh Long",	
     code: "85000"
   },
   {
-    province: "Vĩnh Phúc",	
+    name: "Vĩnh Phúc",	
     code: "15000"
   },
   {
-    province: "Yên Bái",	
+    name: "Yên Bái",	
     code: "33000"
   }
 ]
