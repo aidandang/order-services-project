@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 
 // components
-import CustomerSearch from '../customer-search/customer-search.component';
+import CustomerSearch from './customer-search.component';
 import AlertMesg from '../alert-mesg/alert-mesg.component';
 
 // redux
@@ -21,14 +21,11 @@ const CustomerList = ({
     const fetchSuccess = CustomerActionTypes.CUSTOMER_FETCH_SUCCESS;
     getReq('/customers', fetchSuccess);
     // eslint-disable-next-line
-  }, []);
+  }, [location.state]);
 
   return <>
-    { 
-      alertMessage 
-      ? <AlertMesg />
-      : <CustomerSearch />
-    }
+    { alertMessage && <AlertMesg /> }
+    <CustomerSearch />  
   </>
 }
 

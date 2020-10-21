@@ -1,8 +1,8 @@
 import React from 'react';
 
 // dependencies
-import { useLocation } from 'react-router-dom';
 import queryString from 'query-string';
+import { useLocation } from 'react-router-dom';
 
 // components
 import Title from '../../components/title/title.component';
@@ -16,21 +16,19 @@ const title = {
 }
 
 // main component
-const CustomerListPage = () => {
+const CustomerAllIds = () => {
 
   const location = useLocation();
 
-  const queryObj = queryString.parse(location.search);
-  const { action } = queryObj;
-  
-  return <>
+  const queryStr = queryString.parse(location.search);
+  const { action } = queryStr;
 
+  return <>
     <Title title={title} />
-    
+
+    { action === undefined &&  <CustomerList /> }
     { action === 'customer-add' && <CustomerAdd /> }
-    { action === 'customer-list' && <CustomerList /> } 
-    { action === undefined && <CustomerList /> } 
   </>
 }
 
-export default CustomerListPage;
+export default CustomerAllIds;

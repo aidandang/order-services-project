@@ -1,23 +1,17 @@
 import React from 'react';
 
 // components
-import { Card, Ul, Li, Button, TextInput, TextareaInput, SelectInput } from '../tag/tag.component';
+import { Card, Ul, Li, TextInput, TextareaInput, SelectInput } from '../tag/tag.component';
 
 const ProductForm = ({
   formData,
-  formSubmit,
-  formReset,
   errors,
   onInputChange,
-  buttonDisabled,
   brands,
-  formTitle,
-  buttonName
+  formTitle
 }) => {
-
   return <>
-
-    <Card width="col-12" title={formTitle}>
+    <Card width="col" title={formTitle}>
       <Ul>
         <Li>
           <TextInput
@@ -42,7 +36,8 @@ const ProductForm = ({
             value={formData.brandId ? formData.brandId : ""}
             onChange={onInputChange}
             data={brands}
-            optionKey="name" 
+            valueKey="_id"
+            textKey="name"
           />
         </Li>
         <Li>
@@ -99,31 +94,6 @@ const ProductForm = ({
             value={formData.url}
             onChange={onInputChange} 
           />
-        </Li>
-        <Li>      
-          <div className="row my-3">
-            <div className="col">
-                <Button
-                  type="submit" 
-                  onClick={e => {
-                    e.preventDefault();
-                    formSubmit();
-                  }}
-                  disabled={buttonDisabled}
-                >
-                  {buttonName}
-                </Button>
-                <span className="mr-3"></span>
-                <Button
-                  onClick={e => {
-                    e.preventDefault();
-                    formReset()
-                  }}
-                >
-                  Reset
-                </Button>
-            </div>
-          </div>
         </Li>
       </Ul>
     </Card>

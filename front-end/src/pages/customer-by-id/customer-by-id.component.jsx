@@ -6,13 +6,10 @@ import queryString from 'query-string';
 
 // components
 import Title from '../../components/title/title.component';
-import AlertMesg from '../../components/alert-mesg/alert-mesg.component';
 import CustomerInfo from '../../components/customer-info/customer-info.component';
 import CustomerEdit from '../../components/customer-edit/customer-edit.component';
-import CustomerAddressesUpdate from '../../components/customer-addresses-update/customer-addresses-update.component';
-import CustomerAddressAdd from '../../components/customer-address-add/customer-address-add.component';
-import CustomerAddressEdit from '../../components/customer-address-edit/customer-address-edit.component';
-import CustomerAddressRemove from '../../components/customer-address-remove/customer-address-remove.component';
+import CustomerShippingInfo from '../../components/customer-shipping-info/customer-shipping-info.component';
+import AlertMesg from '../../components/alert-mesg/alert-mesg.component';
 
 // redux
 import { connect } from 'react-redux';
@@ -29,7 +26,7 @@ const title = {
 }
 
 // main component
-const CustomerInfoPage = ({
+const CustomerById = ({
   getReq,
   alertMessage,
   data
@@ -40,30 +37,22 @@ const CustomerInfoPage = ({
 
   const queryObj = queryString.parse(location.search);
   const { action } = queryObj;
-  
-  const { byId } = data;
 
   useEffect(() => {
     const fetchSuccess = CustomerActionTypes.CUSTOMER_FETCH_SUCCESS;
-
     getReq('/customers/' + params.id, fetchSuccess)
     // eslint-disable-next-line
-  }, [])
+  }, [location.state])
   
   return <>
     <Title title={title} />
 
+    { alertMessage && <AlertMesg /> }
     {
-      alertMessage 
-      ? <AlertMesg />
-      : byId && <>
+      data.byId && data.byId._id === params.id && <>
         { action === undefined && <CustomerInfo />}
-        { action === 'customer-info' && <CustomerInfo />}
         { action === 'customer-edit' && <CustomerEdit />}
-        { action === 'customer-addresses-update' && <CustomerAddressesUpdate />}
-        { action === 'customer-address-add' && <CustomerAddressAdd />}
-        { action === 'customer-address-edit' && <CustomerAddressEdit />}
-        { action === 'customer-address-remove' && <CustomerAddressRemove />}
+        { action === 'customer-shipping-info' && <CustomerShippingInfo />}
       </>
     }
   </>
@@ -80,4 +69,4 @@ const mapDispatchToProps = dispatch => ({
   )
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(CustomerInfoPage);
+export default connect(mapStateToProps, mapDispatchToProps)(CustomerById);

@@ -7,17 +7,17 @@ import { useLocation, Link } from 'react-router-dom';
 // components
 import { Card, Ul, Li } from '../tag/tag.component';
 import { useForm } from '../hook/use-form';
-import ProductSearchForm from './product-search-form.component';
-import PreviewProducts from './preview-products.component';
+import CustomerSearchForm from './customer-search-form.component';
+import PreviewCustomers from './preview-customers.component';
 import PaginationBar from '../pagination-bar/pagination-bar.component';
 import { convertSearchFormToQueryString } from '../utils/convert-search-form-to-query-string';
 
 // redux
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import { selectProductData } from '../../state/product/product.selectors';
+import { selectCustomerData } from '../../state/customer/customer.selectors';
 import { getReq } from '../../state/api/get-request';
-import { ProductActionTypes } from '../../state/product/product.types';
+import { CustomerActionTypes } from '../../state/customer/customer.types';
 
 // initial values
 const formSchema = Yup.object().shape({
@@ -30,13 +30,13 @@ const formState = {
 }
 
 // main component
-const ProductSearch = ({ 
+const CustomerSearch = ({ 
   getReq, 
   data
 }) => {
 
   const location = useLocation();
-
+  
   const [
     formData,
     errors, 
@@ -45,27 +45,27 @@ const ProductSearch = ({
   ] = useForm(formState, formState, formSchema);
 
   const [active, setActive] = useState(null);
-
+  
   // handle search form 
   const formSubmit = (e, page) => {
     e.preventDefault();
 
-    const fetchSuccess = ProductActionTypes.PRODUCT_FETCH_SUCCESS;
+    const fetchSuccess = CustomerActionTypes.CUSTOMER_FETCH_SUCCESS;
     
     let queryStr = convertSearchFormToQueryString(e, formData);
 
     if (queryStr !== undefined) {
       if (page) queryStr = queryStr + `${queryStr === '' ? '?' : '&'}page=${page}`;
-      getReq('/products', fetchSuccess, queryStr);
+      getReq('/customers', fetchSuccess, queryStr);
       setActive(page)
     }
   }
   
   return <>
-    <Card width="col" title="Search For Products" >
+    <Card width="col" title="Search For Customers" >
       <Ul>
 
-        <ProductSearchForm 
+        <CustomerSearchForm
           formSubmit={formSubmit} 
           formData={formData}
           errors={errors}
@@ -79,7 +79,7 @@ const ProductSearch = ({
               <Link
                 to={{
                   pathname: location.pathname,
-                  search: location.search ? `${location.search}&action=product-add` : `?action=product-add`,
+                  search: location.search ? `${location.search}&action=customer-add` : `?action=customer-add`,
                   state: {
                     key: location.key,
                     path: location.pathname + location.search
@@ -87,13 +87,13 @@ const ProductSearch = ({
                 }}
                 className="a-link-cs"
               >
-                ( + ) Add a New Product
+                ( + ) Add a New Customer
               </Link>
             </div>
           </div>
         </Li>
 
-      </Ul>
+     </Ul>
     </Card>
     {
       data && data.allIds && data.allIds.length > 0 && data.info && <>
@@ -103,7 +103,7 @@ const ProductSearch = ({
           onPageChange={formSubmit}
           page={active}
         />
-        <PreviewProducts />
+        <PreviewCustomers />
         <PaginationBar 
           numberOfPages={data.info.pages}
           limit={5}
@@ -116,11 +116,11 @@ const ProductSearch = ({
 }
 
 const mapStateToProps = createStructuredSelector({
-  data: selectProductData
+  data: selectCustomerData
 })
 
 const mapDispatchToProps = dispatch => ({
   getReq: (pathname, fetchSuccess, queryStr) => dispatch(getReq(pathname, fetchSuccess, queryStr))
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(ProductSearch);
+export default connect(mapStateToProps, mapDispatchToProps)(CustomerSearch);

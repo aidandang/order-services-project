@@ -1,11 +1,13 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
 // dependencies
 import * as Yup from "yup";
+import { Redirect, useLocation } from 'react-router-dom';
 
 // components
 import { Container } from '../tag/tag.component';
 import { useForm } from '../hook/use-form';
+import SubmitCard from '../submit-card/submit-card.component';
 import ProductForm from '../product-form/product-form.component';
 import ProductBrand from '../product-brand/product-brand.component';
 
@@ -55,9 +57,12 @@ const formState = {
 const ProductAdd = ({
   getReq,
   postReq,
-  brandData,
-  setAction
+  brandData
 }) => {
+
+  const location = useLocation();
+
+  const [success, setSuccess] = useState(false);
 
   const [
     formData,
@@ -77,8 +82,7 @@ const ProductAdd = ({
     };
     delete newProduct.brandId;
  
-    postReq('/products', fetchSuccess, newProduct)
-    setAction('')
+    postReq('/products', fetchSuccess, newProduct, setSuccess)
   }
 
   const formReset = () => {
@@ -92,24 +96,37 @@ const ProductAdd = ({
   }, [])
 
   return <>
-    <Container width="col" setAction={setAction}>
+
+    {
+      success && <Redirect to={{
+        pathname: location.state.path,
+        state: {
+          key: location.key,
+          path: location.pathname + location.search
+        }
+      }} />
+    }
+
+    <Container width="col">
       <div className="row">
         <div className="col-12 col-xl-8">
           <form onSubmit={formSubmit}>
             <ProductForm
               formData={formData}
-              formSubmit={formSubmit}
-              formReset={formReset} 
               errors={errors} 
               onInputChange={onInputChange}
-              buttonDisabled={buttonDisabled}
               brands={brandData.allIds}
               formTitle={"Add a new product"}
-              buttonName={'Add Product'}
             />
           </form>  
         </div>
         <div className="col-12 col-xl-4">
+          <SubmitCard 
+            formSubmit={formSubmit}
+            handleSecond={formReset}
+            buttonDisabled={buttonDisabled}
+            buttonText={['Add Product', 'Reset']} 
+          />
           <ProductBrand />
         </div>
       </div> 

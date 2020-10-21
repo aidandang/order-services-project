@@ -4,6 +4,8 @@ const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/appError');
 
 exports.readCustomers = catchAsync(async (req, res, next) => {
+  console.log('hello')
+
   // set default limit documents per page
   const defaultLimit = 10;
   const defaultPage = 1;

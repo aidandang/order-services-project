@@ -38,12 +38,12 @@ const ProductColor = ({
                       <img className="product-img my-2" src={color.image} alt={byId.name} />
                     </div>
                   </div>
-                  <div className="row">
+                  <div className="row pt-1">
                     <div className="col">
                       {color.color}
                     </div>
                   </div>
-                  <div className="row">
+                  <div className="row pt-1">
                     <div className="col">
                       <a href="/" className="a-link-cs" onClick={e => {
                         e.preventDefault();

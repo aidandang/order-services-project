@@ -7,6 +7,7 @@ import { useLocation, Redirect } from 'react-router-dom';
 // components
 import { Container } from '../tag/tag.component';
 import { useForm } from '../hook/use-form';
+import SubmitCard from '../submit-card/submit-card.component';
 import ProductForm from '../product-form/product-form.component';
 import ProductBrand from '../product-brand/product-brand.component';
 import AlertMesg from '../alert-mesg/alert-mesg.component';
@@ -61,20 +62,18 @@ const ProductEdit = ({
   data,
   patchReq,
   brandData,
-  alertMessage,
-  setAction
+  alertMessage
 }) => {
 
+  const location = useLocation();
+
   const { byId } = data;
-  const productTemp = byId 
-  ? {
+  const productTemp = {
     ...byId,
     brandId: byId.brand._id 
-  } : formState;
+  }
 
   const [success, setSuccess] = useState(false);
-
-  const location = useLocation();
 
   const [
     formData,
@@ -109,36 +108,41 @@ const ProductEdit = ({
 
   return <>
     {
-      success && <Redirect to={`${location.pathname}`} />
+      success && <Redirect to={{
+        pathname: location.state.path,
+        state: {
+          key: location.key,
+          path: location.pathname + location.search
+        }
+      }} />
     }
 
-    { 
-      alertMessage 
-      ? <AlertMesg />
-      : 
-      <Container width="col" setAction={setAction}>
-        <div className="row">
-          <div className="col-12 col-xl-8">
-            <form onSubmit={formSubmit}>
-              <ProductForm
-                formData={formData}
-                formSubmit={formSubmit}
-                formReset={formReset} 
-                errors={errors} 
-                onInputChange={onInputChange}
-                buttonDisabled={buttonDisabled}
-                brands={brandData.allIds}
-                formTitle={'Edit product'}
-                buttonName={'Update'}
-              />
-            </form>  
-          </div>
-          <div className="col-12 col-xl-4">
-            <ProductBrand />
-          </div>
+    { alertMessage && <AlertMesg /> }
+    
+    <Container width="col">
+      <div className="row">
+        <div className="col-12 col-xl-8">
+          <form onSubmit={formSubmit}>
+            <ProductForm
+              formData={formData}
+              errors={errors} 
+              onInputChange={onInputChange}
+              brands={brandData.allIds}
+              formTitle={'Edit product'}
+            />
+          </form>  
         </div>
-      </Container>
-    }
+        <div className="col-12 col-xl-4">
+          <SubmitCard 
+            formSubmit={formSubmit}
+            handleSecond={formReset}
+            buttonDisabled={buttonDisabled}
+            buttonText={['Update', 'Reset']} 
+          />
+          <ProductBrand />
+        </div>
+      </div>
+    </Container>
   </>
 }
 

@@ -93,7 +93,7 @@ exports.createProduct = catchAsync(async (req, res, next) => {
   const queryObj = {...req.body};
   const newProduct = await Product.create(queryObj);
   res.status(201).json({
-    status: 'POST_SUCCESS',
+    status: 'success',
     product: newProduct
   });
 });
