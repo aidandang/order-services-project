@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Link } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import uuid from 'react-uuid';
 import './tag.styles.css';
 
@@ -9,19 +9,25 @@ export const Container = ({
   width
 }) => {
 
+  const history = useHistory()
+
   return (
     <div className="card mt-3">
-      <div className="card-body pb-2">
+      <div className="card-body pb-1">
         <div className="row my-0 py-0">
           <div className={`${width ? width : 'col'} text-right`}>
-            <Link
-              to={{
-                key: 'goBack'
-              }}
+            <a
+              href="/"
               className="a-link-cs"
+              onClick={e => {
+                e.preventDefault();
+                if (history.action === "PUSH") {
+                  history.goBack()
+                }
+              }}
             >
               Close ( x )
-            </Link>
+            </a>
           </div>
         </div>
         {children}

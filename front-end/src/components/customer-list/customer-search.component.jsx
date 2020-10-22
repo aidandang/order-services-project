@@ -81,8 +81,7 @@ const CustomerSearch = ({
                   pathname: location.pathname,
                   search: location.search ? `${location.search}&action=customer-add` : `?action=customer-add`,
                   state: {
-                    key: location.key,
-                    path: location.pathname + location.search
+                    from: location.pathname + location.search
                   }
                 }}
                 className="a-link-cs"

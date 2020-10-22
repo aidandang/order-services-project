@@ -2,8 +2,6 @@ import React from 'react';
 
 // dependencies
 import { Link } from 'react-router-dom'; 
-// ui settings
-import './title.styles.css';
 
 const Title = ({
   title
@@ -13,7 +11,7 @@ const Title = ({
       <div className="card-header mb-0 title_card_header">
         <div className="d-flex justify-content-start">
           <div>
-            <span className="h4 mr-3 title_font">{title.name}</span>
+            <span className="h4 mr-3 title-font">{title.name}</span>
           </div>
           {
             title.button && 

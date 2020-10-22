@@ -43,11 +43,11 @@ const CustomerForm = ({
           <div className="row">
             <div className="col-xl-6">
               <TextInput
-                label="Email" 
+                label="Email (*)" 
                 name="email"
                 errors={errors}
                 size="col"
-                smallText="Email is optional."
+                smallText="Email is required."
                 value={formData.email}
                 onChange={onInputChange} 
               />

@@ -15,7 +15,8 @@ const CustomerAddressForm = ({
   formReset, 
   errors,
   onInputChange,
-  buttonDisabled
+  buttonDisabled,
+  buttonText
 }) => {
 
   const country = [
@@ -182,7 +183,7 @@ const CustomerAddressForm = ({
               type="submit" 
               disabled={buttonDisabled}
             >
-              Add Address
+              {buttonText[0]}
             </Button>
             <span className="mr-3"></span>
             <Button
@@ -191,7 +192,7 @@ const CustomerAddressForm = ({
                 formReset()
               }}
             >
-              Reset
+              {buttonText[1]}
             </Button>
           </div>
         </div>

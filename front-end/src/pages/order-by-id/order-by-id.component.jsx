@@ -6,9 +6,7 @@ import queryString from 'query-string';
 
 // components
 import Title from '../../components/title/title.component';
-import CustomerInfo from '../../components/customer-info/customer-info.component';
-import CustomerEdit from '../../components/customer-edit/customer-edit.component';
-import CustomerShippingInfo from '../../components/customer-shipping-info/customer-shipping-info.component';
+import OrderInfo from '../../components/order-info/order-info.component';
 import AlertMesg from '../../components/alert-mesg/alert-mesg.component';
 
 // redux
@@ -16,17 +14,17 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { getReq } from '../../state/api/get-request';
 import { selectAlertMessage } from '../../state/alert/alert.selectors';
-import { selectCustomerData } from '../../state/customer/customer.selectors';
-import { CustomerActionTypes } from '../../state/customer/customer.types';
+import { selectOrderData } from '../../state/order/order.selectors';
+import { OrderActionTypes } from '../../state/order/order.types';
 
 // initial values
 const title = {
-  name: 'Customer Infomation',
-  message: 'Detail information of the customer. Information can be edited.'
+  name: 'Order Details',
+  message: 'Detail information of the order. Information can be edited.'
 }
 
 // main component
-const CustomerById = ({
+const OrderById = ({
   getReq,
   alertMessage,
   data
@@ -39,8 +37,8 @@ const CustomerById = ({
   const { action } = queryObj;
 
   useEffect(() => {
-    const fetchSuccess = CustomerActionTypes.CUSTOMER_FETCH_SUCCESS;
-    getReq('/customers/' + params.id, fetchSuccess)
+    const fetchSuccess = OrderActionTypes.ORDER_FETCH_SUCCESS;
+    getReq('/orders/' + params.id, fetchSuccess)
     // eslint-disable-next-line
   }, [location.state])
   
@@ -50,9 +48,7 @@ const CustomerById = ({
     { alertMessage && <AlertMesg /> }
     {
       data.byId && data.byId._id === params.id && <>
-        { action === undefined && <CustomerInfo />}
-        { action === 'customer-edit' && <CustomerEdit />}
-        { action === 'customer-shipping-info' && <CustomerShippingInfo />}
+        { action === undefined && <OrderInfo />}
       </>
     }
   </>
@@ -60,7 +56,7 @@ const CustomerById = ({
 
 const mapStateToProps = createStructuredSelector({
   alertMessage: selectAlertMessage,
-  data: selectCustomerData
+  data: selectOrderData
 })
 
 const mapDispatchToProps = dispatch => ({
@@ -69,4 +65,4 @@ const mapDispatchToProps = dispatch => ({
   )
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(CustomerById);
+export default connect(mapStateToProps, mapDispatchToProps)(OrderById);
