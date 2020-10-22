@@ -18,7 +18,12 @@ const PreviewCustomers = ({
 
   const handleOnClick = (e, customer) => {
     e.preventDefault();
-    history.push(location.pathname + '/' + customer._id)
+    const search = `?id=${customer._id}&action=customer-info`
+    const path = location.pathname + search;
+
+    history.push(path, {
+      from: location.pathname + location.search
+    })
   }
 
   return <>

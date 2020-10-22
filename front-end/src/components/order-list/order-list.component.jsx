@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 
 // components
-import OrderSearch from '../order-search/order-search.component';
+import OrderSearch from './order-search.component';
 import AlertMesg from '../alert-mesg/alert-mesg.component';
 
 // redux
@@ -21,14 +21,11 @@ const OrderList = ({
     const fetchSuccess = OrderActionTypes.ORDER_FETCH_SUCCESS;
     getReq('/orders', fetchSuccess);
     // eslint-disable-next-line
-  }, []);
+  }, [location.state]);
   
   return <>
-    { 
-      alertMessage 
-      ? <AlertMesg />
-      : <OrderSearch />
-    }
+    { alertMessage && <AlertMesg /> }
+    <OrderSearch />
   </>
 }
 

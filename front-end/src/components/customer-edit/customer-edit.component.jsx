@@ -21,12 +21,10 @@ import { selectCustomerData } from '../../state/customer/customer.selectors';
 
 // initial values
 const formSchema = Yup.object().shape({
-  username: Yup
-    .string()
-    .required(),
   email: Yup
     .string()
-    .email(),
+    .email()
+    .required(),
   nickname: Yup
     .string()
     .required(),
@@ -60,7 +58,6 @@ const formSchema = Yup.object().shape({
 });
 
 const formState = {
-  username: "",
   email: "",
   nickname: "",
   fullname: "",
@@ -109,13 +106,7 @@ const CustomerEdit = ({
   return <>
 
     {
-      success && <Redirect to={{
-        pathname: location.state.path,
-        state: {
-          key: location.key,
-          path: location.pathname + location.search
-        }
-      }} />
+      success && <Redirect to={location.state.from} />
     }
 
     { alertMessage && <AlertMesg /> }

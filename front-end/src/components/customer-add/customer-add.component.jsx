@@ -9,9 +9,12 @@ import { Container } from '../tag/tag.component';
 import { useForm } from '../hook/use-form';
 import SubmitCard from '../submit-card/submit-card.component';
 import CustomerForm from '../customer-form/customer-form.component';
+import AlertMesg from '../alert-mesg/alert-mesg.component';
 
 // redux
 import { connect } from 'react-redux';
+import { createStructuredSelector } from 'reselect';
+import { selectAlertMessage } from '../../state/alert/alert.selectors';
 import { postReq } from '../../state/api/post-request';
 import { CustomerActionTypes } from '../../state/customer/customer.types';
 
@@ -19,7 +22,8 @@ import { CustomerActionTypes } from '../../state/customer/customer.types';
 const formSchema = Yup.object().shape({
   email: Yup
     .string()
-    .email(),
+    .email()
+    .required(),
   nickname: Yup
     .string()
     .required(),
@@ -68,7 +72,8 @@ const formState = {
 
 // main component
 const CustomerAdd = ({
-  postReq
+  postReq,
+  alertMessage
 }) => {
 
   const location = useLocation();
@@ -95,17 +100,15 @@ const CustomerAdd = ({
     setValues(formState);
   }
 
+  console.log(location.state)
+
   return <>
 
     {
-      success && <Redirect to={{
-        pathname: location.state.path,
-        state: {
-          key: location.key,
-          path: location.pathname + location.search
-        }
-      }} />
+      success && <Redirect to={location.state.from} />
     }
+
+    { alertMessage && <AlertMesg /> }
 
     <Container width="col">
       <form onSubmit={formSubmit}>
@@ -132,10 +135,14 @@ const CustomerAdd = ({
   </>
 }
 
+const mapStateToProps = createStructuredSelector({
+  alertMessage: selectAlertMessage
+})
+
 const mapDispatchToProps = dispatch => ({
   postReq: (pathname, fetchSuccess, reqBody, setSuccess) => dispatch(
     postReq(pathname, fetchSuccess, reqBody, setSuccess)
   )
 })
 
-export default connect(null, mapDispatchToProps)(CustomerAdd);
+export default connect(mapStateToProps, mapDispatchToProps)(CustomerAdd);

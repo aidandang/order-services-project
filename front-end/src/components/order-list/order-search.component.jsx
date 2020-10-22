@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
 
 // dependencies
-import { useLocation, useHistory } from 'react-router-dom';
 import * as Yup from "yup";
+import { useLocation, Link } from 'react-router-dom';
 
 // components
+import { Card, Ul, Li } from '../tag/tag.component';
 import { useForm } from '../hook/use-form';
 import OrderSearchForm from './order-search-form.component';
 import PreviewOrders from './preview-orders.component';
 import PaginationBar from '../pagination-bar/pagination-bar.component';
-import AlertMesg from '../alert-mesg/alert-mesg.component';
 import { convertSearchFormToQueryString } from '../utils/convert-search-form-to-query-string';
 
 // redux
@@ -18,7 +18,6 @@ import { createStructuredSelector } from 'reselect';
 import { selectOrderData } from '../../state/order/order.selectors';
 import { getReq } from '../../state/api/get-request';
 import { OrderActionTypes } from '../../state/order/order.types';
-import { selectAlertMessage } from '../../state/alert/alert.selectors';
 
 // initial values
 const formSchema = Yup.object().shape({
@@ -32,12 +31,10 @@ const formState = {
 
 const OrderList = ({ 
   getReq, 
-  data, 
-  alertMessage
+  data
 }) => {
   
   const location = useLocation();
-  const history = useHistory();
 
   const [
     formData,
@@ -62,17 +59,10 @@ const OrderList = ({
       setActive(page)
     }
   }
-
-  const handleOnClick = (e, order) => {
-    e.preventDefault();
-    history.push(location.pathname + '/' + order._id)
-  }
   
   return <>
-    { 
-      alertMessage 
-      ? <AlertMesg />
-      : <> 
+    <Card width="col" title="Search for orders">
+      <Ul>
         <OrderSearchForm
           formSubmit={formSubmit} 
           formData={formData}
@@ -80,30 +70,50 @@ const OrderList = ({
           onInputChange={onInputChange}
           buttonDisabled={buttonDisabled}
         />
-        {
-          data && data.allIds && data.allIds.length > 0 && data.info && <>
-            <PaginationBar  
-              numberOfPages={data.info.pages}
-              limit={5}
-              onPageChange={formSubmit}
-              page={active}
-            />
-            <PreviewOrders handleOnClick={handleOnClick} />
-            <PaginationBar 
-              numberOfPages={data.info.pages}
-              limit={10}
-              onPageChange={formSubmit}
-              page={active}
-            /> 
-          </>
-        }
+
+        <Li>
+          <div className="row">
+            <div className="col">
+              <Link
+                to={{
+                  pathname: location.pathname,
+                  search: location.search ? `${location.search}&ctnr=order-add` : `?ctnr=order-add`,
+                  state: {
+                    key: location.key,
+                    path: location.pathname + location.search
+                  }
+                }}
+                className="a-link-cs"
+              >
+                ( + ) Add a New Order
+              </Link>
+            </div>
+          </div>
+        </Li>
+      </Ul>
+    </Card>
+    
+    {
+      data && data.allIds && data.allIds.length > 0 && data.info && <>
+        <PaginationBar  
+          numberOfPages={data.info.pages}
+          limit={5}
+          onPageChange={formSubmit}
+          page={active}
+        />
+        <PreviewOrders />
+        <PaginationBar 
+          numberOfPages={data.info.pages}
+          limit={10}
+          onPageChange={formSubmit}
+          page={active}
+        /> 
       </>
     }
   </>
 }
 
 const mapStateToProps = createStructuredSelector({
-  alertMessage: selectAlertMessage,
   data: selectOrderData
 })
 

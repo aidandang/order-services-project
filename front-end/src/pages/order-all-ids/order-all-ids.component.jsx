@@ -16,22 +16,20 @@ const title = {
 }
 
 // main component
-const OrderListPage = () => {
+const OrderAllIds = () => {
 
   const location = useLocation();
 
   const queryObj = queryString.parse(location.search);
-  const { action } = queryObj;
+  const { ctnr } = queryObj;
   
   return <>
     
     <Title title={title} />
 
-    { action === 'order-add' && <OrderAdd /> }
-    { action === undefined && <OrderList /> }
-      
-    
+    { ctnr === undefined && <OrderList /> }
+    { ctnr === 'order-add' && <OrderAdd /> }
   </>
 }
 
-export default OrderListPage;
+export default OrderAllIds;

@@ -20,7 +20,7 @@ import { ProductActionTypes } from '../../state/product/product.types';
 
 // initial values
 const title = {
-  name: 'Product Infomation',
+  name: 'Product Details',
   message: 'Detail information of the product. Information can be edited.'
 }
 
