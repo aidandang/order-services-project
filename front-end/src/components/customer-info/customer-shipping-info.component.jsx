@@ -2,8 +2,6 @@ import React, { useState, useEffect } from 'react';
 
 // dependencies
 import * as Yup from "yup";
-import { useLocation, Redirect } from 'react-router-dom';
-import queryString from 'query-string';
 
 // components
 import { Container, Card, Ul } from '../tag/tag.component';
@@ -15,11 +13,9 @@ import AlertMesg from '../alert-mesg/alert-mesg.component';
 // redux
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import { patchReq } from '../../state/api/patch-request';
-import { getReq } from '../../state/api/get-request';
-import { CustomerActionTypes } from '../../state/customer/customer.types';
-import { selectCustomerData } from '../../state/customer/customer.selectors';
+import { patchReq } from '../../state/api/api.requests';
 import { selectAlertMessage } from '../../state/alert/alert.selectors';
+import { CustomerActionTypes } from '../../state/customer/customer.types';
 
 // initial values
 const formSchema = Yup.object().shape({
@@ -66,21 +62,20 @@ const formState = {
 };
 
 const CustomerShippingInfo = ({
+  byId,
   patchReq,
-  getReq,
-  data,
-  alertMessage
+  alertMessage,
+  goBack
 }) => {
-
-  const location = useLocation();
 
   const [radio, setRadio] = useState('');
   const [success, setSuccess] = useState(false);
 
-  const queryObj = queryString.parse(location.search);
-  const { id } = queryObj;
+  let customerTemp = null;
 
-  const { byId } = data;
+  const pathname = `/customers/${byId._id}`;
+  const fetchSuccess = CustomerActionTypes.CUSTOMER_FETCH_SUCCESS;
+  const component = 'customer-shipping-info';
 
   const [
     formData,
@@ -93,14 +88,14 @@ const CustomerShippingInfo = ({
   const formSubmit = e => {
     e.preventDefault();
 
-    let customerTemp = null;
-
-    const fetchSuccess = CustomerActionTypes.CUSTOMER_FETCH_SUCCESS;
+    const obj =  { ...formData };
+    delete obj.action;
+    delete obj.handle;
 
     if (formData.action === 'add') {
       customerTemp = { 
         ...byId,
-        shippingInfo: [ ...byId.shippingInfo, formData]
+        shippingInfo: [ ...byId.shippingInfo, obj]
       }
     }
 
@@ -113,13 +108,14 @@ const CustomerShippingInfo = ({
           }
           return {
             ...address,
-            ...formData
+            ...obj
           }
         })
       }
     }
-    
-    patchReq('/customers/' + byId._id, fetchSuccess, customerTemp);
+
+    const reqBody = { ...customerTemp }
+    patchReq(pathname, fetchSuccess, reqBody, null, component);
     setValues(prevState => ({
       ...prevState,
       action: ''
@@ -127,106 +123,110 @@ const CustomerShippingInfo = ({
   }
 
   const formReset = () => {
-    setValues(formState)
+    const obj = { ...formState }
+    delete obj.action
+
+    setValues(prevState => ({
+      ...prevState,
+      ...obj
+    }))
   }
 
   const handleRemoveSubmit = (e, id) => {
     e.preventDefault();
 
-    const fetchSuccess = CustomerActionTypes.CUSTOMER_FETCH_SUCCESS;
-
     let newArray = byId.shippingInfo.slice()
     newArray.splice(id, 1)
     
-    const customerTemp = { 
+    customerTemp = { 
       ...byId,
       shippingInfo: newArray
     }
-    patchReq('/customers/' + byId._id, fetchSuccess, customerTemp);
+
+    const reqBody = { ...customerTemp }
+    patchReq(pathname, fetchSuccess, reqBody, null, component);
+    setValues(prevState => ({
+      ...prevState,
+      action: ''
+    }))
   }
 
   const handleRadioSubmit = (e) => {
     e.preventDefault();
 
-    const updatedCustomer = {
+    customerTemp = {
       ...byId,
       shippingAddress: radio
     }
 
-    const fetchSuccess = CustomerActionTypes.CUSTOMER_FETCH_SUCCESS;
-    patchReq('/customers/' + byId._id, fetchSuccess, updatedCustomer, setSuccess)
+    const reqBody = { ...customerTemp }
+    patchReq(pathname, fetchSuccess, reqBody, setSuccess, component);
   }
 
   const handleRadioOnChange = e => {
     e.stopPropagation();
-    
-    const value = e.target.value;
-    setRadio(value)
+    setRadio(e.target.value)
   }
 
   useEffect(() => {
-    const fetchSuccess = CustomerActionTypes.CUSTOMER_FETCH_SUCCESS;
-
-    if ((byId === undefined) || (byId && byId._id !== id)) {
-      getReq('/customers/' + id, fetchSuccess)
-    }
+    if (success) goBack()
     // eslint-disable-next-line
-  }, [])
+  }, [success])
 
   return <>
-    { alertMessage && <AlertMesg /> }
+    { alertMessage && alertMessage.component === 'customer-shipping-info' && <AlertMesg/> }
 
     {
-      success && <Redirect to={location.state.from} />
-    }
-
-    { 
-      byId && byId._id === id &&
-      <>
-        <Container width="col">
-          <Card width="col" title="Shipping Information">
-            <Ul>
-              <AddressOptions
-                handleRemoveSubmit={handleRemoveSubmit}
-                handleRadioSubmit={handleRadioSubmit}
-                handleRadioOnChange={handleRadioOnChange}
-                byId={byId}
+      !success &&
+      <Container width="col" goBack={goBack}>
+        <Card width="col" title="Shipping Information">
+          <Ul>
+            <AddressOptions
+              handleRemoveSubmit={handleRemoveSubmit}
+              handleRadioSubmit={handleRadioSubmit}
+              handleRadioOnChange={handleRadioOnChange}
+              byId={byId}
+              formData={formData}
+              setValues={setValues}
+              formState={formState}
+            />
+          
+            { (formData.action === 'add' || formData.action === 'edit' ) &&
+              <CustomerAddressForm
                 formData={formData}
-                setValues={setValues}
-                formState={formState}
+                formSubmit={formSubmit} 
+                formReset={formReset}
+                errors={errors} 
+                onInputChange={onInputChange}
+                buttonDisabled={buttonDisabled}
+                buttonText={[formData.add ? 'Add Address' : 'Update', 'Reset']}
               />
-            
-              { (formData.action === 'add' || formData.action === 'edit' ) &&
-                <CustomerAddressForm
-                  formData={formData}
-                  formSubmit={formSubmit} 
-                  formReset={formReset}
-                  errors={errors} 
-                  onInputChange={onInputChange}
-                  buttonDisabled={buttonDisabled}
-                  buttonText={[formData.add ? 'Add Address' : 'Update', 'Reset']}
-                />
-              }
-            </Ul>
-          </Card>
-        </Container>
-      </>
+            }
+          </Ul>
+        </Card>
+      </Container>  
     }
   </>
 }
 
 const mapStateToProps = createStructuredSelector({
-  data: selectCustomerData,
   alertMessage: selectAlertMessage
 })
 
 const mapDispatchToProps = dispatch => ({
-  patchReq: (pathname, fetchSuccess, reqBody, setSuccess) => dispatch(
-    patchReq(pathname, fetchSuccess, reqBody, setSuccess)
-  ),
-  getReq: (pathname, fetchSuccess, queryStr) => dispatch(
-    getReq(pathname, fetchSuccess, queryStr)
-  )
+  patchReq: (
+    pathname, 
+    fetchSuccess, 
+    reqBody, 
+    setSuccess, 
+    component
+  ) => dispatch(patchReq(
+    pathname,
+    fetchSuccess,
+    reqBody,
+    setSuccess,
+    component
+  ))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(CustomerShippingInfo);

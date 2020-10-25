@@ -1,8 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 // dependencies
 import * as Yup from "yup";
-import { useLocation, Redirect } from 'react-router-dom';
 
 // components
 import { Container } from '../tag/tag.component';
@@ -14,10 +13,9 @@ import AlertMesg from '../alert-mesg/alert-mesg.component';
 // redux
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import { patchReq } from '../../state/api/patch-request';
-import { CustomerActionTypes } from '../../state/customer/customer.types';
+import { patchReq } from '../../state/api/api.requests';
 import { selectAlertMessage } from '../../state/alert/alert.selectors';
-import { selectCustomerData } from '../../state/customer/customer.selectors';
+import { CustomerActionTypes } from '../../state/customer/customer.types';
 
 // initial values
 const formSchema = Yup.object().shape({
@@ -73,15 +71,11 @@ const formState = {
 
 // main component
 const CustomerEdit = ({
+  byId,
   patchReq,
   alertMessage,
-  data
+  goBack
 }) => {
-
-  const { byId } = data;
-  const customerTemp = byId ? { ...byId } : formState;
-  
-  const location = useLocation();
 
   const [success, setSuccess] = useState(false);
 
@@ -91,60 +85,77 @@ const CustomerEdit = ({
     onInputChange, 
     buttonDisabled,
     setValues
-  ] = useForm(customerTemp, formState, formSchema);
+  ] = useForm(byId, formState, formSchema);
 
   const formSubmit = () => {
+    const pathname = `/customers/${byId._id}`;
     const fetchSuccess = CustomerActionTypes.CUSTOMER_FETCH_SUCCESS;
-    const updatedCustomer = { ...formData };
-    patchReq(`/customers/${updatedCustomer._id}`, fetchSuccess, updatedCustomer, setSuccess);
+    const reqBody = { ...formData }
+    const component = 'customer-edit';
+
+    patchReq(pathname, fetchSuccess, reqBody, setSuccess, component);
   }
 
   const formReset = () => {
     setValues(formState);
   }
 
+  useEffect(() => {
+    if (success) goBack()
+    // eslint-disable-next-line
+  }, [success])
+
   return <>
 
+    { alertMessage && alertMessage.component === 'customer-edit' && <AlertMesg/> }
+
     {
-      success && <Redirect to={location.state.from} />
+      !success &&
+      <Container width="col" goBack={goBack}>
+        <form onSubmit={formSubmit}>  
+          <div className="row">
+            <div className="col-12 col-xl-8">
+              <CustomerForm
+                formData={formData} 
+                errors={errors} 
+                onInputChange={onInputChange}
+                formTitle={"Edit Customer"}
+              />
+            </div>
+            <div className="col-12 col-xl-4">
+              <SubmitCard
+                formSubmit={formSubmit}
+                handleSecond={formReset}
+                buttonDisabled={buttonDisabled}
+                buttonText={['Update', 'Reset']}
+              />
+            </div>
+          </div>
+        </form>
+      </Container>
     }
 
-    { alertMessage && <AlertMesg /> }
-
-    <Container width="col">
-      <form onSubmit={formSubmit}>  
-        <div className="row">
-          <div className="col-12 col-xl-8">
-            <CustomerForm
-              formData={formData} 
-              errors={errors} 
-              onInputChange={onInputChange}
-              formTitle={"Edit Customer"}
-            />
-          </div>
-          <div className="col-12 col-xl-4">
-            <SubmitCard
-              formSubmit={formSubmit}
-              handleSecond={formReset}
-              buttonDisabled={buttonDisabled}
-              buttonText={['Update', 'Reset']}
-            />
-          </div>
-        </div>
-      </form>
-    </Container> 
   </>
 }
 
 const mapStateToProps = createStructuredSelector({
-  alertMessage: selectAlertMessage,
-  data: selectCustomerData
+  alertMessage: selectAlertMessage
 })
 
 const mapDispatchToProps = dispatch => ({
-  patchReq: (pathname, fetchSuccess, reqBody, setSuccess) => dispatch(
-    patchReq(pathname, fetchSuccess, reqBody, setSuccess)
-  )
+  patchReq: (
+    pathname, 
+    fetchSuccess, 
+    reqBody, 
+    setSuccess, 
+    component
+  ) => dispatch(patchReq(
+    pathname,
+    fetchSuccess,
+    reqBody,
+    setSuccess,
+    component
+  ))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(CustomerEdit);

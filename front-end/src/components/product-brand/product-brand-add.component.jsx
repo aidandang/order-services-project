@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 //dependencies
 import * as Yup from "yup";
@@ -14,7 +14,7 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { selectAlertMessage } from '../../state/alert/alert.selectors';
 import { BrandActionTypes } from '../../state/brand/brand.types';
-import { postReq } from '../../state/api/post-request';
+import { postReq } from '../../state/api/api.requests';
 
 // initial values
 const formSchema = Yup.object().shape({
@@ -37,6 +37,8 @@ const ProductBrandAdd = ({
   setAction
 }) => {
 
+  const [success, setSuccess] = useState(false);
+
   const [
     formData,
     errors, 
@@ -49,18 +51,21 @@ const ProductBrandAdd = ({
     const fetchSuccess = BrandActionTypes.BRAND_FETCH_SUCCESS;
     const newBrand = { ...formData}
 
-    postReq('/brands', fetchSuccess, newBrand);
-    setAction('')
+    postReq('/brands', fetchSuccess, newBrand, setSuccess, 'product-brand-add');
   }
+
+  useEffect(() => {
+    if (success) setAction('')
+    // eslint-disable-next-line
+  }, [success])
 
   // main component
   return <>
 
+    { alertMessage && alertMessage.component === 'product-brand-add' && <AlertMesg/> }
+
     { 
-      alertMessage 
-      ? 
-      <AlertMesg />
-      : 
+      !success &&
       <form onSubmit={formSubmit}>
         <Ul>
 
@@ -107,9 +112,19 @@ const mapStateToProps = createStructuredSelector({
 })
 
 const mapDispatchToProps = dispatch => ({
-  postReq: (pathname, fetchSuccess, reqBody, setSuccess) => dispatch(
-    postReq(pathname, fetchSuccess, reqBody, setSuccess)
-  )
+  postReq: (
+    pathname, 
+    fetchSuccess, 
+    reqBody, 
+    setSuccess, 
+    component
+  ) => dispatch(postReq(
+    pathname, 
+    fetchSuccess, 
+    reqBody, 
+    setSuccess, 
+    component
+  ))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProductBrandAdd);

@@ -25,7 +25,7 @@ const ProductColor = ({
       {
         action === 'add'
         ?
-        <ProductColorAdd setAction={setAction} />
+        <ProductColorAdd data={data} setAction={setAction} />
         :
         <>
           {
@@ -59,11 +59,11 @@ const ProductColor = ({
                 </Li>
                 {
                   action === 'edit' &&
-                  <ProductColorEdit colorTemp={color} setAction={setAction} />
+                  <ProductColorEdit data={data} colorTemp={color} setAction={setAction} />
                 }
                 {
                   action === 'remove' &&
-                  <ProductColorRemove colorTemp={color} setAction={setAction} />
+                  <ProductColorRemove data={data} colorTemp={color} setAction={setAction} />
                 }
               </div>
             )

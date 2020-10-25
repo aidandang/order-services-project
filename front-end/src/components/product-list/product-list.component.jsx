@@ -1,40 +1,95 @@
-import React, { useEffect } from 'react';
+import React, { useState } from 'react';
+
+// dependencies
+import * as Yup from "yup";
+import { useLocation, Link } from 'react-router-dom';
 
 // components
-import ProductSearch from './product-search.component';
-import AlertMesg from '../alert-mesg/alert-mesg.component';
+import { Card, Ul, Li } from '../tag/tag.component';
+import { useForm } from '../hook/use-form';
+import ProductSearchForm from './product-search-form.component';
+import ProductCards from './product-cards.component';
+import { convertSearchFormToQueryString } from '../utils/convert-search-form-to-query-string';
 
-// redux
-import { connect } from 'react-redux';
-import { createStructuredSelector } from 'reselect';
-import { getReq } from '../../state/api/get-request';
-import { ProductActionTypes } from '../../state/product/product.types';
-import { selectAlertMessage } from '../../state/alert/alert.selectors';
+// initial values
+const formSchema = Yup.object().shape({
+  search: Yup
+    .string()
+});
+const formState = {
+  search: ''
+}
 
 // main component
-const ProductList = ({ 
-  getReq,
-  alertMessage
-}) => {
+const ProductList = () => {
 
-  useEffect(() => {
-    const fetchSuccess = ProductActionTypes.PRODUCT_FETCH_SUCCESS;
-    getReq('/products', fetchSuccess);
-    // eslint-disable-next-line
-  }, [location.state]);
+  const location = useLocation();
+
+  const [queryObj, setQueryObj] = useState({
+    str: "",
+    page: null
+  });
+
+  const [
+    formData,
+    errors, 
+    onInputChange,
+    buttonDisabled
+  ] = useForm(formState, formState, formSchema);
+
+  const formSubmit = (e) => {
+    e.preventDefault();
+    
+    let queryStr = convertSearchFormToQueryString(e, formData);
+
+    if (queryStr !== undefined) {
+      setQueryObj(prevState => ({
+        ...prevState,
+        str: queryStr,
+        page: null
+      }))
+    }
+  }
   
   return <>
-    { alertMessage && <AlertMesg /> }
-    <ProductSearch />
+    <Card width="col" title="Search For Products" >
+      <Ul>
+        <ProductSearchForm 
+          formSubmit={formSubmit} 
+          formData={formData}
+          errors={errors}
+          onInputChange={onInputChange}
+          buttonDisabled={buttonDisabled}
+        />
+        <Li>
+          <div className="row">
+            <div className="col">
+              <Link
+                to={{
+                  pathname: location.pathname,
+                  search: location.search ? `${location.search}&action=product-add` : `?action=product-add`,
+                  state: {
+                    key: location.key,
+                    path: location.pathname + location.search
+                  }
+                }}
+                className="a-link-cs"
+              >
+                ( + ) Add a New Product
+              </Link>
+            </div>
+          </div>
+        </Li>
+      </Ul>
+    </Card>
+    <ProductCards
+      pathname='/products'
+      queryStr={queryObj.str}
+      queryObj={queryObj}
+      setQueryObj={setQueryObj}
+    />
   </>
 }
 
-const mapStateToProps = createStructuredSelector({
-  alertMessage: selectAlertMessage
-})
 
-const mapDispatchToProps = dispatch => ({
-  getReq: (pathname, fetchSuccess, queryStr) => dispatch(getReq(pathname, fetchSuccess, queryStr))
-})
-
-export default connect(mapStateToProps, mapDispatchToProps)(ProductList);
+export default ProductList;

@@ -12,7 +12,7 @@ import AlertMesg from '../../components/alert-mesg/alert-mesg.component';
 // redux
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import { getReq } from '../../state/api/get-request';
+import { getReq } from '../../state/api/api.requests';
 import { selectAlertMessage } from '../../state/alert/alert.selectors';
 import { selectOrderData } from '../../state/order/order.selectors';
 import { OrderActionTypes } from '../../state/order/order.types';

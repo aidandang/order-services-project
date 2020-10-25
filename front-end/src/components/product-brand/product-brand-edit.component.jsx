@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 //dependencies
 import * as Yup from "yup";
@@ -14,7 +14,7 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { selectAlertMessage } from '../../state/alert/alert.selectors';
 import { BrandActionTypes } from '../../state/brand/brand.types';
-import { patchReq } from '../../state/api/patch-request';
+import { patchReq } from '../../state/api/api.requests';
 
 // initial values
 const formSchema = Yup.object().shape({
@@ -39,6 +39,8 @@ const ProductBrandEdit = ({
   setAction
 }) => {
 
+  const [success, setSuccess] = useState(false);
+
   const [
     formData,
     errors, 
@@ -51,18 +53,20 @@ const ProductBrandEdit = ({
     const fetchSuccess = BrandActionTypes.BRAND_FETCH_SUCCESS;
     const updatedBrand = { ...formData }
 
-    patchReq(`/brands/${updatedBrand._id}`, fetchSuccess, updatedBrand);
-    setAction('')
+    patchReq(`/brands/${updatedBrand._id}`, fetchSuccess, updatedBrand, setSuccess, 'product-brand-edit');
   }
+
+  useEffect(() => {
+    if (success) setAction('')
+    // eslint-disable-next-line
+  }, [success])
 
   // main component
   return <>
+    { alertMessage && alertMessage.component === 'product-brand-edit' && <AlertMesg/> }
 
     { 
-      alertMessage 
-      ? 
-      <AlertMesg />
-      : 
+      !success &&
       <form onSubmit={formSubmit}>
         <Ul>
 
@@ -111,9 +115,19 @@ const mapStateToProps = createStructuredSelector({
 })
 
 const mapDispatchToProps = dispatch => ({
-  patchReq: (pathname, fetchSuccess, reqBody, setSuccess) => dispatch(
-    patchReq(pathname, fetchSuccess, reqBody, setSuccess)
-  )
+  patchReq: (
+    pathname, 
+    fetchSuccess, 
+    reqBody, 
+    setSuccess, 
+    component
+  ) => dispatch(patchReq(
+    pathname, 
+    fetchSuccess, 
+    reqBody, 
+    setSuccess, 
+    component
+  ))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProductBrandEdit);

@@ -25,20 +25,23 @@ const ProductForm = ({
           />
         </Li>
         <Li>
-          <SelectInput
-            label="Brand (*)" 
-            name="brandId"
-            errors={errors}
-            size="col col-xl-6"
-            smallText="Select a brand, add new if there is no brand."
-            defaultValue=""
-            defaultText="..."
-            value={formData.brandId ? formData.brandId : ""}
-            onChange={onInputChange}
-            data={brands}
-            valueKey="_id"
-            textKey="name"
-          />
+          {
+            brands &&
+            <SelectInput
+              label="Brand (*)" 
+              name="brandId"
+              errors={errors}
+              size="col col-xl-6"
+              smallText="Select a brand, add new if there is no brand."
+              defaultValue=""
+              defaultText="..."
+              value={formData.brandId ? formData.brandId : ""}
+              onChange={onInputChange}
+              data={brands}
+              valueKey="_id"
+              textKey="name"
+            />
+          }
         </Li>
         <Li>
           <TextInput

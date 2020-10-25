@@ -1,20 +1,43 @@
 import React from 'react';
 
+// dependencies
 import { useHistory, useLocation } from 'react-router-dom';
+import queryString from 'query-string';
 
-// redux
-import { connect } from 'react-redux';
-import { createStructuredSelector } from 'reselect';
-import { selectCustomerData } from '../../state/customer/customer.selectors';
+// components
+import withCustomerData from '../api/withCustomerData';
+import PaginationBar from '../pagination-bar/pagination-bar.component';
 
-const PreviewCustomers = ({ 
-  data
+const CustomerListTable = ({ 
+  data,
+  queryObj,
+  setQueryObj
 }) => {
 
   const location = useLocation();
   const history = useHistory();
-
   const { allIds } = data;
+
+  // handle search form 
+  const onPageChange = (e, page) => {
+    e.preventDefault();
+
+    const obj = queryString.parse(queryObj.str);
+    let queryStr = null;
+
+    if (obj.page) {
+      obj.page = page;
+      queryStr = '?' + queryString.stringify(obj);
+    } else {
+      queryStr = queryObj.str ? `${queryObj.str}&page=${page}` : `?page=${page}`
+    }
+    
+    setQueryObj(prevState => ({
+      ...prevState,
+      str: queryStr,
+      page
+    }))
+  }
 
   const handleOnClick = (e, customer) => {
     e.preventDefault();
@@ -27,6 +50,13 @@ const PreviewCustomers = ({
   }
 
   return <>
+    <PaginationBar  
+      numberOfPages={data.info.pages}
+      limit={5}
+      onPageChange={onPageChange}
+      page={queryObj.page}
+    />
+
     {/* customer table */}
     <div className="row mt-3">
       <div className="col">
@@ -66,11 +96,14 @@ const PreviewCustomers = ({
       </div>
     </div>
     {/* <!-- end of customer table --> */}
+
+    <PaginationBar  
+      numberOfPages={data.info.pages}
+      limit={5}
+      onPageChange={onPageChange}
+      page={queryObj.page}
+    />
   </>
 }
 
-const mapStateToProps = createStructuredSelector({
-  data: selectCustomerData
-})
-
-export default connect(mapStateToProps)(PreviewCustomers);
+export default withCustomerData(CustomerListTable);

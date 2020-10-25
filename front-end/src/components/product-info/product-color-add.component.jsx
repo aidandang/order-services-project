@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 // dependencies
 import * as Yup from "yup";
@@ -7,12 +7,13 @@ import * as Yup from "yup";
 import { Ul, Li, Button } from '../tag/tag.component';
 import { useForm } from '../hook/use-form';
 import ProductColorForm from './product-color-form.compoent';
+import AlertMesg from '../../components/alert-mesg/alert-mesg.component';
 
 // redux
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import { patchReq } from '../../state/api/patch-request';
-import { selectProductData } from '../../state/product/product.selectors';
+import { selectAlertMessage } from '../../state/alert/alert.selectors';
+import { patchReq } from '../../state/api/api.requests';
 import { ProductActionTypes } from '../../state/product/product.types'; 
 
 // initial values
@@ -35,10 +36,13 @@ const formState = {
 const ProductColorAdd = ({
   patchReq,
   data,
-  setAction
+  setAction,
+  alertMessage
 }) => {
 
   const { byId } = data;
+
+  const [success, setSuccess] = useState(false);
 
   const [
     formData,
@@ -56,54 +60,74 @@ const ProductColorAdd = ({
       ...byId,
       colors: [ ...byId.colors, formData]
     }
-    patchReq('/products/' + byId._id, fetchSuccess, productTemp);
-    setAction('')
+    patchReq('/products/' + byId._id, fetchSuccess, productTemp, setSuccess, 'product-color-add');
   }
+
+  useEffect(() => {
+    if (success) setAction('')
+    // eslint-disable-next-line
+  }, [success])
 
   return <>
 
-    <form onSubmit={formSubmit}>
-      <Ul>
+    { alertMessage && alertMessage.component === 'product-color-add' && <AlertMesg/> }
 
-        <ProductColorForm
-          formData={formData} 
-          errors={errors} 
-          onInputChange={onInputChange}
-        />
+    { 
+      !success &&
+      <form onSubmit={formSubmit}>
+        <Ul>
 
-        <Li>
-          <div className="row">
-            <div className="col my-3">
-              <Button 
-                type="submit" 
-                disabled={buttonDisabled}
-              >
-                Add Color
-              </Button>
-              <span className="mr-3"></span>
-              <Button
-                onClick={e => {
-                  e.preventDefault();
-                  setAction('')
-                }}
-              >
-                Cancel
-              </Button>
+          <ProductColorForm
+            formData={formData} 
+            errors={errors} 
+            onInputChange={onInputChange}
+          />
+
+          <Li>
+            <div className="row">
+              <div className="col my-3">
+                <Button 
+                  type="submit" 
+                  disabled={buttonDisabled}
+                >
+                  Add Color
+                </Button>
+                <span className="mr-3"></span>
+                <Button
+                  onClick={e => {
+                    e.preventDefault();
+                    setAction('')
+                  }}
+                >
+                  Cancel
+                </Button>
+              </div>
             </div>
-          </div>
-        </Li>
-      </Ul>
-    </form>   
+          </Li>
+        </Ul>
+      </form>  
+    } 
   </>
 }
 
 const mapStateToProps = createStructuredSelector({
-  data: selectProductData
+  alertMessage: selectAlertMessage
 })
 
 const mapDispatchToProps = dispatch => ({
-  patchReq: (pathname, fetchSuccess, reqBody, setSuccess) => dispatch(
-    patchReq(pathname, fetchSuccess, reqBody, setSuccess))
+  patchReq: (
+    pathname, 
+    fetchSuccess, 
+    reqBody, 
+    setSuccess, 
+    componnent
+  ) => dispatch(patchReq(
+    pathname, 
+    fetchSuccess, 
+    reqBody, 
+    setSuccess, 
+    componnent
+  ))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProductColorAdd);

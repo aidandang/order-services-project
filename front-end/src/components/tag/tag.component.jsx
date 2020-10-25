@@ -1,15 +1,17 @@
 import React from 'react';
 
-import { useHistory } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import uuid from 'react-uuid';
 import './tag.styles.css';
 
 export const Container = ({
   children,
-  width
+  width,
+  goBack
 }) => {
 
   const history = useHistory()
+  const location = useLocation()
 
   return (
     <div className="card mt-3">
@@ -20,9 +22,14 @@ export const Container = ({
               href="/"
               className="a-link-cs"
               onClick={e => {
+                e.stopPropagation();
                 e.preventDefault();
-                if (history.action === "PUSH") {
+                if (goBack) {
+                  goBack()
+                } else if (history.action === "PUSH") {
                   history.goBack()
+                } else {
+                  history.push(location.pathname)
                 }
               }}
             >

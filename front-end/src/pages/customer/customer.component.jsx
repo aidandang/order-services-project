@@ -9,8 +9,6 @@ import Title from '../../components/title/title.component';
 import CustomerList from '../../components/customer-list/customer-list.component';
 import CustomerAdd from '../../components/customer-add/customer-add.component';
 import CustomerInfo from '../../components/customer-info/customer-info.component';
-import CustomerShippingInfo from '../../components/customer-shipping-info/customer-shipping-info.component';
-import CustomerEdit from '../../components/customer-edit/customer-edit.component';
 
 // initial values
 const title = {
@@ -28,11 +26,15 @@ const Customer = () => {
 
   return <>
     <Title title={title} />
-    { action === 'customer-info' && id !== undefined && <CustomerInfo /> }
+    
     { action === undefined &&  <CustomerList /> }
+    { action === 'customer-info' && id !== undefined && 
+      <CustomerInfo 
+        pathname={`/customers/${id}`} 
+        component='customer-info'
+      /> 
+    }
     { action === 'customer-add' && <CustomerAdd /> }
-    { action === 'customer-shipping-info' && <CustomerShippingInfo /> }
-    { action === 'customer-edit' && <CustomerEdit /> }
   </>
 }
 

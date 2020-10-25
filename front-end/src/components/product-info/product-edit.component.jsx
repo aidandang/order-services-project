@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 
 // dependencies
 import * as Yup from "yup";
-import { useLocation, Redirect } from 'react-router-dom';
 
 // components
 import { Container } from '../tag/tag.component';
@@ -15,11 +14,7 @@ import AlertMesg from '../alert-mesg/alert-mesg.component';
 // redux
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import { selectBrandData } from '../../state/brand/brand.selectors';
-import { selectProductData } from '../../state/product/product.selectors';
-import { getReq } from '../../state/api/get-request';
-import { patchReq } from '../../state/api/patch-request';
-import { BrandActionTypes } from '../../state/brand/brand.types';
+import { patchReq } from '../../state/api/api.requests';
 import { ProductActionTypes } from '../../state/product/product.types';
 import { selectAlertMessage } from '../../state/alert/alert.selectors';
 
@@ -58,16 +53,13 @@ const formState = {
 
 // main component
 const ProductEdit = ({
-  getReq,
-  data,
+  byId,
+  brands,
   patchReq,
-  brandData,
+  goBack,
   alertMessage
 }) => {
 
-  const location = useLocation();
-
-  const { byId } = data;
   const productTemp = {
     ...byId,
     brandId: byId.brand._id 
@@ -89,7 +81,7 @@ const ProductEdit = ({
 
     const updatedProduct = { 
       ...formData,
-      brand: brandData.allIds.find(element => element._id === formData.brandId)
+      brand: brands.find(element => element._id === formData.brandId)
     };
     delete updatedProduct.brandId;
  
@@ -101,61 +93,47 @@ const ProductEdit = ({
   }
 
   useEffect(() => {
-    const fetchSuccess = BrandActionTypes.BRAND_FETCH_SUCCESS;
-    getReq('/brands', fetchSuccess)
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+    if (success) goBack()
+    // eslint-disable-next-line
+  }, [success])
 
   return <>
-    {
-      success && <Redirect to={{
-        pathname: location.state.path,
-        state: {
-          key: location.key,
-          path: location.pathname + location.search
-        }
-      }} />
-    }
-
-    { alertMessage && <AlertMesg /> }
-    
-    <Container width="col">
-      <div className="row">
-        <div className="col-12 col-xl-8">
-          <form onSubmit={formSubmit}>
-            <ProductForm
-              formData={formData}
-              errors={errors} 
-              onInputChange={onInputChange}
-              brands={brandData.allIds}
-              formTitle={'Edit product'}
+    { alertMessage && alertMessage.component === 'product-edit' && <AlertMesg/> }
+    { 
+      !success &&
+      <Container width="col" goBack={goBack}>
+        <div className="row">
+          <div className="col-12 col-xl-8">
+            <form onSubmit={formSubmit}>
+              <ProductForm
+                formData={formData}
+                errors={errors} 
+                onInputChange={onInputChange}
+                brands={brands}
+                formTitle={'Edit product'}
+              />
+            </form>  
+          </div>
+          <div className="col-12 col-xl-4">
+            <SubmitCard 
+              formSubmit={formSubmit}
+              handleSecond={formReset}
+              buttonDisabled={buttonDisabled}
+              buttonText={['Update', 'Reset']} 
             />
-          </form>  
+            <ProductBrand allIds={brands} />
+          </div>
         </div>
-        <div className="col-12 col-xl-4">
-          <SubmitCard 
-            formSubmit={formSubmit}
-            handleSecond={formReset}
-            buttonDisabled={buttonDisabled}
-            buttonText={['Update', 'Reset']} 
-          />
-          <ProductBrand />
-        </div>
-      </div>
-    </Container>
+      </Container>
+    }
   </>
 }
 
 const mapStateToProps = createStructuredSelector({
-  brandData: selectBrandData,
-  data: selectProductData,
   alertMessage: selectAlertMessage
 })
 
 const mapDispatchToProps = dispatch => ({
-  getReq: (pathname, fetchSuccess, queryStr) => dispatch(
-    getReq(pathname, fetchSuccess, queryStr)
-  ),
   patchReq: (pathname, fetchSuccess, reqBody, setSuccess) => dispatch(
     patchReq(pathname, fetchSuccess, reqBody, setSuccess)
   )

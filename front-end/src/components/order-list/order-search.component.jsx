@@ -16,7 +16,7 @@ import { convertSearchFormToQueryString } from '../utils/convert-search-form-to-
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { selectOrderData } from '../../state/order/order.selectors';
-import { getReq } from '../../state/api/get-request';
+import { getReq } from '../../state/api/api.requests';
 import { OrderActionTypes } from '../../state/order/order.types';
 
 // initial values

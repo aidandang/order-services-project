@@ -13,7 +13,12 @@ const ProductCard = ({
 
   const handleOnClick = (e, product) => {
     e.preventDefault();
-    history.push(location.pathname + '/' + product._id)
+    const search = `?id=${product._id}&action=product-info`
+    const path = location.pathname + search;
+
+    history.push(path, {
+      from: location.pathname + location.search
+    })
   }
 
   return <>

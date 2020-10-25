@@ -60,10 +60,9 @@ const ProductStyle = ({
               <Link
                 to={{
                   pathname: location.pathname,
-                  search: location.search ? `${location.search}&action=product-edit` : `?action=product-edit`,
+                  search: `?id=${product._id}&action=product-edit`,
                   state: {
-                    key: location.key,
-                    path: location.pathname + location.search
+                    from: location.pathname + location.search
                   }
                 }}
                 className="a-link-cs"

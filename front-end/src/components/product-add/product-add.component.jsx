@@ -15,8 +15,7 @@ import ProductBrand from '../product-brand/product-brand.component';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { selectBrandData } from '../../state/brand/brand.selectors';
-import { getReq } from '../../state/api/get-request';
-import { postReq } from '../../state/api/post-request';
+import { getReq, postReq } from '../../state/api/api.requests'; 
 import { BrandActionTypes } from '../../state/brand/brand.types';
 import { ProductActionTypes } from '../../state/product/product.types';
 

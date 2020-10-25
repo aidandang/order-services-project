@@ -1,23 +1,28 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 // components
 import { Ul, Li, Button } from '../tag/tag.component';
+import AlertMesg from '../../components/alert-mesg/alert-mesg.component';
 
 // redux
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import { patchReq } from '../../state/api/patch-request';
-import { selectProductData } from '../../state/product/product.selectors';
+import { patchReq } from '../../state/api/api.requests';
 import { ProductActionTypes } from '../../state/product/product.types';
+import { selectAlertMessage } from '../../state/alert/alert.selectors';
+
 
 const ProductColorAdd = ({
   patchReq,
   data,
   colorTemp,
-  setAction
+  setAction,
+  alertMessage
 }) => {
 
   const { byId } = data;
+
+  const [success, setSuccess] = useState(false);
 
   const formSubmit = e => {
     e.preventDefault();
@@ -28,11 +33,20 @@ const ProductColorAdd = ({
       ...byId,
       colors: byId.colors.filter(color => color._id !== colorTemp._id)
     }
-    patchReq('/products/' + byId._id, fetchSuccess, productTemp);
-    setAction('')
+    patchReq('/products/' + byId._id, fetchSuccess, productTemp, setSuccess, 'product-color-remove');
   }
 
+  useEffect(() => {
+    if (success) setAction('')
+    // eslint-disable-next-line
+  }, [success])
+
   return <>
+
+  { alertMessage && alertMessage.component === 'product-color-add' && <AlertMesg/> }
+
+  {
+    !success &&
     <form onSubmit={formSubmit}>
       <Ul>
 
@@ -63,17 +77,30 @@ const ProductColorAdd = ({
 
       </Ul>
     </form> 
+  }
+    
     
   </>
 }
 
 const mapStateToProps = createStructuredSelector({
-  data: selectProductData
+  alertMessage: selectAlertMessage
 })
 
 const mapDispatchToProps = dispatch => ({
-  patchReq: (pathname, fetchSuccess, reqBody, setSuccess) => dispatch(
-    patchReq(pathname, fetchSuccess, reqBody, setSuccess))
+  patchReq: (
+    pathname, 
+    fetchSuccess, 
+    reqBody, 
+    setSuccess, 
+    component
+  ) => dispatch(patchReq(
+    pathname, 
+    fetchSuccess, 
+    reqBody, 
+    setSuccess, 
+    component
+  ))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProductColorAdd);

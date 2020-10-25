@@ -15,8 +15,8 @@ import AlertMesg from '../alert-mesg/alert-mesg.component';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { selectAlertMessage } from '../../state/alert/alert.selectors';
-import { postReq } from '../../state/api/post-request';
-import { CustomerActionTypes } from '../../state/customer/customer.types';
+import { postReq } from '../../state/api/api.requests';
+import { ApiActionTypes } from '../../state/api/api.types';
 
 // initial values
 const formSchema = Yup.object().shape({
@@ -90,17 +90,17 @@ const CustomerAdd = ({
 
   const formSubmit = () => {
     
-    const fetchSuccess = CustomerActionTypes.CUSTOMER_FETCH_SUCCESS;
+    const fetchSuccess = ApiActionTypes.API_FETCH_SUCCESS;
     const newCustomer = { ...formData };
 
-    postReq('/customers', fetchSuccess, newCustomer, setSuccess);
+    postReq('/customers', fetchSuccess, newCustomer, setSuccess, 'customer-add');
   }
 
   const formReset = () => {
     setValues(formState);
   }
 
-  console.log(location.state)
+  console.log(alertMessage)
 
   return <>
 
@@ -108,7 +108,7 @@ const CustomerAdd = ({
       success && <Redirect to={location.state.from} />
     }
 
-    { alertMessage && <AlertMesg /> }
+    { alertMessage && alertMessage.component === 'customer-add' && <AlertMesg /> }
 
     <Container width="col">
       <form onSubmit={formSubmit}>
@@ -140,9 +140,19 @@ const mapStateToProps = createStructuredSelector({
 })
 
 const mapDispatchToProps = dispatch => ({
-  postReq: (pathname, fetchSuccess, reqBody, setSuccess) => dispatch(
-    postReq(pathname, fetchSuccess, reqBody, setSuccess)
-  )
+  postReq: (
+    pathname, 
+    fetchSuccess, 
+    reqBody, 
+    setSuccess,
+    component
+  ) => dispatch(postReq(
+    pathname, 
+    fetchSuccess, 
+    reqBody, 
+    setSuccess,
+    component
+  ))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(CustomerAdd);

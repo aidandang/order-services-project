@@ -13,8 +13,6 @@ const AddressOptions = ({
   formState
 }) => {
 
-  const { action } = formData;
-
   return <>
     <form onSubmit={handleRadioSubmit}>
       <div onChange={handleRadioOnChange}>
@@ -103,13 +101,13 @@ const AddressOptions = ({
         
         <Li>
           <div className="row">
-            <div className={`col ${action !== '' ? 'text-right' : null}`}>
+            <div className={`col ${formData.action !== '' ? 'text-right' : null}`}>
               <a
                 href="/"
                 className="a-link-cs"
                 onClick={e => {
                   e.preventDefault();
-                  if (action === '') {
+                  if (formData.action === '') {
                     setValues(prevState => ({ 
                       ...prevState,
                       action: 'add'
@@ -123,7 +121,7 @@ const AddressOptions = ({
                 }}
               >
                 { 
-                  action !== '' ? 'Cancel' : '( + ) Add a New Address' 
+                  formData.action !== '' ? 'Cancel' : '( + ) Add a New Address' 
                 } 
               </a>
             </div>  

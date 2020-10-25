@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 // dependencies
 import * as Yup from "yup";
@@ -7,12 +7,13 @@ import * as Yup from "yup";
 import { Ul, Li, Button } from '../tag/tag.component';
 import { useForm } from '../hook/use-form';
 import ProductColorForm from './product-color-form.compoent';
+import AlertMesg from '../../components/alert-mesg/alert-mesg.component';
 
 // redux
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import { patchReq } from '../../state/api/patch-request';
-import { selectProductData } from '../../state/product/product.selectors';
+import { selectAlertMessage } from '../../state/alert/alert.selectors';
+import { patchReq } from '../../state/api/api.requests';
 import { ProductActionTypes } from '../../state/product/product.types'; 
 
 // initial values
@@ -36,10 +37,13 @@ const ProductColorEdit = ({
   patchReq,
   data,
   colorTemp,
-  setAction
+  setAction,
+  alertMessage
 }) => {
   
   const { byId } = data;
+
+  const [success, setSuccess] = useState(false);
 
   const [
     formData,
@@ -65,11 +69,18 @@ const ProductColorEdit = ({
         }
       })
     }
-    patchReq('/products/' + byId._id, fetchSuccess, productTemp);
-    setAction('')
+    patchReq('/products/' + byId._id, fetchSuccess, productTemp, setSuccess, 'product-color-edit');
   }
 
+  useEffect(() => {
+    if (success) setAction('')
+    // eslint-disable-next-line
+  }, [success])
+
   return <>
+
+    { alertMessage && alertMessage.component === 'product-color-edit' && <AlertMesg/> }
+
     <form onSubmit={formSubmit}>
       <Ul>
 
@@ -107,12 +118,23 @@ const ProductColorEdit = ({
 }
 
 const mapStateToProps = createStructuredSelector({
-  data: selectProductData
+  alertMessage: selectAlertMessage
 })
 
 const mapDispatchToProps = dispatch => ({
-  patchReq: (pathname, fetchSuccess, reqBody, setSuccess) => dispatch(
-    patchReq(pathname, fetchSuccess, reqBody, setSuccess))
+  patchReq: (
+    pathname, 
+    fetchSuccess, 
+    reqBody, 
+    setSuccess, 
+    component
+  ) => dispatch(patchReq(
+    pathname, 
+    fetchSuccess, 
+    reqBody, 
+    setSuccess, 
+    component
+  ))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProductColorEdit);
