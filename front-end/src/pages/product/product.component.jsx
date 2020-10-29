@@ -7,7 +7,7 @@ import { useLocation } from 'react-router-dom';
 // components
 import Title from '../../components/title/title.component';
 import ProductList from '../../components/product-list/product-list.component';
-import ProductAdd from '../../components/product-add/product-add.component';
+import GetBrandList from '../../components/product-add/get-brand-list.component';
 import ProductInfo from '../../components/product-info/product-info.component';
 
 // initial values
@@ -33,7 +33,7 @@ const Product = () => {
         component="product-info"
       /> 
     }
-    { action === 'product-add' && <ProductAdd /> }
+    { action === 'product-add' && <GetBrandList pathname={`/brands`} component="product-add" /> }
   </>
 }
 

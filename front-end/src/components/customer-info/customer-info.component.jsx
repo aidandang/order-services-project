@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 // dependencies
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 // components
 import withCustomerData from '../api/withCustomerData';
@@ -12,6 +12,8 @@ import CustomerShippingInfo from './customer-shipping-info.component';
 const CustomerInfo = ({
   data
 }) => {
+
+  const location = useLocation();
 
   const { byId } = data;
 
@@ -137,7 +139,7 @@ const CustomerInfo = ({
               <div className="row">
                 <div className="col">
                   <Link
-                    to="/"
+                    to={location.pathname + `?select=customer&action=save&id=${byId._id}`}
                     className="a-link-cs"
                   >
                     Select to Order

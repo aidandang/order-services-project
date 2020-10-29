@@ -48,7 +48,7 @@ const ProductBrand = ({
             <Li>
               <SelectInput
                 label="Brand List"
-                name="brands"
+                name="brand"
                 size="col-12"
                 smallText="Select a brand to edit."
                 defaultValue=""

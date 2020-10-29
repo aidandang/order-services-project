@@ -16,7 +16,7 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { selectAlertMessage } from '../../state/alert/alert.selectors';
 import { postReq } from '../../state/api/api.requests';
-import { ApiActionTypes } from '../../state/api/api.types';
+import { CustomerActionTypes } from '../../state/customer/customer.types';
 
 // initial values
 const formSchema = Yup.object().shape({
@@ -90,7 +90,7 @@ const CustomerAdd = ({
 
   const formSubmit = () => {
     
-    const fetchSuccess = ApiActionTypes.API_FETCH_SUCCESS;
+    const fetchSuccess = CustomerActionTypes.CUSTOMER_FETCH_SUCCESS;
     const newCustomer = { ...formData };
 
     postReq('/customers', fetchSuccess, newCustomer, setSuccess, 'customer-add');
@@ -99,8 +99,6 @@ const CustomerAdd = ({
   const formReset = () => {
     setValues(formState);
   }
-
-  console.log(alertMessage)
 
   return <>
 

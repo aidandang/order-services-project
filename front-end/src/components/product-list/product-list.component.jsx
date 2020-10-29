@@ -69,8 +69,7 @@ const ProductList = () => {
                   pathname: location.pathname,
                   search: location.search ? `${location.search}&action=product-add` : `?action=product-add`,
                   state: {
-                    key: location.key,
-                    path: location.pathname + location.search
+                    from: location.pathname + location.search
                   }
                 }}
                 className="a-link-cs"

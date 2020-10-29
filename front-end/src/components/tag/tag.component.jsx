@@ -15,7 +15,7 @@ export const Container = ({
 
   return (
     <div className="card mt-3">
-      <div className="card-body pb-1">
+      <div className="card-body pb-3">
         <div className="row my-0 py-0">
           <div className={`${width ? width : 'col'} text-right`}>
             <a
@@ -46,7 +46,7 @@ export const Container = ({
 export const Card = ({ children, width, title }) => {
   return (
     <div className="row">
-      <div className={width}>
+      <div className={width ? width : 'col'}>
         <div className="card my-3">
           <div className="card-header bg-card-cs">
             <div className="row">
@@ -102,7 +102,7 @@ export const SelectInput = ({
 }) => {
   return <>
     <div className="row">
-      <div className={size}>
+      <div className={size ? size : 'col'}>
         <div className="form-group">
           <label htmlFor={name}>{label}</label>
           <select
@@ -131,7 +131,7 @@ export const TextInput = ({
 }) => {
   return <>
     <div className="row">
-      <div className={size}>
+      <div className={size ? size : 'col'}>
         <div className="form-group">
           <label htmlFor={name}>{label}</label>
           <input
@@ -139,6 +139,33 @@ export const TextInput = ({
             type="text"
             className="form-control"
             {...otherProps}
+          />
+          <small>{smallText}</small>
+          {errors[name].length > 0 ? <p className="mt-2 text-danger">{errors[name]}</p> : null}
+        </div>
+      </div>
+    </div>
+  </>
+}
+
+export const DateInput = ({
+  label,
+  name,
+  errors,
+  size,
+  smallText,
+  ...otherProps
+}) => {
+  return <>
+    <div className="row">
+      <div className={size ? size : 'col'}>
+        <div className="form-group">
+          <label htmlFor={name}>{label}</label>
+          <input
+            className="form-control" 
+            type="date"
+            name={name} 
+            {...otherProps} 
           />
           <small>{smallText}</small>
           {errors[name].length > 0 ? <p className="mt-2 text-danger">{errors[name]}</p> : null}
@@ -158,7 +185,7 @@ export const TextareaInput = ({
 }) => {
   return <>
     <div className="row">
-      <div className={size}>
+      <div className={size ? size : 'col'}>
         <div className="form-group">
           <label htmlFor={name}>{label}</label>
           <textarea

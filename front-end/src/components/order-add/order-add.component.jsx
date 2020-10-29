@@ -1,20 +1,27 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 // dependencies
 import uuid from 'react-uuid';
+import { Link, useLocation } from 'react-router-dom';
+import moment from 'moment';
 
 // components
 import { Container, Ul, Li, Card } from '../tag/tag.component';
 import { strToAcct } from '../utils/strToAcct';
 import { acctToStr } from '../utils/acctToStr';
 
-const OrderAdd = () => {
+// redux
+import { connect } from 'react-redux';
+import { createStructuredSelector } from 'reselect';
+import { selectOrderEditing } from '../../state/order/order.selectors';
 
-  const [formData, setFormData] = useState(() => ({
-    items: []
-  }))
+const OrderAdd = ({
+  order
+}) => {
 
-  const { items } = formData; 
+  const { orderInfo, items } = order;
+
+  const location = useLocation()
 
   let sum = 0;
 
@@ -35,45 +42,138 @@ const OrderAdd = () => {
     e.preventDefault();
   }
 
-  console.log(setFormData)
-
   return <>
     <Container width="col">
       <form onSubmit={formSubmit}>
-        <div className="row mb-3">
-          <div className="col">
-            <span className="h5">Add a New Order</span>
-          </div>
-        </div>
-        <div className="row">
-          <div className="col-xl-8"> 
-            <Card width="col" title="Order Details">
-              <Ul>
+        <Card width="col" title="Order Information">
+          <Ul>
+            {
+              orderInfo 
+              ? 
+              <>
                 <Li>
                   <div className="row">
                     <div className="col">
-                      <a href="/" className="a-link-cs">Update Details</a>
+                      <div className="row">
+                        <div className="col-4">
+                          <span>Order Number:</span>
+                        </div>
+                        <div className="col-8">
+                          <span>{orderInfo.orderNumber}</span>
+                        </div>
+                      </div>
+                      <div className="row">
+                        <div className="col-4">
+                          <span>Order Date:</span>
+                        </div>
+                        <div className="col-8">
+                          <span>{moment(orderInfo.orderDate).format('MMM DD, YYYY')}</span>
+                        </div>
+                      </div>
+                      <div className="row">
+                        <div className="col-4">
+                          <span>Order Type:</span>
+                        </div>
+                        <div className="col-8">
+                          <span>{orderInfo.orderType}</span>
+                        </div>
+                      </div>
                     </div>
-                  </div>  
+                  </div>
                 </Li>
-              </Ul>
-            </Card>    
-          </div>             
-          <div className="col-xl-4"> 
-            <Card width="col" title="Customer">
-              <Ul>
-                <Li>      
+                <Li>
                   <div className="row">
                     <div className="col">
-                      <a href="/" className="a-link-cs">Update Details</a>
+                      <div className="row">
+                        <div className="col-4">
+                          <span>Merchant:</span>
+                        </div>
+                        <div className="col-8">
+                          <span>{orderInfo.merchant.name}</span>
+                        </div>
+                      </div>
+                      <div className="row">
+                        <div className="col-4">
+                          <span>Official Website:</span>
+                        </div>
+                        <div className="col-8">
+                          <a 
+                            href={orderInfo.merchant.url}
+                            className="a-link-cs"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            {orderInfo.merchant.url}
+                          </a>
+                        </div>
+                      </div>
                     </div>
-                  </div>  
+                  </div>
                 </Li>
-              </Ul>
-            </Card>   
-          </div>    
-        </div>
-
+                <Li>
+                  <div className="row">
+                    <div className="col">
+                      <div className="row">
+                        <div className="col-4">
+                          <span>Status:</span>
+                        </div>
+                        <div className="col-8">
+                          <span>{orderInfo.status}</span>
+                        </div>
+                      </div>
+                      <div className="row">
+                        <div className="col-4">
+                          <span>Warehouse:</span>
+                        </div>
+                        <div className="col-8">
+                          <span>{orderInfo.warehouse.name}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </Li>
+                <Li>
+                  <div className="row">
+                    <div className="col">
+                      <Link 
+                        to={{
+                          pathname: location.pathname,
+                          search: '?select=order-info',
+                          state: {
+                            from: location.pathname
+                          }
+                        }}
+                        className="a-link-cs"
+                      >
+                        Reselect customer
+                      </Link>
+                    </div>
+                  </div> 
+                </Li> 
+              </>
+              : 
+              <Li>
+                <div className="row">
+                  <div className="col">
+                    <Link 
+                      to={{
+                        pathname: location.pathname,
+                        search: '?select=order-info',
+                        state: {
+                          from: location.pathname
+                        }
+                      }}
+                      className="a-link-cs"
+                    >
+                      Update Details
+                    </Link>
+                  </div>
+                </div> 
+              </Li> 
+            }
+          </Ul>
+        </Card>    
+         
         {/* Item Table */}
         <div className="row mt-3">
           <div className="col">
@@ -92,8 +192,8 @@ const OrderAdd = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {Object.keys(items).length > 0
-                    ? items.map((item, index) => 
+                  {items.length > 0 &&
+                    items.map((item, index) => 
                       <tr key={uuid()} className="table-row-no-link-cs">
                         <td>{item.product.styleCode}</td>
                         <td>{`${item.product.name}/Color:${handleColor(item.product, item.color)}/Size:${item.size}${item.note && `/${item.note}`}`}</td>
@@ -107,13 +207,12 @@ const OrderAdd = () => {
                         </th>
                       </tr>
                     ) 
-                    :
-                      <tr className="table-row-no-link-cs">
-                        <td colSpan="8" className="text-center"><a href="/" className="a-link-cs">Add Item to the Order</a></td>
-                      </tr>
                   }
+                  <tr className="table-row-no-link-cs">
+                        <td colSpan="8" className="text-center"><a href="/" className="a-link-cs">Add a New Item</a></td>
+                      </tr>
                   {
-                    Object.keys(items).length > 0 && <>
+                    items.length > 0 && <>
                       <tr className="table-row-no-link-cs">
                         <td className="text-right"></td>
                         <td className="text-right"></td>
@@ -154,4 +253,8 @@ const OrderAdd = () => {
   </>
 }
 
-export default OrderAdd;
+const mapStateToProps = createStructuredSelector({
+  order: selectOrderEditing
+})
+
+export default connect(mapStateToProps)(OrderAdd);

@@ -1,14 +1,14 @@
 import React from 'react';
 import { Switch, Route } from 'react-router-dom';
 
-import OrderAllIds from '../../pages/order-all-ids/order-all-ids.component';
-import OrderById from '../../pages/order-by-id/order-by-id.component';
+import Order from '../../pages/order/order.component';
+import OrderAddPage from '../../pages/order/order-add-page.component';
 
 export default function OrderRoutes() {
   return <>
     <Switch>
-      <Route exact path="/app/order/:id" render={() => <OrderById />} />
-      <Route exact path="/app/order" render={() => <OrderAllIds />} />
+      <Route exact path="/app/order/add" render={() => <OrderAddPage />} />
+      <Route exact path="/app/order" render={() => <Order />} />
     </Switch>
   </>
 }

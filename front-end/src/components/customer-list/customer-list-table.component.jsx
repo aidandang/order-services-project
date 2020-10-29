@@ -41,7 +41,10 @@ const CustomerListTable = ({
 
   const handleOnClick = (e, customer) => {
     e.preventDefault();
-    const search = `?id=${customer._id}&action=customer-info`
+    const search = `${location.search 
+      ? `${location.search}&id=${customer._id}&action=customer-info` 
+      : `?id=${customer._id}&action=customer-info`
+    }`
     const path = location.pathname + search;
 
     history.push(path, {

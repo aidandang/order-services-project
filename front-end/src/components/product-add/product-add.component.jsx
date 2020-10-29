@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
 // dependencies
 import * as Yup from "yup";
@@ -10,14 +10,14 @@ import { useForm } from '../hook/use-form';
 import SubmitCard from '../submit-card/submit-card.component';
 import ProductForm from '../product-form/product-form.component';
 import ProductBrand from '../product-brand/product-brand.component';
+import AlertMesg from '../alert-mesg/alert-mesg.component';
 
 // redux
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import { selectBrandData } from '../../state/brand/brand.selectors';
-import { getReq, postReq } from '../../state/api/api.requests'; 
-import { BrandActionTypes } from '../../state/brand/brand.types';
+import { postReq } from '../../state/api/api.requests'; 
 import { ProductActionTypes } from '../../state/product/product.types';
+import { selectAlertMessage } from '../../state/alert/alert.selectors';
 
 // inital values
 const formSchema = Yup.object().shape({
@@ -54,9 +54,9 @@ const formState = {
 
 // main component
 const ProductAdd = ({
-  getReq,
   postReq,
-  brandData
+  brands,
+  alertMessage
 }) => {
 
   const location = useLocation();
@@ -77,34 +77,24 @@ const ProductAdd = ({
 
     const newProduct = { 
       ...formData,
-      brand: brandData.allIds.find(element => element._id === formData.brandId)
+      brand: brands.find(element => element._id === formData.brandId)
     };
     delete newProduct.brandId;
  
-    postReq('/products', fetchSuccess, newProduct, setSuccess)
+    postReq('/products', fetchSuccess, newProduct, setSuccess, 'product-add')
   }
 
   const formReset = () => {
     setValues(formState);
   }
 
-  useEffect(() => {
-    const fetchSuccess = BrandActionTypes.BRAND_FETCH_SUCCESS;
-    getReq('/brands', fetchSuccess)
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
-
   return <>
-
+    
     {
-      success && <Redirect to={{
-        pathname: location.state.path,
-        state: {
-          key: location.key,
-          path: location.pathname + location.search
-        }
-      }} />
+      success && <Redirect to={location.state.from} />
     }
+
+    { alertMessage && alertMessage.component === 'product-add' && <AlertMesg/> }
 
     <Container width="col">
       <div className="row">
@@ -114,7 +104,7 @@ const ProductAdd = ({
               formData={formData}
               errors={errors} 
               onInputChange={onInputChange}
-              brands={brandData.allIds}
+              brands={brands}
               formTitle={"Add a new product"}
             />
           </form>  
@@ -126,7 +116,7 @@ const ProductAdd = ({
             buttonDisabled={buttonDisabled}
             buttonText={['Add Product', 'Reset']} 
           />
-          <ProductBrand />
+          <ProductBrand allIds={brands} />
         </div>
       </div> 
     </Container>
@@ -134,15 +124,12 @@ const ProductAdd = ({
 }
 
 const mapStateToProps = createStructuredSelector({
-  brandData: selectBrandData
+  alertMessage: selectAlertMessage
 })
 
 const mapDispatchToProps = dispatch => ({
-  getReq: (pathname, fetchSuccess, queryStr) => dispatch(
-    getReq(pathname, fetchSuccess, queryStr)
-  ),
-  postReq: (pathname, fetchSuccess, reqBody, setSuccess) => dispatch(
-    postReq(pathname, fetchSuccess, reqBody, setSuccess)
+  postReq: (pathname, fetchSuccess, reqBody, setSuccess, component) => dispatch(
+    postReq(pathname, fetchSuccess, reqBody, setSuccess, component)
   )
 })
 

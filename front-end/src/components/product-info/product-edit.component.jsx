@@ -85,7 +85,7 @@ const ProductEdit = ({
     };
     delete updatedProduct.brandId;
  
-    patchReq('/products/' + updatedProduct._id, fetchSuccess, updatedProduct, setSuccess) 
+    patchReq('/products/' + updatedProduct._id, fetchSuccess, updatedProduct, setSuccess, 'product-edit') 
   }
 
   const formReset = () => {
@@ -134,9 +134,19 @@ const mapStateToProps = createStructuredSelector({
 })
 
 const mapDispatchToProps = dispatch => ({
-  patchReq: (pathname, fetchSuccess, reqBody, setSuccess) => dispatch(
-    patchReq(pathname, fetchSuccess, reqBody, setSuccess)
-  )
+  patchReq: (
+    pathname, 
+    fetchSuccess, 
+    reqBody, 
+    setSuccess, 
+    component
+  ) => dispatch(patchReq(
+    pathname, 
+    fetchSuccess, 
+    reqBody, 
+    setSuccess, 
+    component
+  ))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProductEdit);

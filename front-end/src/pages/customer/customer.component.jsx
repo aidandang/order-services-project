@@ -27,7 +27,7 @@ const Customer = () => {
   return <>
     <Title title={title} />
     
-    { action === undefined &&  <CustomerList /> }
+    { action === undefined && <CustomerList /> }
     { action === 'customer-info' && id !== undefined && 
       <CustomerInfo 
         pathname={`/customers/${id}`} 
