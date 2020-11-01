@@ -4,8 +4,9 @@ import React, { useState, useEffect } from 'react';
 import * as Yup from "yup";
 
 // components
-import { Li, Button } from '../tag/tag.component';
+import { Li } from '../tag/tag.component';
 import { useForm } from '../hook/use-form';
+import SubmitOrReset from '../submit-or-reset/submit-or-reset.component';
 import WarehouseForm from './warehouse-form.component';
 import AlertMesg from '../alert-mesg/alert-mesg.component';
 
@@ -96,30 +97,12 @@ const WarehouseAdd = ({
         onInputChange={onInputChange}
       />
     </form>
-    <Li>
-      <div className="row">
-        <div className="col my-3">
-          <Button
-            onClick={e => {
-              e.preventDefault();
-              formSubmit();
-            }}
-            disabled={buttonDisabled}
-          >
-            Add Warehouse
-          </Button>
-          <span className="mr-3"></span>
-          <Button
-            onClick={e => {
-              e.preventDefault();
-              formReset();
-            }}
-          >
-            Reset
-          </Button>
-        </div>
-      </div>
-    </Li>
+    <SubmitOrReset
+      buttonName={'Submit'}
+      buttonDisabled={buttonDisabled}
+      formSubmit={formSubmit}
+      formReset={formReset}
+    />
   </>
 }
 

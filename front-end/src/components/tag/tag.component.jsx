@@ -18,9 +18,8 @@ export const Container = ({
       <div className="card-body pb-3">
         <div className="row my-0 py-0">
           <div className={`${width ? width : 'col'} text-right`}>
-            <a
-              href="/"
-              className="a-link-cs"
+            <span
+              className="span-link-cs"
               onClick={e => {
                 e.stopPropagation();
                 e.preventDefault();
@@ -33,8 +32,8 @@ export const Container = ({
                 }
               }}
             >
-              Close ( x )
-            </a>
+              &#10006;
+            </span>
           </div>
         </div>
         {children}

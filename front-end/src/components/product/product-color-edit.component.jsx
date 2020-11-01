@@ -6,45 +6,45 @@ import * as Yup from "yup";
 // components
 import { Li } from '../tag/tag.component';
 import { useForm } from '../hook/use-form';
-import SubmitOrReset from '../submit-or-reset/submit-or-reset.component';
-import WarehouseForm from './warehouse-form.component';
+import ProductColorForm from './product-color-form.compoent';
 import AlertMesg from '../../components/alert-mesg/alert-mesg.component';
 
 // redux
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import { selectWarehouseData } from '../../state/warehouse/warehouse.selectors';
 import { selectAlertMessage } from '../../state/alert/alert.selectors';
 import { patchReq } from '../../state/api/api.requests';
-import { WarehouseActionTypes } from '../../state/warehouse/warehouse.types'; 
+import { ProductActionTypes } from '../../state/product/product.types'; 
+import SubmitOrReset from '../submit-or-reset/submit-or-reset.component';
 
 // initial values
 const formSchema = Yup.object().shape({
-  name: Yup
+  color: Yup
     .string()
     .required(),
-  type: Yup
+  image: Yup
+    .string(),
+  url: Yup
     .string()
-    .required()
 });
 
 const formState = {
-  _id: "",
-  name: "",
-  type: ""
+  color: "",
+  image: "",
+  url: ""
 };
 
-const WarehouseEdit = ({
-  warehouse,
-  data,
+const ProductColorEdit = ({
   patchReq,
-  alertMessage,
-  setAction
+  data,
+  colorTemp,
+  setAction,
+  alertMessage
 }) => {
+  
+  const { byId } = data;
 
   const [success, setSuccess] = useState(false);
-
-  const warehouseTemp = data.allIds.find(item => item._id === warehouse._id)
 
   const [
     formData,
@@ -52,13 +52,24 @@ const WarehouseEdit = ({
     onInputChange, 
     buttonDisabled,
     setValues
-  ] = useForm(warehouseTemp, formState, formSchema);
+  ] = useForm(colorTemp, formState, formSchema);
 
-  const formSubmit = () => {
-    const fetchSuccess = WarehouseActionTypes.WAREHOUSE_FETCH_SUCCESS;
-    const updateWarehouse = { ...formData };
+  const formSubmit = e => {
+    const fetchSuccess = ProductActionTypes.PRODUCT_FETCH_SUCCESS;
 
-    patchReq('/warehouses/' + warehouse._id, fetchSuccess, updateWarehouse, setSuccess, 'warehouse-edit');
+    const productTemp = { 
+      ...byId,
+      colors: byId.colors.map(color => {
+        if (color._id !== colorTemp._id) {
+          return color
+        }
+        return {
+          ...color,
+          ...formData
+        }
+      })
+    }
+    patchReq('/products/' + byId._id, fetchSuccess, productTemp, setSuccess, 'product-color-edit');
   }
 
   const formReset = () => {
@@ -76,7 +87,7 @@ const WarehouseEdit = ({
 
   return <>
 
-    { alertMessage && alertMessage.component === 'warehouse-edit' && <AlertMesg/> }
+    { alertMessage && alertMessage.component === 'product-color-edit' && <AlertMesg/> }
 
     <form>
       <Li>
@@ -96,17 +107,15 @@ const WarehouseEdit = ({
         </div>
       </Li>
     </form>
-
     <form>
-      <WarehouseForm
+      <ProductColorForm
         formData={formData} 
         errors={errors} 
         onInputChange={onInputChange}
       />
     </form>
-
-    <SubmitOrReset
-      buttonName={'Submit'}
+    <SubmitOrReset 
+      buttonName={'Update'}
       buttonDisabled={buttonDisabled}
       formSubmit={formSubmit}
       formReset={formReset}
@@ -115,8 +124,7 @@ const WarehouseEdit = ({
 }
 
 const mapStateToProps = createStructuredSelector({
-  alertMessage: selectAlertMessage,
-  data: selectWarehouseData
+  alertMessage: selectAlertMessage
 })
 
 const mapDispatchToProps = dispatch => ({
@@ -135,4 +143,4 @@ const mapDispatchToProps = dispatch => ({
   ))
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(WarehouseEdit);
+export default connect(mapStateToProps, mapDispatchToProps)(ProductColorEdit);

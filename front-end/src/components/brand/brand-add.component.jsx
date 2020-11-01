@@ -1,13 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
-// dependencies
+//dependencies
 import * as Yup from "yup";
 
 // components
 import { Li } from '../tag/tag.component';
 import { useForm } from '../hook/use-form';
 import SubmitOrReset from '../submit-or-reset/submit-or-reset.component';
-import MerchantForm from './merchant-form.component';
+import BrandForm from './brand-form.component';
 import AlertMesg from '../alert-mesg/alert-mesg.component';
 
 // redux
@@ -15,24 +15,25 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { selectAlertMessage } from '../../state/alert/alert.selectors';
 import { postReq } from '../../state/api/api.requests';
-import { MerchantActionTypes } from '../../state/merchant/merchant.types';
+import { BrandActionTypes } from '../../state/brand/brand.types';
+
 
 // initial values
 const formSchema = Yup.object().shape({
   name: Yup
     .string()
     .required(),
-  url: Yup
+  preferredName: Yup
     .string()
     .required()
 });
 
 const formState = {
   name: "",
-  url: ""
+  preferredName: ""
 };
 
-const MerchantAdd = ({
+const BrandAdd = ({
   postReq,
   alertMessage,
   setAction
@@ -49,10 +50,11 @@ const MerchantAdd = ({
   ] = useForm(formState, formState, formSchema);
 
   const formSubmit = () => {
-    const fetchSuccess = MerchantActionTypes.MERCHANT_FETCH_SUCCESS;
-    const newMerchant = { ...formData };
 
-    postReq('/merchants', fetchSuccess, newMerchant, setSuccess, 'merchant-add');
+    const fetchSuccess = BrandActionTypes.BRAND_FETCH_SUCCESS;
+    const newBrand = { ...formData}
+
+    postReq('/brands', fetchSuccess, newBrand, setSuccess, 'brand-add');
   }
 
   const formReset = () => {
@@ -68,30 +70,31 @@ const MerchantAdd = ({
     // eslint-disable-next-line
   }, [success])
 
+  // main component
   return <>
 
-    { alertMessage && alertMessage.component === 'merchant-add' && <AlertMesg /> }
- 
-    <form>
+    { alertMessage && alertMessage.component === 'brand-add' && <AlertMesg/> }
+
+    <form onSubmit={formSubmit}>
       <Li>
-          <div className="row">
-            <div className="col text-right">
-              <a
-                href="/"
-                className="a-link-cs"
-                onClick={e => {
-                  e.preventDefault();
-                  setAction('')
-                }}
-              >
-                Cancel
-              </a>
-            </div>  
-          </div>
+        <div className="row">
+          <div className="col text-right">
+            <a
+              href="/"
+              className="a-link-cs"
+              onClick={e => {
+                e.preventDefault();
+                setAction('')
+              }}
+            >
+              Cancel
+            </a>
+          </div>  
+        </div>
       </Li>
     </form>
     <form>
-      <MerchantForm
+      <BrandForm
         formData={formData} 
         errors={errors} 
         onInputChange={onInputChange}
@@ -115,15 +118,15 @@ const mapDispatchToProps = dispatch => ({
     pathname, 
     fetchSuccess, 
     reqBody, 
-    setSuccess,
+    setSuccess, 
     component
   ) => dispatch(postReq(
     pathname, 
     fetchSuccess, 
     reqBody, 
-    setSuccess,
+    setSuccess, 
     component
   ))
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(MerchantAdd);
+export default connect(mapStateToProps, mapDispatchToProps)(BrandAdd);

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
 // dependencies
 import * as Yup from "yup";
@@ -6,37 +6,42 @@ import * as Yup from "yup";
 // components
 import { Li } from '../tag/tag.component';
 import { useForm } from '../hook/use-form';
-import SubmitOrReset from '../submit-or-reset/submit-or-reset.component';
-import MerchantForm from './merchant-form.component';
+import ProductColorForm from './product-color-form.compoent';
 import AlertMesg from '../alert-mesg/alert-mesg.component';
+import SubmitOrReset from '../submit-or-reset/submit-or-reset.component';
 
 // redux
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { selectAlertMessage } from '../../state/alert/alert.selectors';
-import { postReq } from '../../state/api/api.requests';
-import { MerchantActionTypes } from '../../state/merchant/merchant.types';
+import { patchReq } from '../../state/api/api.requests';
+import { ProductActionTypes } from '../../state/product/product.types'; 
 
 // initial values
 const formSchema = Yup.object().shape({
-  name: Yup
+  color: Yup
     .string()
     .required(),
+  image: Yup
+    .string(),
   url: Yup
     .string()
-    .required()
 });
 
 const formState = {
-  name: "",
+  color: "",
+  image: "",
   url: ""
 };
 
-const MerchantAdd = ({
-  postReq,
-  alertMessage,
-  setAction
+const ProductColorAdd = ({
+  patchReq,
+  data,
+  setAction,
+  alertMessage
 }) => {
+
+  const { byId } = data;
 
   const [success, setSuccess] = useState(false);
 
@@ -49,10 +54,13 @@ const MerchantAdd = ({
   ] = useForm(formState, formState, formSchema);
 
   const formSubmit = () => {
-    const fetchSuccess = MerchantActionTypes.MERCHANT_FETCH_SUCCESS;
-    const newMerchant = { ...formData };
+    const fetchSuccess = ProductActionTypes.PRODUCT_FETCH_SUCCESS;
 
-    postReq('/merchants', fetchSuccess, newMerchant, setSuccess, 'merchant-add');
+    const productTemp = { 
+      ...byId,
+      colors: [ ...byId.colors, formData]
+    }
+    patchReq('/products/' + byId._id, fetchSuccess, productTemp, setSuccess, 'product-color-add');
   }
 
   const formReset = () => {
@@ -70,39 +78,39 @@ const MerchantAdd = ({
 
   return <>
 
-    { alertMessage && alertMessage.component === 'merchant-add' && <AlertMesg /> }
- 
+    { alertMessage && alertMessage.component === 'product-color-add' && <AlertMesg/> }
+      
     <form>
       <Li>
-          <div className="row">
-            <div className="col text-right">
-              <a
-                href="/"
-                className="a-link-cs"
-                onClick={e => {
-                  e.preventDefault();
-                  setAction('')
-                }}
-              >
-                Cancel
-              </a>
-            </div>  
-          </div>
+        <div className="row">
+          <div className="col text-right">
+            <a
+              href="/"
+              className="a-link-cs"
+              onClick={e => {
+                e.preventDefault();
+                setAction('')
+              }}
+            >
+              Cancel
+            </a>
+          </div>  
+        </div>
       </Li>
     </form>
     <form>
-      <MerchantForm
+      <ProductColorForm
         formData={formData} 
         errors={errors} 
         onInputChange={onInputChange}
       />
     </form>
     <SubmitOrReset
-      buttonName={'Submit'}
+      buttonName={'Add Color'}
       buttonDisabled={buttonDisabled}
       formSubmit={formSubmit}
       formReset={formReset}
-    />
+    /> 
   </>
 }
 
@@ -111,19 +119,19 @@ const mapStateToProps = createStructuredSelector({
 })
 
 const mapDispatchToProps = dispatch => ({
-  postReq: (
+  patchReq: (
     pathname, 
     fetchSuccess, 
     reqBody, 
-    setSuccess,
-    component
-  ) => dispatch(postReq(
+    setSuccess, 
+    componnent
+  ) => dispatch(patchReq(
     pathname, 
     fetchSuccess, 
     reqBody, 
-    setSuccess,
-    component
+    setSuccess, 
+    componnent
   ))
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(MerchantAdd);
+export default connect(mapStateToProps, mapDispatchToProps)(ProductColorAdd);

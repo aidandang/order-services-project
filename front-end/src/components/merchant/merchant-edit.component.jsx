@@ -4,8 +4,9 @@ import React, { useEffect, useState } from 'react';
 import * as Yup from "yup";
 
 // components
-import { Li, Button } from '../tag/tag.component';
+import { Li } from '../tag/tag.component';
 import { useForm } from '../hook/use-form';
+import SubmitOrReset from '../submit-or-reset/submit-or-reset.component';
 import MerchantForm from './merchant-form.component';
 import AlertMesg from '../../components/alert-mesg/alert-mesg.component';
 
@@ -103,30 +104,12 @@ const MerchantEdit = ({
       />
     </form>
 
-    <Li>
-      <div className="row">
-        <div className="col my-3">
-          <Button 
-            onClick={e => {
-              e.preventDefault();
-              formSubmit();
-            }}
-            disabled={buttonDisabled}
-          >
-            Update
-          </Button>
-          <span className="mr-3"></span>
-          <Button
-            onClick={e => {
-              e.preventDefault();
-              formReset();
-            }}
-          >
-            Reset
-          </Button>
-        </div>
-      </div>
-    </Li>  
+    <SubmitOrReset
+      buttonName={'Submit'}
+      buttonDisabled={buttonDisabled}
+      formSubmit={formSubmit}
+      formReset={formReset}
+    />  
   </>
 }
 

@@ -2,17 +2,17 @@ import React, { useEffect, useState } from 'react';
 
 // components
 import { Li, Button } from '../tag/tag.component';
-import AlertMesg from '../../components/alert-mesg/alert-mesg.component';
+import AlertMesg from '../alert-mesg/alert-mesg.component';
 
 // redux
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { selectAlertMessage } from '../../state/alert/alert.selectors';
 import { deleteReq } from '../../state/api/api.requests';
-import { WarehouseActionTypes } from '../../state/warehouse/warehouse.types'; 
+import { BrandActionTypes } from '../../state/brand/brand.types';
 
-const WarehouseRemove = ({
-  warehouse,
+const BrandRemove = ({
+  brand,
   deleteReq,
   alertMessage,
   setAction
@@ -21,8 +21,9 @@ const WarehouseRemove = ({
   const [success, setSuccess] = useState(false);
 
   const formSubmit = () => {
-    const fetchSuccess = WarehouseActionTypes.WAREHOUSE_FETCH_SUCCESS;
-    deleteReq('/warehouses/' + warehouse._id, fetchSuccess, setSuccess, 'warehouse-remove');
+
+    const fetchSuccess = BrandActionTypes.BRAND_FETCH_SUCCESS;
+    deleteReq(`/brands/${brand._id}`, fetchSuccess, setSuccess, 'brand-remove');
   }
 
   useEffect(() => {
@@ -30,9 +31,10 @@ const WarehouseRemove = ({
     // eslint-disable-next-line
   }, [success])
 
+  // main component
   return <>
 
-    { alertMessage && alertMessage.component === 'warehouse-remove' && <AlertMesg/> }
+    { alertMessage && alertMessage.component === 'brand-remove' && <AlertMesg/> }
 
     <form>
       <Li>
@@ -70,7 +72,7 @@ const WarehouseRemove = ({
           </Button>
         </div>
       </div>
-    </Li>  
+    </Li> 
   </>
 }
 
@@ -81,15 +83,15 @@ const mapStateToProps = createStructuredSelector({
 const mapDispatchToProps = dispatch => ({
   deleteReq: (
     pathname, 
-    fetchSuccess,
+    fetchSuccess, 
     setSuccess, 
     component
   ) => dispatch(deleteReq(
     pathname, 
-    fetchSuccess,
+    fetchSuccess, 
     setSuccess, 
     component
   ))
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(WarehouseRemove);
+export default connect(mapStateToProps, mapDispatchToProps)(BrandRemove);

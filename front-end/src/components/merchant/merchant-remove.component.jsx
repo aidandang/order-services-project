@@ -52,11 +52,11 @@ const MerchantRemove = ({
           </div>
       </Li>
     </form>
-
-    <Li>
-      <span>Do you want to remove?</span>
-    </Li>
-
+    <form>
+      <Li>
+        <span>Do you want to remove?</span>
+      </Li>
+    </form>
     <Li>
       <div className="row">
         <div className="col my-3">

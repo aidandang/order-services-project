@@ -2,14 +2,16 @@ import React from 'react';
 
 // dependencies
 import { Switch, Route } from 'react-router-dom';
+
 // components
 import Navbar from '../../components/navbar/navbar.component';
 import Footer from '../../components/footer/footer.component';
 import Sidebar from '../../components/sidebar/sidebar.component';
 import DashboardPage from '../../pages/dashboard-page/dashboard-page.component';
-import Product from '../../pages/product/product.component';
+import ProductPage from '../../pages/product-page/product-page.component';
+import OrderPage from '../../pages/order-page/order-page.component';
 import Customer from '../../pages/customer/customer.component';
-import OrderRoutes from './order-routes.component';
+
 // ui settings
 import './private-routes.styles.css';
 
@@ -29,9 +31,9 @@ const PrivateRoutes = () => {
               <div className="row p-0 m-0 px-2 pt-4 pb-5">
                 <div className="col">
                   <Switch>
-                    <Route path="/app/product" render={() => <Product />} />
+                    <Route path="/app/product" render={() => <ProductPage />} />
+                    <Route path="/app/order" render={() => <OrderPage />} />
                     <Route path="/app/customer" render={() => <Customer />} />
-                    <Route path="/app/order" render={() => <OrderRoutes />} />
                     <Route exact path="/app" render={() => <DashboardPage />} />
                   </Switch>
                 </div>
