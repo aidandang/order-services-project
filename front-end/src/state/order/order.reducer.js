@@ -1,46 +1,47 @@
 import { OrderActionTypes } from './order.types';
-import { acctToStr } from '../../components/utils/acctToStr';
+// import { acctToStr } from '../../components/utils/acctToStr';
 
 const INITIAL_STATE = {
   data: {},
-  orderTemp: {
-    customer: null,
-    shippingAddress: null,
-    item: {},
-    index: null,
-    items: [],
-    ref: {}
+  editing: {
+    isSelectingProduct: false,
+    itemTemp: {},
+    items: []
   }
 }
 
-function updateObjectInArray(array, action) {
+function addItemToArray(array, action) {
+  return [...array, action.payload]
+}
+
+function updateItemInArray(array, payload) {
   return array.map((item, index) => {
-    if (index !== action.index) {
+    if (index !== payload.index) {
       return item
     }
     return {
       ...item,
-      ...action.item
+      ...payload.item
     }
   })
 }
 
-function removeItem(array, action) {
+function removeItemInArray(array, index) {
   let newArray = array.slice()
-  newArray.splice(action.index, 1)
+  newArray.splice(index, 1)
   return newArray
 }
 
-function convertAccountNumberToString(array) {
-  return array.map(item => ({
-      ...item,
-      qty: String(item.qty),
-      price: acctToStr(item.price),
-      saleTax: acctToStr(item.saleTax),
-      localCharge: acctToStr(item.localCharge),
-      shippingCost: acctToStr(item.shippingCost)
-  })) 
-}
+// function convertAccountNumberToString(array) {
+//   return array.map(item => ({
+//       ...item,
+//       qty: String(item.qty),
+//       price: acctToStr(item.price),
+//       saleTax: acctToStr(item.saleTax),
+//       localCharge: acctToStr(item.localCharge),
+//       shippingCost: acctToStr(item.shippingCost)
+//   })) 
+// }
 
 const orderReducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
@@ -49,102 +50,67 @@ const orderReducer = (state = INITIAL_STATE, action) => {
         ...state,
         data: { ...state.data, ...action.payload }
       }
-    case OrderActionTypes.UPDATE_CUSTOMER_TO_ORDER:
+    case OrderActionTypes.SAVE_ORDER_CUSTOMER:
       return {
         ...state,
-        orderTemp: { 
-          ...state.orderTemp,
-          customer: action.payload.customer,
-          shippingAddress: action.payload.shippingAddress
+        editing: { 
+          ...state.editing,
+          customer: action.payload
         }
       }
-    case OrderActionTypes.UPDATE_SHIPPING_ADDRESS_TO_ORDER:
+    case OrderActionTypes.SAVE_ORDER_INFO:
       return {
         ...state,
-        orderTemp: {
-          ...state.orderTemp,
-          shippingAddress: action.payload 
+        editing: { 
+          ...state.editing,
+          orderInfo: action.payload
         }
       }
-    case OrderActionTypes.UPDATE_PRODUCT_TO_ITEM:
+    case OrderActionTypes.SAVE_ORDER_ITEM:
       return {
         ...state,
-        orderTemp: {
-          ...state.orderTemp,
-          item: { 
-            ...state.orderTemp.item,
-            product: action.payload
-          }
+        editing: {
+          ...state.editing,
+          items: addItemToArray(state.editing.items, action),
+          itemTemp: {}
         }
       }
-    case OrderActionTypes.ADD_ITEM_TO_ORDER:
+    case OrderActionTypes.SELECT_PRODUCT_TO_ORDER:
       return {
         ...state,
-        orderTemp: {
-          ...state.orderTemp,
-          items: [...state.orderTemp.items, action.payload],
-          item: {}
+        editing: {
+          ...state.editing,
+          itemTemp: {
+            ...state.editing.itemTemp,
+            product: action.payload.product,
+            color: action.payload.color
+          },
+          isSelectingProduct: false
         }
       }
-    case OrderActionTypes.EDIT_ORDER_ITEM:
+    case OrderActionTypes.SET_IS_SELECTING_PRODUCT:
       return {
         ...state,
-        orderTemp: {
-          ...state.orderTemp,
-          item: action.payload.item,
-          index: action.payload.index
+        editing: {
+          ...state.editing,
+          isSelectingProduct: action.payload
         }
       }
-    case OrderActionTypes.UPDATE_ITEM_TO_ORDER:
+    case OrderActionTypes.UPDATE_ORDER_ITEM:
       return {
         ...state,
-        orderTemp: {
-          ...state.orderTemp,
-          items: updateObjectInArray(state.orderTemp.items, action.payload),
-          item: {},
-          index: null
+        editing: {
+          ...state.editing,
+          items: updateItemInArray(state.editing.items, action.payload),
+          itemTemp: {}
         }
       }
-    case OrderActionTypes.REMOVE_ITEM_FROM_ORDER:
+    case OrderActionTypes.REMOVE_ORDER_ITEM:
       return {
         ...state,
-        orderTemp: {
-          ...state.orderTemp,
-          items: removeItem(state.orderTemp.items, { index: action.payload }),
-          item: {},
-          index: null
-        }
-      }
-    case OrderActionTypes.REMOVE_ORDER_TEMPLATE:
-      return {
-        ...state,
-        orderTemp: {
-          ...state.orderTemp,
-          customer: null,
-          shippingAddress: null,
-          item: {},
-          index: null,
-          items: []
-        }
-      }
-    case OrderActionTypes.COPY_TO_ORDER_TEMPLATE:
-      return {
-        ...state,
-        orderTemp: {
-          ...state.orderTemp,
-          orderNumber: action.payload.orderNumber ? action.payload.orderNumber : null, 
-          customer: action.payload.customer,
-          shippingAddress: action.payload.shippingAddress === "" ? null : action.payload.shippingAddress,
-          items: convertAccountNumberToString(action.payload.items),
-          ref: action.payload.ref ? action.payload.ref : {}
-        }
-      }
-    case OrderActionTypes.UPDATE_REFERENCE_TO_ORDER:
-      return {
-        ...state,
-        orderTemp: {
-          ...state.orderTemp,
-          ref: action.payload
+        editing: {
+          ...state.editing,
+          items: removeItemInArray(state.editing.items, action.payload)
         }
       }
     default:

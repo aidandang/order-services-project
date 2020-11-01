@@ -37,6 +37,9 @@ const SubmitCard = ({
             </div>
           </div>
         </Li>
+        <Li>
+          Block contents
+        </Li>
       </Ul>
     </Card>
   </>

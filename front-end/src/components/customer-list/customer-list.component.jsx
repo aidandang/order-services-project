@@ -1,40 +1,93 @@
-import React, { useEffect } from 'react';
+import React, { useState } from 'react';
+
+// dependencies
+import * as Yup from "yup";
+import { useLocation, Link } from 'react-router-dom';
 
 // components
-import CustomerSearch from './customer-search.component';
-import AlertMesg from '../alert-mesg/alert-mesg.component';
+import { Card, Ul, Li } from '../tag/tag.component';
+import { useForm } from '../hook/use-form';
+import CustomerSearchForm from './customer-search-form.component';
+import CustomerListTable from './customer-list-table.component';
+import { convertSearchFormToQueryString } from '../utils/convert-search-form-to-query-string';
 
-// redux
-import { connect } from 'react-redux';
-import { createStructuredSelector } from 'reselect';
-import { getReq } from '../../state/api/get-request';
-import { CustomerActionTypes } from '../../state/customer/customer.types';
-import { selectAlertMessage } from '../../state/alert/alert.selectors';
+// initial values
+const formSchema = Yup.object().shape({
+  search: Yup
+    .string()
+});
+const formState = {
+  search: ''
+}
 
 // main component
-const CustomerList = ({
-  getReq,
-  alertMessage
-}) => {
+const CustomerList = () => {
 
-  useEffect(() => {
-    const fetchSuccess = CustomerActionTypes.CUSTOMER_FETCH_SUCCESS;
-    getReq('/customers', fetchSuccess);
-    // eslint-disable-next-line
-  }, [location.state]);
+  const location = useLocation();
+
+  const [queryObj, setQueryObj] = useState({
+    str: "",
+    page: null
+  });
+
+  const [
+    formData,
+    errors, 
+    onInputChange,
+    buttonDisabled
+  ] = useForm(formState, formState, formSchema);
+
+  const formSubmit = (e) => {
+    e.preventDefault();
+    
+    let queryStr = convertSearchFormToQueryString(e, formData);
+
+    if (queryStr !== undefined) {
+      setQueryObj(prevState => ({
+        ...prevState,
+        str: queryStr,
+        page: null
+      }))
+    }
+  }
 
   return <>
-    { alertMessage && <AlertMesg /> }
-    <CustomerSearch />  
+    <Card width="col" title="Search For Customers" >
+      <Ul>
+        <CustomerSearchForm
+          formSubmit={formSubmit} 
+          formData={formData}
+          errors={errors}
+          onInputChange={onInputChange}
+          buttonDisabled={buttonDisabled}
+        />
+        <Li>
+          <div className="row">
+            <div className="col">
+              <Link
+                to={{
+                  pathname: location.pathname,
+                  search: location.search ? `${location.search}&action=customer-add` : `?action=customer-add`,
+                  state: {
+                    from: location.pathname + location.search
+                  }
+                }}
+                className="a-link-cs"
+              >
+                ( + ) Add a New Customer
+              </Link>
+            </div>
+          </div>
+        </Li>
+      </Ul>
+    </Card>
+    <CustomerListTable
+      pathname='/customers'
+      queryStr={queryObj.str}
+      queryObj={queryObj}
+      setQueryObj={setQueryObj}
+    />
   </>
 }
 
-const mapStateToProps = createStructuredSelector({
-  alertMessage: selectAlertMessage,
-})
-
-const mapDispatchToProps = dispatch => ({
-  getReq: (pathname, fetchSuccess, queryStr) => dispatch(getReq(pathname, fetchSuccess, queryStr))
-})
-
-export default connect(mapStateToProps, mapDispatchToProps)(CustomerList);
+export default CustomerList

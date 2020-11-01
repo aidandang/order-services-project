@@ -1,18 +1,18 @@
 const mongoose = require('mongoose'),
-  Schema = mongoose.Schema,
-  autoIncrement = require('mongoose-auto-increment');
-
-autoIncrement.initialize(mongoose);
+  Schema = mongoose.Schema;
 
 const itemSchema = new Schema({
   product: {
-    type: Object
+    type: Object,
+    required: true
   },
   color: {
-    type: String
+    type: Object,
+    required: true
   },
   size: {
-    type: String
+    type: String,
+    required: true
   },
   qty: {
     type: Number
@@ -35,19 +35,27 @@ const orderSchema = new Schema({
   merchant: {
     type: Object
   },
-  origOrderNumber: {
-    type: String
+  orderNumber: {
+    type: String,
+    required: true
+  },
+  orderDate: {
+    type: Date
+  },
+  orderType: {
+    type: String,
+    required: true
   },
   status: {
     type: String
   },
-  orderedDate: {
-    type: Date
+  warehouse: {
+    type: Object
   },
   items: {
     type: [itemSchema]
   },
-  recvShippingCost: {
+  shippingCost: {
     type: Number,
     default: 0
   },
@@ -55,20 +63,17 @@ const orderSchema = new Schema({
     type: Number,
     default: 0
   },
-  recvAddress: {
-    type: Object
-  },
   customer: {
-    type: Object
+    type: Object,
+    required: true
   },
-  orderSalePrice: {
-    type: Number
+  salePrice: {
+    type: Number,
+    required: true
   },
-  dlvdShippingCost: {
-    type: Number
-  },
-  dlvdAddress: {
-    type: Object
+  shippingPrice: {
+    type: Number,
+    default: 0
   },
   attachments: {
     type: Array
@@ -79,14 +84,7 @@ const orderSchema = new Schema({
   },
   createdBy: {
     type: Object
-  },
-});
-
-orderSchema.plugin(autoIncrement.plugin, {
-  model: 'Order',
-  field: 'orderNumber',
-  startAt: 1,
-  incrementBy: 1
+  }
 });
 
 const Order = mongoose.model('Order', orderSchema);

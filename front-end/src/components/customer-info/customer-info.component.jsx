@@ -1,49 +1,31 @@
-import React, { useEffect } from 'react';
+import React, { useState } from 'react';
 
 // dependencies
 import { Link, useLocation } from 'react-router-dom';
-import queryString from 'query-string';
 
 // components
+import withCustomerData from '../api/withCustomerData';
 import { Container, Card, Ul, Li } from '../tag/tag.component';
-import AlertMesg from '../alert-mesg/alert-mesg.component';
-
-// redux
-import { connect } from 'react-redux';
-import { createStructuredSelector } from 'reselect';
-import { getReq } from '../../state/api/get-request';
-import { selectAlertMessage } from '../../state/alert/alert.selectors';
-import { selectCustomerData } from '../../state/customer/customer.selectors';
-import { CustomerActionTypes } from '../../state/customer/customer.types';
+import CustomerEdit from './customer-edit.component';
+import CustomerShippingInfo from './customer-shipping-info.component';
 
 const CustomerInfo = ({
-  getReq,
-  data,
-  alertMessage
+  data
 }) => {
 
   const location = useLocation();
 
-  const queryObj = queryString.parse(location.search);
-  const { id } = queryObj;
-
   const { byId } = data;
 
-  useEffect(() => {
-    const fetchSuccess = CustomerActionTypes.CUSTOMER_FETCH_SUCCESS;
+  const [edit, setEdit] = useState('');
 
-    if ((byId === undefined) || (byId && byId._id !== id)) {
-      getReq('/customers/' + id, fetchSuccess)
-    }
-    // eslint-disable-next-line
-  }, [])
+  const goBack = () => {
+    setEdit('')
+  }
 
   return <>
-    { alertMessage && <AlertMesg /> }
-
-    { 
-      byId && byId._id === id &&
-      <>
+    {
+      edit === '' &&
       <Container width="col">
         <Card width="col" title="Customer Information">
           <Ul>
@@ -78,18 +60,16 @@ const CustomerInfo = ({
                   </div>
                   <div className="row">
                     <div className="col-4">
-                      <Link 
-                        to={{
-                          pathname: location.pathname,
-                          search: `?${id}&action=customer-edit`,
-                          state: {
-                            from: location.pathname + location.search
-                          }
-                        }}
+                      <a
+                        href="/"
                         className="a-link-cs"
+                        onClick={e => {
+                          e.preventDefault();
+                          setEdit('customer-edit')
+                        }}
                       >
                         Update Information
-                      </Link>
+                      </a>
                     </div>
                   </div>
                 </div>
@@ -140,18 +120,16 @@ const CustomerInfo = ({
                   </div>
                   <div className="row">
                     <div className="col-4">
-                      <Link 
-                        to={{
-                          pathname: location.pathname,
-                          search: `?id=${id}&action=customer-shipping-info`,
-                          state: {
-                            from: location.pathname + location.search
-                          }
-                        }}
+                      <a
+                        href="/"
                         className="a-link-cs"
+                        onClick={e => {
+                          e.preventDefault();
+                          setEdit('customer-shipping-info')
+                        }}
                       >
                         Update Shipping Information
-                      </Link>
+                      </a>
                     </div>
                   </div>
                 </div>
@@ -161,7 +139,7 @@ const CustomerInfo = ({
               <div className="row">
                 <div className="col">
                   <Link
-                    to="/"
+                    to={location.pathname + `?select=customer&action=save&id=${byId._id}`}
                     className="a-link-cs"
                   >
                     Select to Order
@@ -172,20 +150,16 @@ const CustomerInfo = ({
           </Ul>
         </Card>
       </Container>
-      </>
+    }
+    {
+      edit === 'customer-edit' &&
+      <CustomerEdit byId={byId} goBack={goBack} /> 
+    }
+    {
+      edit === 'customer-shipping-info' &&
+      <CustomerShippingInfo byId={byId} goBack={goBack} />
     }
   </>
 }
 
-const mapStateToProps = createStructuredSelector({
-  data: selectCustomerData,
-  alertMessage: selectAlertMessage
-})
-
-const mapDispatchToProps = dispatch => ({
-  getReq: (pathname, fetchSuccess, queryStr) => dispatch(
-    getReq(pathname, fetchSuccess, queryStr)
-  )
-})
-
-export default connect(mapStateToProps, mapDispatchToProps)(CustomerInfo);
+export default withCustomerData(CustomerInfo);

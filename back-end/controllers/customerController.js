@@ -4,7 +4,6 @@ const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/appError');
 
 exports.readCustomers = catchAsync(async (req, res, next) => {
-  console.log('hello')
 
   // set default limit documents per page
   const defaultLimit = 10;
@@ -27,6 +26,8 @@ exports.readCustomers = catchAsync(async (req, res, next) => {
   // get pages and num of docs
   const limit = features.limit;
   const pages = Math.ceil(count/limit);
+
+  if (customers.length === 0) return next(new AppError('No customer found.', 404))
 
   res
     .status(200)

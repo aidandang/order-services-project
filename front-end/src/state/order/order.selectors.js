@@ -7,7 +7,7 @@ export const selectOrderData = createSelector(
   order => order.data
 )
 
-export const selectOrderTemp = createSelector(
+export const selectOrderEditing = createSelector(
   [selectOrder],
-  order => order.orderTemp
+  order => order.editing
 )

@@ -12,7 +12,9 @@ const alertReducer = (state = INITIAL_STATE, action) => {
         alertMessage: {
           ...state.alertMessage,
           message: action.payload.message,
-          color: action.payload.color
+          color: action.payload.color,
+          component: action.payload.component,
+          request: action.payload.request
         }
       }
     case AlertActionTypes.CLEAR_ALERT_MESSAGE:

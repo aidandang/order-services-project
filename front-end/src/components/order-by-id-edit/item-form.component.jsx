@@ -15,6 +15,12 @@ const liClassName = "list-group-item bg-item-list-cs list-group-item-action";
 
 // set form schema
 const formSchema = Yup.object().shape({
+  product: Yup
+    .string()
+    .required(),
+  color: Yup
+    .string()
+    .required(),
   size: Yup
     .string()
     .required(),
@@ -24,17 +30,10 @@ const formSchema = Yup.object().shape({
   price: Yup
     .string()
     .required(),
-  saleTax: Yup
-    .string(),
-  localCharge: Yup
-    .string(),
-  shippingCost: Yup
+  recvDate: Yup
     .string(),
   note: Yup
-    .string(),
-  color: Yup
     .string()
-    .required()
 })
 
 const ItemForm = ({
