@@ -21,11 +21,28 @@ const PreviewOrderItem = ({
   const location = useLocation();
   const history = useHistory();
 
-  const { items } = order;
+  const { items, orderCost } = order;
 
-  const subTotal = (qty, price) => {
+  let shippingCost = ""
+  let saleTax = ""
+
+  if (orderCost) {
+    shippingCost = orderCost.shippingCost
+    saleTax = orderCost.saleTax
+  }
+
+  let sum = 0;
+
+  const subTotalCalc = () => (qty, price) => {
     const value = strToAcct(price) * Number(qty);
+    sum = sum + value;
     return acctToStr(value);
+  }
+  
+  const subTotal = subTotalCalc();
+
+  const total = (sum, shippingCost, saleTax) => {
+    return acctToStr(sum + strToAcct(shippingCost, saleTax))
   }
 
   const editOrderItem = (index) => {
@@ -47,9 +64,8 @@ const PreviewOrderItem = ({
                 <th scope="col">Item/Description</th>
                 <th scope="col" className="text-right">Qty</th>
                 <th scope="col" className="text-right">Price</th>
-                <th scope="col" className="text-right">Subtotal</th>
+                <th scope="col" className="text-right">Amount</th>
                 <th scope="col" className="text-right"></th>
-
               </tr>
             </thead>
             <tbody>
@@ -87,7 +103,7 @@ const PreviewOrderItem = ({
                 ) 
               }
               <tr className="table-row-no-link-cs">
-                <td colSpan="8" className="text-center">
+                <td colSpan="6" className="text-left">
                   <Link 
                     to={{
                       pathname: location.pathname,
@@ -98,10 +114,64 @@ const PreviewOrderItem = ({
                     }}
                     className="a-link-cs"
                   >
-                    Add a New Item
+                    Add Item
                   </Link>
                 </td>
               </tr>
+              {
+                Object.keys(items).length > 0 && <>
+                  <tr className="table-row-no-link-cs">
+                    <td colSpan="6" className="text-left">
+                      <Link 
+                        to={{
+                          pathname: location.pathname,
+                          search: `${location.search}&select=order-cost`,
+                          state: {
+                            from: location.pathname + location.search
+                          }
+                        }}
+                        className="a-link-cs"
+                      >
+                        Update Local Costs
+                      </Link>
+                    </td>
+                  </tr>
+                  <tr className="table-row-no-link-cs">
+                    <td className="text-right"></td>
+                    <td className="text-right"></td>
+                    <td colSpan="2" className="text-right">Subtotal</td>
+                    <td className="text-right">{acctToStr(sum)}</td>
+                    <td className="text-right"></td>
+                  </tr>
+                  <tr className="table-row-no-link-cs">
+                    <td className="text-right"></td>
+                    <td className="text-right"></td>
+                    <td colSpan="2" className="text-right">
+                      Local Shipping
+                    </td>
+                    <td className="text-right">{shippingCost.length > 0 ? shippingCost : '.00'}</td>
+                    <td className="text-right"></td>
+                  </tr>
+                  <tr className="table-row-no-link-cs">
+                    <td className="text-right"></td>
+                    <td className="text-right"></td>
+                    <td colSpan="2" className="text-right">
+                      Local Sale Tax
+                    </td>
+                    <td className="text-right">{saleTax.length > 0 ? saleTax : '.00'}</td>
+                    <td className="text-right"></td>
+                  </tr>
+                  <tr className="table-row-no-link-cs">
+                    <td className="text-right"></td>
+                    <td className="text-right"></td>
+                    <th scope="row" colSpan="2" className="text-right">Total</th>
+                    <th scope="row" className="text-right">
+                      {total(sum, shippingCost, saleTax)}
+                    </th>
+                    <td className="text-right"></td>
+                  </tr>
+                </>
+              }
             </tbody>
           </table>
         </div>

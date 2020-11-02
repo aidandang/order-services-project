@@ -12,7 +12,7 @@ import { ProductActionTypes } from '../../state/product/product.types';
 import { selectAlertMessage } from '../../state/alert/alert.selectors';
 
 
-const ProductColorAdd = ({
+const ProductColorRemove = ({
   patchReq,
   data,
   colorTemp,
@@ -43,10 +43,8 @@ const ProductColorAdd = ({
 
   return <>
 
-  { alertMessage && alertMessage.component === 'product-color-add' && <AlertMesg/> }
+    { alertMessage && alertMessage.component === 'product-color-remove' && <AlertMesg/> }
 
-  {
-    !success &&
     <form onSubmit={formSubmit}>
       <Ul>
 
@@ -76,10 +74,7 @@ const ProductColorAdd = ({
         </Li>
 
       </Ul>
-    </form> 
-  }
-    
-    
+    </form>
   </>
 }
 
@@ -103,4 +98,4 @@ const mapDispatchToProps = dispatch => ({
   ))
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(ProductColorAdd);
+export default connect(mapStateToProps, mapDispatchToProps)(ProductColorRemove);

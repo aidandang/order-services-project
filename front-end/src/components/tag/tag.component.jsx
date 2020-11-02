@@ -1,6 +1,5 @@
 import React from 'react';
 
-import { useHistory, useLocation } from 'react-router-dom';
 import uuid from 'react-uuid';
 import './tag.styles.css';
 
@@ -10,32 +9,25 @@ export const Container = ({
   goBack
 }) => {
 
-  const history = useHistory()
-  const location = useLocation()
-
   return (
     <div className="card mt-3">
       <div className="card-body pb-3">
-        <div className="row my-0 py-0">
-          <div className={`${width ? width : 'col'} text-right`}>
-            <span
-              className="span-link-cs"
-              onClick={e => {
-                e.stopPropagation();
-                e.preventDefault();
-                if (goBack) {
-                  goBack()
-                } else if (history.action === "PUSH") {
-                  history.goBack()
-                } else {
-                  history.push(location.pathname)
-                }
-              }}
-            >
-              &#10006;
-            </span>
+        { 
+          goBack &&
+          <div className="row my-0 py-0">
+            <div className={`${width ? width : 'col'} text-right`}>
+              <span
+                className="span-link-cs"
+                onClick={e => {
+                  e.stopPropagation();
+                  goBack();
+                }}
+              >
+                &#10006;
+              </span>
+            </div>
           </div>
-        </div>
+        }
         {children}
       </div>
     </div>

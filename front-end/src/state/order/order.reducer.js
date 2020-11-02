@@ -5,6 +5,7 @@ const INITIAL_STATE = {
   data: {},
   editing: {
     isSelectingProduct: false,
+    isSelectingCustomer: false,
     itemTemp: {},
     items: []
   }
@@ -56,6 +57,14 @@ const orderReducer = (state = INITIAL_STATE, action) => {
         editing: { 
           ...state.editing,
           customer: action.payload
+        }
+      }
+    case OrderActionTypes.SAVE_ORDER_COST:
+      return {
+        ...state,
+        editing: { 
+          ...state.editing,
+          orderCost: action.payload
         }
       }
     case OrderActionTypes.SAVE_ORDER_INFO:
@@ -111,6 +120,22 @@ const orderReducer = (state = INITIAL_STATE, action) => {
         editing: {
           ...state.editing,
           items: removeItemInArray(state.editing.items, action.payload)
+        }
+      }
+    case OrderActionTypes.SAVE_ORDER_SALE:
+      return {
+        ...state,
+        editing: { 
+          ...state.editing,
+          orderSale: action.payload
+        }
+      }
+    case OrderActionTypes.SET_IS_SELECTING_CUSTOMER:
+      return {
+        ...state,
+        editing: {
+          ...state.editing,
+          isSelectingCustomer: action.payload
         }
       }
     default:

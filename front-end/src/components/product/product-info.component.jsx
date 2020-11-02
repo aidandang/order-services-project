@@ -8,16 +8,17 @@ import ProductColor from './product-color.component';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { selectProductData } from '../../state/product/product.selectors'; 
+import { setProductComp } from '../../state/product/product.actions'; 
 
 const ProductInfo = ({ 
   data,
-  setComp
+  setProductComp
 }) => {
 
   const { byId } = data;
 
   const goBack = () => {
-    setComp('')
+    setProductComp('')
   }
 
   return <> 
@@ -69,7 +70,7 @@ const ProductInfo = ({
                       className="a-link-cs"
                       onClick={e => {
                         e.preventDefault();
-                        setComp('product-edit')
+                        setProductComp('product-edit')
                       }}
                     >
                       Update Information
@@ -92,4 +93,8 @@ const mapStateToProps = createStructuredSelector({
   data: selectProductData
 })
 
-export default connect(mapStateToProps)(ProductInfo);
+const mapDispatchToProps = dispatch => ({
+  setProductComp: comp => dispatch(setProductComp(comp))
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(ProductInfo);

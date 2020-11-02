@@ -14,6 +14,7 @@ import AlertMesg from '../alert-mesg/alert-mesg.component';
 // redux
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
+import { setProductComp } from '../../state/product/product.actions'; 
 import { postReq } from '../../state/api/api.requests'; 
 import { ProductActionTypes } from '../../state/product/product.types';
 import { selectAlertMessage } from '../../state/alert/alert.selectors';
@@ -56,7 +57,7 @@ const formState = {
 const ProductAdd = ({
   brandData,
   postReq,
-  setComp,
+  setProductComp,
   alertMessage
 }) => {
 
@@ -90,11 +91,11 @@ const ProductAdd = ({
   }
 
   const goBack = () => {
-    setComp('')
+    setProductComp('')
   }
 
   useEffect(() => {
-    if (success) setComp('product-info')
+    if (success) setProductComp('product-info')
     // eslint-disable-next-line
   }, [success])
 
@@ -148,7 +149,8 @@ const mapStateToProps = createStructuredSelector({
 const mapDispatchToProps = dispatch => ({
   postReq: (pathname, fetchSuccess, reqBody, setSuccess, component) => dispatch(
     postReq(pathname, fetchSuccess, reqBody, setSuccess, component)
-  )
+  ),
+  setProductComp: comp => dispatch(setProductComp(comp))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProductAdd);
