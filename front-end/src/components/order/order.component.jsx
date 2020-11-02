@@ -5,7 +5,7 @@ import * as Yup from "yup";
 import { useLocation, Link } from 'react-router-dom';
 
 // components
-import { Card, Ul, Li } from '../tag/tag.component';
+import { Container, Card, Ul, Li } from '../tag/tag.component';
 import { useForm } from '../hook/use-form';
 import OrderSearchForm from './order-search-form.component';
 import OrderListTable from './order-list-table.component';
@@ -52,41 +52,43 @@ const Order = () => {
   }
   
   return <>
-    <Card width="col" title="Search For Orders" >
-      <Ul>
-        <OrderSearchForm
-          formSubmit={formSubmit} 
-          formData={formData}
-          errors={errors}
-          onInputChange={onInputChange}
-          buttonDisabled={buttonDisabled}
-        />
-        <Li>
-          <div className="row">
-            <div className="col">
-              <Link
-                to={{
-                  pathname: location.search,
-                  search: '?comp=add',
-                  state: {
-                    from: location.search
-                  }
-                }}
-                className="a-link-cs"
-              >
-                ( + ) Add a New Order
-              </Link>
+    <Container width="col" goBack={undefined}>
+      <Card width="col" title="Search For Orders" >
+        <Ul>
+          <OrderSearchForm
+            formSubmit={formSubmit} 
+            formData={formData}
+            errors={errors}
+            onInputChange={onInputChange}
+            buttonDisabled={buttonDisabled}
+          />
+          <Li>
+            <div className="row">
+              <div className="col">
+                <Link
+                  to={{
+                    pathname: location.search,
+                    search: '?comp=add',
+                    state: {
+                      from: location.search
+                    }
+                  }}
+                  className="a-link-cs"
+                >
+                  ( + ) Add a New Order
+                </Link>
+              </div>
             </div>
-          </div>
-        </Li>
-      </Ul>
-    </Card>
-    <OrderListTable
-      pathname='/orders'
-      queryStr={queryObj.str}
-      queryObj={queryObj}
-      setQueryObj={setQueryObj}
-    />
+          </Li>
+        </Ul>
+      </Card>
+      <OrderListTable
+        pathname='/orders'
+        queryStr={queryObj.str}
+        queryObj={queryObj}
+        setQueryObj={setQueryObj}
+      />
+    </Container>
   </>
 }
 

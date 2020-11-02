@@ -7,6 +7,7 @@ import { useLocation, useHistory } from 'react-router-dom';
 import { Container, Card, Ul } from '../tag/tag.component';
 import PreviewOrderInfo from './preview-order-info.component';
 import PreviewOrderItem from './preview-order-item.component';
+import PreviewOrderSale from './preview-order-sale.component';
 import SubmitOrReset from '../submit-or-reset/submit-or-reset.component';
 
 // redux
@@ -21,7 +22,7 @@ const OrderAdd = ({
   const history = useHistory();
   const location = useLocation();
 
-  const { orderInfo, items } = order;
+  const { orderInfo, items, orderSale } = order;
 
   const formSubmit = () => {
   }
@@ -43,6 +44,9 @@ const OrderAdd = ({
           </div>
           <div className="col-12">
             <PreviewOrderItem items={items} />
+          </div>
+          <div className="col-12">
+            <PreviewOrderSale orderSale={orderSale} />
           </div>
           <div className="col-12">
             <Card title="Action">

@@ -1,21 +1,20 @@
 import React from 'react';
 
 // dependencies
-import { useHistory, useLocation } from 'react-router-dom';
 import queryString from 'query-string';
 
 // components
 import withCustomerData from '../api/withCustomerData';
 import PaginationBar from '../pagination-bar/pagination-bar.component';
+import CustomerListRow from './customer-list-row.component';
 
 const CustomerListTable = ({ 
   data,
   queryObj,
-  setQueryObj
+  setQueryObj,
+  setComp
 }) => {
 
-  const location = useLocation();
-  const history = useHistory();
   const { allIds } = data;
 
   // handle search form 
@@ -37,19 +36,6 @@ const CustomerListTable = ({
       str: queryStr,
       page
     }))
-  }
-
-  const handleOnClick = (e, customer) => {
-    e.preventDefault();
-    const search = `${location.search 
-      ? `${location.search}&id=${customer._id}&action=customer-info` 
-      : `?id=${customer._id}&action=customer-info`
-    }`
-    const path = location.pathname + search;
-
-    history.push(path, {
-      from: location.pathname + location.search
-    })
   }
 
   return <>
@@ -76,22 +62,7 @@ const CustomerListTable = ({
             </thead>
             <tbody>
               {allIds.map(customer => 
-                <tr 
-                  key={customer._id}
-                  className="table-row-cs" 
-                  onClick={e => handleOnClick(e, customer)}
-                >
-                  <th scope="row">
-                    <span className="mr-2">{customer.account}</span>
-                    {customer.status === "na" && <a href="/" className="a-link-cs">A</a>}
-                  </th>
-                  <td>{customer.nickname}</td>
-                  <td>{customer.fullname}</td>
-                  <td>
-                    {`${customer.streetAddress1}, ${customer.city}, ${customer.state}`}{customer.streetAddress2 !== "" && `, (${customer.streetAddress2})`}
-                  </td>
-                  <td>{customer.phone}</td>
-                </tr>
+                <CustomerListRow key={customer._id} setComp={setComp} customer={customer} />
               )}
             </tbody>
           </table>

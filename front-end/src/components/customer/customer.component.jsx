@@ -7,19 +7,20 @@ import { useLocation } from 'react-router-dom';
 // components
 import { Container, Card, Ul, Li } from '../tag/tag.component';
 import { useForm } from '../hook/use-form';
-import ProductSearchForm from './product-search-form.component';
-import ProductCards from './product-cards.component';
-import ProductInfo from './product-info.component';
-import ProductEdit from './product-edit.component';
-import ProductAdd from './product-add.component';
+import CustomerSearchForm from './customer-search-form.component';
+import CustomerListTable from './customer-list-table.component';
+import CustomerAdd from './customer-add.component';
+import CustomerInfo from './customer-info.component';
+import CustomerEdit from './customer-edit.component';
+import CustomerShippingInfo from './customer-shipping-info.component';
 import { convertSearchFormToQueryString } from '../utils/convert-search-form-to-query-string';
 
 // redux
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import { selectProductComp } from '../../state/product/product.selectors';
-import { setProductComp } from '../../state/product/product.actions';
-import { setIsSelectingProduct } from '../../state/order/order.actions';
+import { selectCustomerComp } from '../../state/customer/customer.selectors';
+import { setCustomerComp } from '../../state/customer/customer.actions';
+import { setIsSelectingCustomer } from '../../state/order/order.actions';
 
 // initial values
 const formSchema = Yup.object().shape({
@@ -31,13 +32,13 @@ const formState = {
 }
 
 // main component
-const Product = ({
+const Customer = ({
   comp,
-  setIsSelectingProduct,
-  setProductComp
+  setCustomerComp,
+  setIsSelectingCustomer
 }) => {
 
-  const location = useLocation()
+  const location = useLocation();
 
   const [queryObj, setQueryObj] = useState({
     str: "",
@@ -66,23 +67,23 @@ const Product = ({
   }
 
   const goBack = () => {
-    setIsSelectingProduct(false)
+    setIsSelectingCustomer(false)
   }
 
   useEffect(() => {
     return () => {
-      setProductComp('')
+      setCustomerComp('')
     }
     // eslint-disable-next-line
   }, [])
-  
+
   return <>
     {
       comp === '' && <>
         <Container width="col" goBack={location.search ? goBack : undefined}>
-          <Card width="col" title="Search For Products" >
+          <Card width="col" title="Search For Customers" >
             <Ul>
-              <ProductSearchForm 
+              <CustomerSearchForm
                 formSubmit={formSubmit} 
                 formData={formData}
                 errors={errors}
@@ -97,52 +98,39 @@ const Product = ({
                       className="a-link-cs"
                       onClick={e => {
                         e.preventDefault();
-                        setProductComp('product-add')
+                        setCustomerComp('customer-add')
                       }}
                     >
-                      ( + ) Add a New Product
+                      ( + ) Add a New Customer
                     </a>
                   </div>
                 </div>
               </Li>
             </Ul>
           </Card>
-          {/* queryObj, setQueryObj are ownProps */}
-          <ProductCards
-            pathname='/products'
+          <CustomerListTable
+            pathname='/customers'
             queryStr={queryObj.str}
-            component='product-cards'
             queryObj={queryObj}
             setQueryObj={setQueryObj}
           />
         </Container>
       </>
     }
-    {
-      comp === 'product-info' && <>
-        <ProductInfo />
-      </>
-    }
-    {
-      comp === 'product-edit' && <>
-        <ProductEdit />
-      </>
-    }
-    {
-      comp === 'product-add' && <>
-        <ProductAdd />
-      </>
-    }
+    { comp === 'customer-add' && <CustomerAdd /> }
+    { comp === 'customer-info' && <CustomerInfo /> }
+    { comp === 'customer-edit' && <CustomerEdit /> }
+    { comp === 'customer-shipping-info' && <CustomerShippingInfo /> }
   </>
 }
 
 const mapStateToProps = createStructuredSelector({
-  comp: selectProductComp
+  comp: selectCustomerComp
 })
 
 const mapDispatchToProps = dispatch => ({
-  setIsSelectingProduct: payload => dispatch(setIsSelectingProduct(payload)),
-  setProductComp: comp => dispatch(setProductComp(comp))
+  setIsSelectingCustomer: payload => dispatch(setIsSelectingCustomer(payload)),
+  setCustomerComp: comp => dispatch(setCustomerComp(comp))
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(Product);
+export default connect(mapStateToProps, mapDispatchToProps)(Customer);

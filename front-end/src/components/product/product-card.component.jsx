@@ -4,20 +4,23 @@ import React from 'react';
 import { Li } from '../tag/tag.component';
 
 // redux
-import { connect } from 'react-redux';
+import { connect, batch } from 'react-redux';
+import { setProductComp } from '../../state/product/product.actions'; 
 import { copyProductToById } from '../../state/product/product.actions';
 
 const ProductCard = ({
   product,
-  setComp,
+  setProductComp,
   copyProductToById
 }) => {
 
   const handleOnClick = (e, product) => {
     e.preventDefault();
     
-    copyProductToById(product)
-    setComp('product-info')
+    batch(() => {
+      copyProductToById(product)
+      setProductComp('product-info')
+    })
   }
 
   return <>
@@ -77,6 +80,7 @@ const ProductCard = ({
 }
 
 const mapDispatchToProps = dispatch => ({
+  setProductComp: comp => dispatch(setProductComp(comp)),
   copyProductToById: product => dispatch(copyProductToById(product))
 })
 

@@ -11,8 +11,7 @@ import ProductCard from './product-card.component';
 const ProductCards = ({ 
   data,
   queryObj,
-  setQueryObj,
-  setComp
+  setQueryObj
 }) => {
 
   const { allIds } = data;
@@ -60,7 +59,7 @@ const ProductCards = ({
                 </div>
               </div>
               <ul className="list-group list-group-flush"> 
-                <ProductCard product={product} setComp={setComp} />
+                <ProductCard product={product} />
               </ul>
             </div>
           </div>

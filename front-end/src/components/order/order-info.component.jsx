@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 // dependencies
 import * as Yup from "yup";
 import { useLocation, Redirect } from 'react-router-dom'; 
+import queryString from 'query-string';
 
 // components
 import { Container, Card, Ul } from '../tag/tag.component';
@@ -59,6 +60,8 @@ const OrderInfo = ({
 }) => {
 
   const location = useLocation();
+  const queryStr = queryString.parse(location.search);
+  const { comp } = queryStr;
   const [redirect, setRedirect] = useState(false)
 
   const { orderInfo } = order;
@@ -112,7 +115,7 @@ const OrderInfo = ({
   return <>
 
     {
-      redirect && <Redirect to={location.state.from} />
+      redirect && <Redirect to={`${location.pathname}?comp=${comp}`} />
     }
 
     <Container width="col">

@@ -19,6 +19,7 @@ import { ProductActionTypes } from '../../state/product/product.types';
 import { selectAlertMessage } from '../../state/alert/alert.selectors';
 import { selectProductData } from '../../state/product/product.selectors';
 import { selectBrandData } from '../../state/brand/brand.selectors';
+import { setProductComp } from '../../state/product/product.actions';
 
 // inital values
 const formSchema = Yup.object().shape({
@@ -58,7 +59,7 @@ const ProductEdit = ({
   productData,
   brandData,
   patchReq,
-  setComp,
+  setProductComp,
   alertMessage
 }) => {
 
@@ -99,11 +100,11 @@ const ProductEdit = ({
   }
 
   const goBack = () => {
-    setComp('product-info')
+    setProductComp('product-info')
   }
 
   useEffect(() => {
-    if (success) setComp('product-info')
+    if (success) setProductComp('product-info')
     // eslint-disable-next-line
   }, [success])
 
@@ -169,7 +170,8 @@ const mapDispatchToProps = dispatch => ({
     reqBody, 
     setSuccess, 
     component
-  ))
+  )),
+  setProductComp: comp => dispatch(setProductComp(comp))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProductEdit);
