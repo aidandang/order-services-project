@@ -1,6 +1,23 @@
 const mongoose = require('mongoose'),
   Schema = mongoose.Schema;
 
+const infoSchema = new Schema({
+  merchant: {
+    type: Object
+  },
+  orderNumber: {
+    type: String,
+    required: true
+  },
+  orderDate: {
+    type: Date
+  },
+  orderType: {
+    type: String,
+    required: true
+  }
+})
+
 const itemSchema = new Schema({
   product: {
     type: Object,
@@ -15,46 +32,31 @@ const itemSchema = new Schema({
     required: true
   },
   qty: {
-    type: Number
+    type: Number,
+    required: true
   },
   price: {
-    type: Number
+    type: Number,
+    required: true
   },
-  recvDate: {
-    type: Date
+  salePrice: {
+    type: Number,
+    required: true
   },
-  dlvdDate: {
-    type: Date
+  weight: {
+    type: Number,
+    required: true
+  },
+  shippingPrice: {
+    type: Number,
+    required: true
   },
   note: {
     type: String
   }
 });
 
-const orderSchema = new Schema({
-  merchant: {
-    type: Object
-  },
-  orderNumber: {
-    type: String,
-    required: true
-  },
-  orderDate: {
-    type: Date
-  },
-  orderType: {
-    type: String,
-    required: true
-  },
-  status: {
-    type: String
-  },
-  warehouse: {
-    type: Object
-  },
-  items: {
-    type: [itemSchema]
-  },
+const costSchema = new Schema({
   shippingCost: {
     type: Number,
     default: 0
@@ -63,10 +65,30 @@ const orderSchema = new Schema({
     type: Number,
     default: 0
   },
-  customer: {
-    type: Object,
+  totalCost: {
+    type: Number,
     required: true
+  }
+})
+
+const receivingSchema = new Schema({
+  status: {
+    type: String,
+    require: true
   },
+  tracking: {
+    type: String
+  },
+  recvDate: {
+    type: Date
+  },
+  warehouse: {
+    type: Object,
+    require: true
+  }
+})
+
+const saleSchema = new Schema({
   salePrice: {
     type: Number,
     required: true
@@ -75,12 +97,38 @@ const orderSchema = new Schema({
     type: Number,
     default: 0
   },
-  attachments: {
-    type: Array
+  customer: {
+    type: Object,
+    required: true
+  }
+})
+
+const orderSchema = new Schema({
+  info: {
+    type: infoSchema,
+    require: true
+  },
+  items: {
+    type: [itemSchema]
+  },
+  cost: {
+    type: costSchema,
+    required: true
+  },
+  receiving: {
+    type: receivingSchema,
+    require: true
+  },
+  sale: {
+    type: saleSchema,
+    require: true
   },
   createdAt: {
     type: Date,
     default: Date.now
+  },
+  attachments: {
+    type: Array
   },
   createdBy: {
     type: Object

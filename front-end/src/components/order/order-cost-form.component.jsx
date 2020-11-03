@@ -11,6 +11,18 @@ const OrderCostForm = ({
   return <>
     <Li>
       <TextInput
+        label="Sale Tax" 
+        name="saleTax"
+        id="currencyMask-order-cost-form-saleTax"
+        errors={errors}
+        size="col-xl-6"
+        smallText="Sale tax applied to this order. Leave empty if there is no tax"
+        value={formData.saleTax}
+        onChange={onInputChange}
+      />
+    </Li>
+    <Li>
+      <TextInput
         label="Shipping Cost" 
         name="shippingCost"
         id="currencyMask-order-cost-form-shippingCost"
@@ -23,13 +35,13 @@ const OrderCostForm = ({
     </Li>
     <Li>
       <TextInput
-        label="Sale Tax" 
-        name="saleTax"
-        id="currencyMask-order-cost-form-saleTax"
+        label="Total (*)" 
+        name="totalCost"
+        id="currencyMask-order-cost-form-totalCost"
         errors={errors}
         size="col-xl-6"
-        smallText="Sale tax applied to this order. Leave empty if there is no tax"
-        value={formData.saleTax}
+        smallText="Total cost of the order."
+        value={formData.totalCost}
         onChange={onInputChange}
       />
     </Li>

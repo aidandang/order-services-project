@@ -1,130 +1,76 @@
 import React from 'react';
 
 // components
-import { Li, TextInput } from '../tag/tag.component';
-
-// redux
-import { connect } from 'react-redux';
-import { setIsSelectingCustomer } from '../../state/order/order.actions';
+import { strToAcct } from '../utils/strToAcct';
+import { acctToStr } from '../utils/acctToStr';
 
 const OrderSaleForm = ({
   formData,
   errors,
   onInputChange,
-  setIsSelectingCustomer
+  order
 }) => {
 
-  let address = null
+  const { items } = order;
 
-  if (formData && formData.customer) {
-    address = formData.customer.shippingInfo.find(item => item._id === formData.customer.shippingAddress)
-  } 
+  let sum = 0;
+
+  const subTotalCalc = () => (qty, price) => {
+    const value = strToAcct(price) * Number(qty);
+    sum = sum + value;
+    return acctToStr(value);
+  }
+  
+  const subTotal = subTotalCalc();
+
+  const total = (sum, shippingCost, saleTax) => {
+    return acctToStr(sum + strToAcct(shippingCost, saleTax))
+  }
 
   return <>
-    {
-      formData.customer && <>
-        <Li>
-          <div className="row">
-            <div className="col">
-              <div className="row">
-                <div className="col-4">
-                  <span>Nickname:</span>
-                </div>
-                <div className="col-8">
-                  <span>{formData.customer.nickname}</span>
-                </div>
-              </div>
-              <div className="row">
-                <div className="col-4">
-                  <span>Account Number:</span>
-                </div>
-                <div className="col-8">
-                  <span>{formData.customer.account}</span>
-                </div>
-              </div>
-              <div className="row">
-                <div className="col-4">
-                  <span>Billing Address:</span>
-                </div>
-                <div className="col-8">
-                  <span>{formData.customer.fullname}</span><br />
-                  <span>{formData.customer.streetAddress1}, {formData.customer.city}, {formData.customer.state}</span><br />
-                  <span>Phone# {formData.customer.phone}</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </Li>
-        <Li>
-          <div className="row">
-            <div className="col">
-              <div className="row">
-                <div className="col-4">
-                  <span>Shipping Address:</span>
-                </div>
-                <div className="col-8 align-self-center">
-                  {
-                    address === null
-                    ? 
-                      <span>Same as Billing Address</span>
-                    : <>
-                      <span>{address.fullname}</span><br />
-                      <span>{address.streetAddress1}, {address.city}, {address.state}</span><br />
-                      <span>Phone# {address.phone}</span>
-                    </>
-                  }
-                </div>
-              </div>
-            </div>
-          </div>
-        </Li>
-        <Li>
-          <TextInput
-            label="Sale Price (*)" 
-            name="salePrice"
-            id="currencyMask-order-sale-form-salePrice"
-            errors={errors}
-            size="col-xl-6"
-            smallText="Order price quote to the customer."
-            value={formData.price}
-            onChange={onInputChange}
-          />
-        </Li>
-        <Li>
-          <TextInput
-            label="Shipping Price (*)" 
-            name="shippingPrice"
-            id="currencyMask-order-sale-form-shippingPrice"
-            errors={errors}
-            size="col-xl-6"
-            smallText="Shipping price quote to the customer."
-            value={formData.price}
-            onChange={onInputChange}
-          />
-        </Li>
-      </>
-    }
-    <Li>
-      <div className="row">
-        <div className="col">
-          <a 
-            href="/" 
-            className="a-link-cs"
-            onClick={e => {
-              e.preventDefault();
-              setIsSelectingCustomer(true)
-            }}
-          >
-            {formData.customer ? 'Reselect Customer' : 'Select Customer'}
-          </a>
+    {/* Item Table */}
+    <div className="row mt-3">
+      <div className="col">
+        <div className="table-responsive">
+          <table className="table table-hover">
+            <thead>
+              <tr>
+                <th scope="col">Style#</th>
+                <th scope="col">Item/Description</th>
+                <th scope="col" className="text-right">Qty</th>
+                <th scope="col" className="text-right">Sale Price</th>
+                <th scope="col" className="text-right">Shipping</th>
+                <th scope="col" className="text-right">Amount</th>
+              </tr>
+            </thead>
+            <tbody>
+              {items.length > 0 &&
+                items.map((item, index) => 
+                  <tr 
+                    key={index} 
+                    className="table-row-no-link-cs span-link-cs"
+                    onClick={e => {
+                      e.preventDefault()
+                    }}
+                  >
+                    <td>{item.product.styleCode}</td>
+                    <td>{`${item.product.name}/Color:${item.color.color}/Size:${item.size}${item.note && `/${item.note}`}`}</td>
+                    <td className="text-right">{item.qty}</td>
+                    <td className="text-right">{item.salePrice.length > 0 ? item.salePrice : '.00'}</td>
+                    <td className="text-right">{item.shippingPrice.length > 0 ? item.shippingPrice : '.00'}</td>
+                    <th scope="row" className="text-right">
+                      {subTotal(item.qty, item.salePrice, item.shippingPrice)}
+                    </th>
+                  </tr>
+                ) 
+              }
+            </tbody>
+          </table>
         </div>
       </div>
-    </Li>
+    </div>
+    {/* End of Item Table */}
   </>
 }
 
-const mapDispatchToProps = dispatch => ({
-  setIsSelectingCustomer: payload => dispatch(setIsSelectingCustomer(payload))
-})
-
-export default connect(null, mapDispatchToProps)(OrderSaleForm);
+export default OrderSaleForm;

@@ -5,24 +5,32 @@ import { Link, useLocation } from 'react-router-dom';
 
 // components
 import { Card, Ul, Li } from '../tag/tag.component';
+import { strToAcct } from '../utils/strToAcct';
+import { acctToStr } from '../utils/acctToStr';
 
 const PreviewOrderSale = ({ 
-  orderSale 
+  sale 
 }) => {
 
   const location = useLocation();
 
+  const { customer } = sale;
+
   let address = null
 
-  if (orderSale && orderSale.customer) {
-    address = orderSale.customer.shippingInfo.find(item => item._id === orderSale.customer.shippingAddress)
-  } 
+  if (customer) {
+    address = sale.customer.shippingInfo.find(item => item._id === sale.customer.shippingAddress)
+  }
+  
+  const total = (salePrice, shippingPrice) => {
+    return acctToStr(strToAcct(salePrice, shippingPrice))
+  }
 
   return <>
-    <Card width="col" title="Sale Information">
+    <Card width="col" title="Billing Information">
       <Ul>
         {
-          orderSale && <>
+          customer && <>
             <Li>
               <div className="row">
                 <div className="col">
@@ -31,7 +39,7 @@ const PreviewOrderSale = ({
                       <span>Nickname:</span>
                     </div>
                     <div className="col-8">
-                      <span>{orderSale.customer.nickname}</span>
+                      <span>{sale.customer.nickname}</span>
                     </div>
                   </div>
                   <div className="row">
@@ -39,7 +47,7 @@ const PreviewOrderSale = ({
                       <span>Account Number:</span>
                     </div>
                     <div className="col-8">
-                      <span>{orderSale.customer.account}</span>
+                      <span>{sale.customer.account}</span>
                     </div>
                   </div>
                   <div className="row">
@@ -47,9 +55,9 @@ const PreviewOrderSale = ({
                       <span>Billing Address:</span>
                     </div>
                     <div className="col-8">
-                      <span>{orderSale.customer.fullname}</span><br />
-                      <span>{orderSale.customer.streetAddress1}, {orderSale.customer.city}, {orderSale.customer.state}</span><br />
-                      <span>Phone# {orderSale.customer.phone}</span>
+                      <span>{sale.customer.fullname}</span><br />
+                      <span>{sale.customer.streetAddress1}, {sale.customer.city}, {sale.customer.state}</span><br />
+                      <span>Phone# {sale.customer.phone}</span>
                     </div>
                   </div>
                 </div>
@@ -64,15 +72,45 @@ const PreviewOrderSale = ({
                     </div>
                     <div className="col-8 align-self-center">
                       {
-                        address === null
-                        ? 
-                          <span>Same as Billing Address</span>
-                        : <>
+                        address
+                        ? <>
                           <span>{address.fullname}</span><br />
                           <span>{address.streetAddress1}, {address.city}, {address.state}</span><br />
                           <span>Phone# {address.phone}</span>
                         </>
+                        : 
+                        <span>Same as Billing Address</span>
                       }
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </Li>
+            <Li>
+              <div className="row">
+                <div className="col">
+                  <div className="row">
+                    <div className="col-4">
+                      <span>Sale Price:</span>
+                    </div>
+                    <div className="col-8 align-self-center">
+                      {sale.salePrice}
+                    </div>
+                  </div>
+                  <div className="row">
+                    <div className="col-4">
+                      <span>Shipping Price:</span>
+                    </div>
+                    <div className="col-8 align-self-center">
+                      {sale.shippingPrice.length > 0 ? sale.shippingPrice : '.00'}
+                    </div>
+                  </div>
+                  <div className="row">
+                    <div className="col-4">
+                      <span>Total:</span>
+                    </div>
+                    <div className="col-8 align-self-center">
+                      {total(sale.salePrice, sale.shippingPrice)}
                     </div>
                   </div>
                 </div>
@@ -81,6 +119,7 @@ const PreviewOrderSale = ({
           </>
         }
         <Li>
+
           <div className="row">
             <div className="col">
               <Link 
@@ -99,7 +138,8 @@ const PreviewOrderSale = ({
           </div> 
         </Li> 
       </Ul>
-    </Card>  
+    </Card>
+    
   </>
 }
 

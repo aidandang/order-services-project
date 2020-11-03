@@ -22,12 +22,16 @@ const formSchema = Yup.object().shape({
   shippingCost: Yup
     .string(),
   saleTax: Yup
+    .string(),
+  totalCost: Yup
     .string()
+    .required()
 })
 
 const formState = {
   shippingCost: "",
-  saleTax: ""
+  saleTax: "",
+  totalCost: ""
 }
 
 // main component
@@ -41,14 +45,15 @@ const OrderCost = ({
   const { comp } = queryStr;
   const [redirect, setRedirect] = useState(false)
 
-  const { orderCost } = order;
+  const { cost } = order;
   let orderEditing = null;
 
-  if (orderCost) {
+  if (cost) {
     orderEditing = {
       ...formState,
-      shippingCost: orderCost.shippingCost,
-      saleTax: orderCost.saleTax
+      shippingCost: cost.shippingCost,
+      saleTax: cost.saleTax,
+      totalCost: cost.totalCost
     }
   }
 

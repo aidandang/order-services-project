@@ -21,14 +21,14 @@ const PreviewOrderItem = ({
   const location = useLocation();
   const history = useHistory();
 
-  const { items, orderCost } = order;
+  const { items, cost } = order;
 
   let shippingCost = ""
   let saleTax = ""
 
-  if (orderCost) {
-    shippingCost = orderCost.shippingCost
-    saleTax = orderCost.saleTax
+  if (cost) {
+    shippingCost = cost.shippingCost
+    saleTax = cost.saleTax
   }
 
   let sum = 0;
@@ -132,7 +132,7 @@ const PreviewOrderItem = ({
                         }}
                         className="a-link-cs"
                       >
-                        Update Local Costs
+                        Update Costs
                       </Link>
                     </td>
                   </tr>

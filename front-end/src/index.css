@@ -102,7 +102,6 @@ body {
 
 .span-link-cs {
   cursor: pointer;
-  color: #5D8C87
 }
 
 .title_card_header {
@@ -121,4 +120,14 @@ body {
 
 .title-btn:hover {
   color: #5D8C87;
+}
+
+.symbol-link-cs {
+  color: #5D8C87;
+  text-decoration: none;
+  font-weight: normal;
+}
+
+.symbol-link-cs:hover {
+  text-decoration: none;
 }
