@@ -8,7 +8,6 @@ import queryString from 'query-string';
 // components
 import { Container, Card, Ul, Li } from '../tag/tag.component';
 import { useForm } from '../hook/use-form';
-import SubmitOrReset from '../submit-or-reset/submit-or-reset.component';
 import OrderSaleForm from './order-sale-form.component';
 import Customer from '../customer/customer.component';
 
@@ -27,13 +26,16 @@ const formSchema = Yup.object().shape({
     .string()
     .required(),
   shippingPrice: Yup
+    .string(),
+  int: Yup
     .string()
 });
 
 const formState = {
   customer: null,
   shippingPrice: "",
-  salePrice: ""
+  salePrice: "",
+  int: ""
 }
 
 // main component
@@ -59,7 +61,9 @@ const OrderSale = ({
     setValues
   ] = useForm(formState, formState, formSchema);
 
-  const { customer } = formData
+  const { customer } = formData;
+
+  const [itemIndex, setItemIndex] = useState(null)
 
   let address = null
 
@@ -184,21 +188,16 @@ const OrderSale = ({
           </Card>
           <form>
             <OrderSaleForm
+              formSubmit={formSubmit}
+              formReset={formReset}
+              buttonDisabled={buttonDisabled}
               formData={formData}
               errors={errors} 
               onInputChange={onInputChange}
               order={order}
+              itemIndex={itemIndex}
+              setItemIndex={setItemIndex}
             />
-            {
-              formData.customer && <>
-                <SubmitOrReset
-                  buttonName={'Save'}
-                  buttonDisabled={buttonDisabled}
-                  formSubmit={formSubmit}
-                  formReset={formReset}
-                />
-              </>
-            }
           </form>
         </Container>
       </>
