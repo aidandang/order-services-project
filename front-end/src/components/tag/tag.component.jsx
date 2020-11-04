@@ -16,15 +16,17 @@ export const Container = ({
           goBack &&
           <div className="row my-0 py-0">
             <div className={`${width ? width : 'col'} text-right`}>
-              <span
-                className="span-link-cs"
+              <a
+                href="/"
+                className="symbol-link-cs"
                 onClick={e => {
                   e.stopPropagation();
+                  e.preventDefault();
                   goBack();
                 }}
               >
                 &#10006;
-              </span>
+              </a>
             </div>
           </div>
         }

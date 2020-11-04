@@ -67,32 +67,6 @@ const OrderInfoForm = ({
         textKey="type" 
       />
     </Li>
-    <Li>
-      <TextInput
-        label="Status" 
-        name="status"
-        errors={errors}
-        smallText="Status of the order."
-        value={formData.status}
-        onChange={onInputChange}
-      />
-    </Li>
-    <Li>
-      <SelectInput
-        label="Warehouse (*)" 
-        name="warehouse"
-        errors={errors}
-        size="col-xl-6"
-        smallText="Select a warehouse, add new if there is no warehouse."
-        defaultValue=""
-        defaultText="..."
-        value={formData.warehouse ? formData.warehouse : ""}
-        onChange={onInputChange}
-        data={warehouses}
-        valueKey="_id"
-        textKey="name"
-      />
-    </Li>
   </>
 }
 

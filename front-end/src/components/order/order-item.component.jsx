@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 
 // dependencies
 import * as Yup from "yup";
-import { useLocation, Redirect } from 'react-router-dom'; 
+import { useLocation, Redirect, useHistory } from 'react-router-dom'; 
 import queryString from 'query-string';
 
 // components
@@ -42,6 +42,9 @@ const formState = {
   size: "",
   qty: "",
   price: "",
+  salePrice: "",
+  weight: "",
+  shippingPrice: "",
   note: ""
 }
 
@@ -53,17 +56,18 @@ const OrderItem = ({
 }) => {
 
   const location = useLocation();
+  const history = useHistory();
   const queryStr = queryString.parse(location.search);
   const { index, comp } = queryStr;
 
-  const { items, itemTemp, isSelectingProduct } = order;
+  const { items, item, isSelectingProduct } = order;
 
   let obj = null
 
   if (index && items[index]) {
     obj = { ...items[index] }
-  } else if (Object.keys(itemTemp).length > 0) {
-    obj = { ...itemTemp }
+  } else if (Object.keys(item).length > 0) {
+    obj = { ...item }
   }
 
   const [redirect, setRedirect] = useState(false)
@@ -90,6 +94,10 @@ const OrderItem = ({
     setValues(formState);
   }
 
+  const goBack = () => {
+    history.push(`${location.pathname}?comp=${comp}`)
+  }
+
   useEffect(() => {
     if (obj) setValues(prevState => ({
       ...prevState, ...obj
@@ -109,7 +117,7 @@ const OrderItem = ({
         <Product />
       </>
       : <>
-        <Container width="col">
+        <Container width="col" goBack={goBack}>
           <Card width="col" title="Item Information">
             <Ul>
               <form onSubmit={formSubmit}>

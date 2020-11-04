@@ -8,6 +8,7 @@ import { Container, Card, Ul } from '../tag/tag.component';
 import PreviewOrderInfo from './preview-order-info.component';
 import PreviewOrderItem from './preview-order-item.component';
 import PreviewOrderSale from './preview-order-sale.component';
+import PreviewOrderReceiving from './preview-order-receiving.component'
 import SubmitOrReset from '../submit-or-reset/submit-or-reset.component';
 
 // redux
@@ -22,7 +23,7 @@ const OrderAdd = ({
   const history = useHistory();
   const location = useLocation();
 
-  const { orderInfo, items, orderSale } = order;
+  const { info, items, receiving, sale } = order;
 
   const formSubmit = () => {
   }
@@ -40,13 +41,16 @@ const OrderAdd = ({
       <form>
         <div className="row">
           <div className="col-12">
-            <PreviewOrderInfo orderInfo={orderInfo} />
+            <PreviewOrderInfo info={info} />
           </div>
           <div className="col-12">
             <PreviewOrderItem items={items} />
           </div>
           <div className="col-12">
-            <PreviewOrderSale orderSale={orderSale} />
+            <PreviewOrderReceiving receiving={receiving} />
+          </div>
+          <div className="col-12">
+            <PreviewOrderSale sale={sale} />
           </div>
           <div className="col-12">
             <Card title="Action">

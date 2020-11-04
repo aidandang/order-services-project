@@ -11,6 +11,7 @@ import OrderAdd from '../../components/order/order-add.component';
 import OrderInfo from '../../components/order/order-info.component';
 import OrderItem from '../../components/order/order-item.component';
 import OrderCost from '../../components/order/order-cost.component';
+import OrderReceiving from '../../components/order/order-receiving.component';
 import OrderSale from '../../components/order/order-sale.component';
 
 // initial values
@@ -47,6 +48,7 @@ const OrderPage = () => {
         { select === 'order-info' && <OrderInfo /> }
         { select === 'order-item' && <OrderItem /> }
         { select === 'order-cost' && <OrderCost /> }
+        { select === 'order-receiving' && <OrderReceiving /> }
         { select === 'order-sale' && <OrderSale /> }
       </>
     }

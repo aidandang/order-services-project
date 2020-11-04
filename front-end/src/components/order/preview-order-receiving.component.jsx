@@ -7,71 +7,50 @@ import { Link, useLocation } from 'react-router-dom';
 // components
 import { Card, Ul, Li } from '../tag/tag.component';
 
-const PreviewOrderInfo = ({ 
-  info 
+const PreviewOrderReceiving = ({ 
+  receiving 
 }) => {
 
   const location = useLocation();
 
   return <>
-    <Card width="col" title="Order Information">
+    <Card width="col" title="Receiving Information">
       <Ul>
         {
-          info && <>
+          receiving && <>
             <Li>
               <div className="row">
                 <div className="col">
                   <div className="row">
                     <div className="col-4">
-                      <span>Order Number:</span>
+                      <span>Status:</span>
                     </div>
                     <div className="col-8">
-                      <span>{info.orderNumber}</span>
+                      <span>{receiving.status}</span>
                     </div>
                   </div>
                   <div className="row">
                     <div className="col-4">
-                      <span>Order Date:</span>
+                      <span>Tracking Number:</span>
                     </div>
                     <div className="col-8">
-                      <span>{moment(info.orderDate).format('MMM DD, YYYY')}</span>
+                      <span>{receiving.tracking.length > 0 ? receiving.tracking : 'Not Available'}</span>
                     </div>
                   </div>
                   <div className="row">
                     <div className="col-4">
-                      <span>Order Type:</span>
+                      <span>Received Date:</span>
                     </div>
                     <div className="col-8">
-                      <span>{info.orderType}</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </Li>
-            <Li>
-              <div className="row">
-                <div className="col">
-                  <div className="row">
-                    <div className="col-4">
-                      <span>Merchant:</span>
-                    </div>
-                    <div className="col-8">
-                      <span>{info.merchant.name}</span>
+                      <span>{receiving.recvDate.length > 0 ? moment(receiving.recvDate).format('MMM DD, YYYY') : 'Not Available'}</span>
                     </div>
                   </div>
                   <div className="row">
                     <div className="col-4">
-                      <span>Official Website:</span>
+                      <span>Warehouse:</span>
                     </div>
                     <div className="col-8">
-                      <a 
-                        href={info.merchant.url}
-                        className="a-link-cs"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        {info.merchant.url}
-                      </a>
+                      <span>{receiving.warehouse.name}</span>
                     </div>
                   </div>
                 </div>
@@ -85,7 +64,7 @@ const PreviewOrderInfo = ({
               <Link 
                 to={{
                   pathname: location.pathname,
-                  search: `${location.search}&select=order-info`,
+                  search: `${location.search}&select=order-receiving`,
                   state: {
                     from: location.pathname + location.search
                   }
@@ -102,4 +81,4 @@ const PreviewOrderInfo = ({
   </>
 }
 
-export default PreviewOrderInfo;
+export default PreviewOrderReceiving;

@@ -1,7 +1,7 @@
 import React from 'react';
 
 // dependencies
-import { Link, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 
 // components
 import { Container, Card, Ul, Li } from '../tag/tag.component';
@@ -11,15 +11,23 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { selectCustomerData } from '../../state/customer/customer.selectors'; 
 import { setCustomerComp } from '../../state/customer/customer.actions';
+import { selectCustomerToOrder } from '../../state/order/order.actions';
 
 const CustomerInfo = ({
   data,
-  setCustomerComp
+  setCustomerComp,
+  selectCustomerToOrder
 }) => {
 
   const location = useLocation();
 
   const { byId } = data;
+
+  const handleSelectCustomerToOrder = () => {
+    if (location.search) {
+      selectCustomerToOrder(byId)
+    } 
+  }
 
   const goBack = () => {
     setCustomerComp('')
@@ -138,12 +146,16 @@ const CustomerInfo = ({
           <Li>
             <div className="row">
               <div className="col">
-                <Link
-                  to={location.pathname + `?select=customer&action=save&id=${byId._id}`}
+                <a
+                  href="/"
                   className="a-link-cs"
+                  onClick={e => {
+                    e.preventDefault()
+                    handleSelectCustomerToOrder()
+                  }}
                 >
                   Select to Order
-                </Link>
+                </a>
               </div>
             </div>
           </Li>
@@ -158,7 +170,8 @@ const mapStateToProps = createStructuredSelector({
 })
 
 const mapDispatchToProps = dispatch => ({
-  setCustomerComp: comp => dispatch(setCustomerComp(comp))
+  setCustomerComp: comp => dispatch(setCustomerComp(comp)),
+  selectCustomerToOrder: customer => dispatch(selectCustomerToOrder(customer))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(CustomerInfo);

@@ -1,20 +1,20 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 // dependencies
 import * as Yup from "yup";
-import { useLocation, Redirect } from 'react-router-dom'; 
+import { useLocation, Redirect, useHistory } from 'react-router-dom'; 
 import queryString from 'query-string';
 
 // components
-import { Container, Card, Ul } from '../tag/tag.component';
+import { Container, Card, Ul, Li } from '../tag/tag.component';
 import { useForm } from '../hook/use-form';
-import SubmitOrReset from '../submit-or-reset/submit-or-reset.component';
 import OrderSaleForm from './order-sale-form.component';
 import Customer from '../customer/customer.component';
 
 // redux
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
+import { setIsSelectingCustomer } from '../../state/order/order.actions';
 import { saveOrderSale } from '../../state/order/order.actions';
 import { selectOrderEditing } from '../../state/order/order.selectors';
 
@@ -26,37 +26,32 @@ const formSchema = Yup.object().shape({
     .string()
     .required(),
   shippingPrice: Yup
+    .string(),
+  int: Yup
     .string()
 });
 
 const formState = {
   customer: null,
   shippingPrice: "",
-  salePrice: ""
+  salePrice: "",
+  int: ""
 }
 
 // main component
 const OrderSale = ({
   order,
-  saveOrderSale
+  saveOrderSale,
+  setIsSelectingCustomer
 }) => {
 
   const location = useLocation();
+  const history = useHistory();
   const queryStr = queryString.parse(location.search);
   const { comp } = queryStr;
   const [redirect, setRedirect] = useState(false)
 
-  const { orderSale, isSelectingCustomer } = order;
-  let orderEditing = null;
-
-  if (orderSale) {
-    orderEditing = {
-      ...formState,
-      customer: orderSale.customer,
-      salePrice: orderSale.salePrice,
-      shippingPrice: orderSale.shippingPrice
-    }
-  }
+  const { sale, isSelectingCustomer } = order;
 
   const [
     formData,
@@ -64,7 +59,18 @@ const OrderSale = ({
     onInputChange, 
     buttonDisabled,
     setValues
-  ] = useForm(orderEditing ? orderEditing : formState, formState, formSchema);
+  ] = useForm(formState, formState, formSchema);
+
+  const { customer } = formData;
+
+  const [itemIndex, setItemIndex] = useState(null)
+
+  let address = null
+
+  if (customer) {
+    address = customer.shippingInfo.find(item => item._id === customer.shippingAddress)
+  }
+  
 
   const formSubmit = () => {
     const obj = { ...formData }
@@ -76,6 +82,17 @@ const OrderSale = ({
   const formReset = () => {
     setValues(formState);
   }
+
+  const goBack = () => {
+    history.push(`${location.pathname}?comp=${comp}`)
+  }
+
+  useEffect(() => {
+    if (Object.keys(sale).length > 0) setValues(prevState => ({
+      ...prevState, ...sale
+    }))
+    // eslint-disable-next-line
+  }, [isSelectingCustomer])
 
   return <>
 
@@ -89,27 +106,99 @@ const OrderSale = ({
         <Customer />
       </>
       : <>
-        <Container width="col">
-          <Card width="col" title="Sale Information">
+        <Container width="col" goBack={goBack}>
+          <Card width="col" title="Billing Information">
             <Ul>
-              <form onSubmit={formSubmit}>
-                <OrderSaleForm
-                  formData={formData}
-                  errors={errors} 
-                  onInputChange={onInputChange}
-                />
-                {
-                  formData.customer &&
-                  <SubmitOrReset
-                    buttonName={'Save'}
-                    buttonDisabled={buttonDisabled}
-                    formSubmit={formSubmit}
-                    formReset={formReset}
-                  />
-                }
-              </form>
+              <Li>
+                <div className="row">
+                  <div className="col">
+                    <a 
+                      href="/" 
+                      className="a-link-cs"
+                      onClick={e => {
+                        e.preventDefault();
+                        setIsSelectingCustomer(true)
+                      }}
+                    >
+                      {formData.customer ? 'Reselect Customer' : 'Select Customer'}
+                    </a>
+                  </div>
+                </div>
+              </Li>
+              { 
+                customer && <>
+                  <Li>
+                    <div className="row">
+                      <div className="col">
+                        <div className="row">
+                          <div className="col-4">
+                            <span>Nickname:</span>
+                          </div>
+                          <div className="col-8">
+                            <span>{customer.nickname}</span>
+                          </div>
+                        </div>
+                        <div className="row">
+                          <div className="col-4">
+                            <span>Account Number:</span>
+                          </div>
+                          <div className="col-8">
+                            <span>{customer.account}</span>
+                          </div>
+                        </div>
+                        <div className="row">
+                          <div className="col-4">
+                            <span>Billing Address:</span>
+                          </div>
+                          <div className="col-8">
+                            <span>{customer.fullname}</span><br />
+                            <span>{customer.streetAddress1}, {customer.city}, {customer.state}</span><br />
+                            <span>Phone# {customer.phone}</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </Li>
+                  <Li>
+                    <div className="row">
+                      <div className="col">
+                        <div className="row">
+                          <div className="col-4">
+                            <span>Shipping Address:</span>
+                          </div>
+                          <div className="col-8 align-self-center">
+                            {
+                              address
+                              ? <>
+                                <span>{address.fullname}</span><br />
+                                <span>{address.streetAddress1}, {address.city}, {address.state}</span><br />
+                                <span>Phone# {address.phone}</span>
+                              </>
+                              : 
+                              <span>Same as Billing Address</span>
+                            }
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </Li>
+                </>
+              }
             </Ul>
           </Card>
+          <form>
+            <OrderSaleForm
+              formSubmit={formSubmit}
+              formReset={formReset}
+              buttonDisabled={buttonDisabled}
+              formData={formData}
+              errors={errors} 
+              onInputChange={onInputChange}
+              order={order}
+              itemIndex={itemIndex}
+              setItemIndex={setItemIndex}
+            />
+          </form>
         </Container>
       </>
     }
@@ -121,7 +210,8 @@ const mapStateToProps = createStructuredSelector({
 })
 
 const mapDispatchToProps = dispatch => ({
-  saveOrderSale: payload => dispatch(saveOrderSale(payload))
+  saveOrderSale: payload => dispatch(saveOrderSale(payload)),
+  setIsSelectingCustomer: payload => dispatch(setIsSelectingCustomer(payload))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(OrderSale);

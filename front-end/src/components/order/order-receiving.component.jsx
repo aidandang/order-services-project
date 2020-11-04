@@ -9,44 +9,42 @@ import queryString from 'query-string';
 import { Container, Card, Ul } from '../tag/tag.component';
 import { useForm } from '../hook/use-form';
 import SubmitOrReset from '../submit-or-reset/submit-or-reset.component';
-import Merchant from '../merchant/merchant.component';
-import OrderInfoForm from './order-info-form.component';
+import Warehouse from '../warehouse/warehouse.component';
+import OrderReceivingForm from './order-receiving-form.component';
 
 // redux
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import { saveOrderInfo } from '../../state/order/order.actions';
-import { selectMerchantData } from '../../state/merchant/merchant.selectors';
+import { saveOrderReceiving } from '../../state/order/order.actions';
+import { selectWarehouseData } from '../../state/warehouse/warehouse.selectors';
 import { selectOrderEditing } from '../../state/order/order.selectors';
 
 // inital values
 const formSchema = Yup.object().shape({
-  merchant: Yup
+  status: Yup
     .string()
     .required(),
-  orderNumber: Yup
-    .string()
-    .required(),
-  orderDate: Yup
-    .string()
-    .required(),
-  orderType: Yup
+  tracking: Yup
+    .string(),
+  recvDate: Yup
+    .string(),
+  warehouse: Yup
     .string()
     .required()
 });
 
 const formState = {
-  merchant: "",
-  orderNumber: "",
-  orderDate: "",
-  orderType: ""
+  status: "",
+  tracking: "",
+  recvDate: "",
+  warehouse: ""
 }
 
 // main component
-const OrderInfo = ({
-  merchantData,
+const OrderReceiving = ({
+  warehouseData,
   order,
-  saveOrderInfo
+  saveOrderReceiving
 }) => {
 
   const location = useLocation();
@@ -55,22 +53,22 @@ const OrderInfo = ({
   const { comp } = queryStr;
   const [redirect, setRedirect] = useState(false)
 
-  const { info } = order;
+  const { receiving } = order;
   let orderEditing = null;
 
-  if (info) {
+  if (receiving) {
     orderEditing = {
       ...formState,
-      merchant: info.merchant._id,
-      orderNumber: info.orderNumber,
-      orderDate: info.orderDate,
-      orderType: info.orderType
+      status: receiving.status,
+      tracking: receiving.tracking,
+      recvDate: receiving.recvDate,
+      warehouse: receiving.warehouse._id
     }
   }
 
-  let merchants = null;
+  let warehouses = null;
 
-  if (merchantData.allIds) merchants = merchantData.allIds;
+  if (warehouseData.allIds) warehouses = warehouseData.allIds;
 
   const [
     formData,
@@ -82,14 +80,14 @@ const OrderInfo = ({
 
   const formSubmit = () => {
     
-    const merchantObj = merchantData.allIds.find(item => item._id === formData.merchant)
+    const warehouseObj = warehouseData.allIds.find(item => item._id === formData.warehouse)
 
     const obj = { 
       ...formData,
-      merchant: merchantObj,
+      warehouse: warehouseObj,
     }
 
-    saveOrderInfo(obj)
+    saveOrderReceiving(obj)
     setRedirect(true)
   }
 
@@ -111,13 +109,13 @@ const OrderInfo = ({
       <div className="row">
         <div className="col-12 col-xl-8">
           <form>
-            <Card width="col" title="Order Information">
+            <Card width="col" title="Order Receiving">
               <Ul>
-                <OrderInfoForm
+                <OrderReceivingForm
                   formData={formData}
                   errors={errors} 
                   onInputChange={onInputChange}
-                  merchants={merchants}
+                  warehouses={warehouses}
                 />
                 <SubmitOrReset
                   buttonName={'Save'}
@@ -130,11 +128,11 @@ const OrderInfo = ({
           </form>  
         </div>
         <div className="col-12 col-xl-4">
-          <Card width="col" title="Update Merchants">
+          <Card width="col" title="Update Warehouses">
             <Ul>
-              <Merchant
-                pathname={'/merchants'}
-                component={'merchant'}
+              <Warehouse
+                pathname={'/warehouses'}
+                component={'warehouse'}
               />
             </Ul>
           </Card>
@@ -145,12 +143,12 @@ const OrderInfo = ({
 }
 
 const mapStateToProps = createStructuredSelector({
-  merchantData: selectMerchantData,
+  warehouseData: selectWarehouseData,
   order: selectOrderEditing
 })
 
 const mapDispatchToProps = dispatch => ({
-  saveOrderInfo: payload => dispatch(saveOrderInfo(payload))
+  saveOrderReceiving: payload => dispatch(saveOrderReceiving(payload))
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(OrderInfo);
+export default connect(mapStateToProps, mapDispatchToProps)(OrderReceiving);

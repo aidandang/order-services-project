@@ -38,6 +38,11 @@ export const saveOrderCost = payload => ({
   payload
 })
 
+export const saveOrderReceiving = payload => ({
+  type: OrderActionTypes.SAVE_ORDER_RECEIVING,
+  payload
+})
+
 export const saveOrderSale = payload => ({
   type: OrderActionTypes.SAVE_ORDER_SALE,
   payload
@@ -46,4 +51,9 @@ export const saveOrderSale = payload => ({
 export const setIsSelectingCustomer = payload => ({
   type: OrderActionTypes.SET_IS_SELECTING_CUSTOMER,
   payload
+})
+
+export const selectCustomerToOrder = customer => ({
+  type: OrderActionTypes.SELECT_CUSTOMER_TO_ORDER,
+  payload: customer
 })
