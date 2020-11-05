@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 // dependencies
 import * as Yup from "yup";
-import { useLocation, Redirect } from 'react-router-dom'; 
+import { useLocation, Redirect, useHistory } from 'react-router-dom'; 
 import queryString from 'query-string';
 
 // components
@@ -41,6 +41,7 @@ const OrderCost = ({
 }) => {
 
   const location = useLocation();
+  const history = useHistory();
   const queryStr = queryString.parse(location.search);
   const { comp } = queryStr;
   const [redirect, setRedirect] = useState(false)
@@ -76,13 +77,17 @@ const OrderCost = ({
     setValues(formState);
   }
 
+  const goBack = () => {
+    history.push(`${location.pathname}?comp=${comp}`)
+  }
+
   return <>
 
     {
       redirect && <Redirect to={`${location.pathname}?comp=${comp}`} />
     }
     
-    <Container width="col">
+    <Container width="col" goBack={goBack}>
       <Card width="col" title="Local Costs">
         <Ul>
           <form onSubmit={formSubmit}>

@@ -43,9 +43,12 @@ const OrderAdd = ({
           <div className="col-12">
             <PreviewOrderInfo info={info} />
           </div>
-          <div className="col-12">
-            <PreviewOrderItem items={items} />
-          </div>
+          {
+            info &&
+            <div className="col-12">
+              <PreviewOrderItem items={items} />
+            </div>
+          }
           <div className="col-12">
             <PreviewOrderReceiving receiving={receiving} />
           </div>

@@ -10,6 +10,8 @@ import { Container, Card, Ul, Li } from '../tag/tag.component';
 import { useForm } from '../hook/use-form';
 import OrderSaleForm from './order-sale-form.component';
 import Customer from '../customer/customer.component';
+import SubmitOrReset from '../submit-or-reset/submit-or-reset.component';
+import OrderSaleItemUpdate from './order-sale-item-update.component';
 
 // redux
 import { connect } from 'react-redux';
@@ -26,16 +28,13 @@ const formSchema = Yup.object().shape({
     .string()
     .required(),
   shippingPrice: Yup
-    .string(),
-  int: Yup
     .string()
 });
 
 const formState = {
   customer: null,
   shippingPrice: "",
-  salePrice: "",
-  int: ""
+  salePrice: ""
 }
 
 // main component
@@ -63,15 +62,12 @@ const OrderSale = ({
 
   const { customer } = formData;
 
-  const [itemIndex, setItemIndex] = useState(null)
-
   let address = null
 
   if (customer) {
     address = customer.shippingInfo.find(item => item._id === customer.shippingAddress)
   }
   
-
   const formSubmit = () => {
     const obj = { ...formData }
 
@@ -125,80 +121,27 @@ const OrderSale = ({
                   </div>
                 </div>
               </Li>
-              { 
-                customer && <>
-                  <Li>
-                    <div className="row">
-                      <div className="col">
-                        <div className="row">
-                          <div className="col-4">
-                            <span>Nickname:</span>
-                          </div>
-                          <div className="col-8">
-                            <span>{customer.nickname}</span>
-                          </div>
-                        </div>
-                        <div className="row">
-                          <div className="col-4">
-                            <span>Account Number:</span>
-                          </div>
-                          <div className="col-8">
-                            <span>{customer.account}</span>
-                          </div>
-                        </div>
-                        <div className="row">
-                          <div className="col-4">
-                            <span>Billing Address:</span>
-                          </div>
-                          <div className="col-8">
-                            <span>{customer.fullname}</span><br />
-                            <span>{customer.streetAddress1}, {customer.city}, {customer.state}</span><br />
-                            <span>Phone# {customer.phone}</span>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </Li>
-                  <Li>
-                    <div className="row">
-                      <div className="col">
-                        <div className="row">
-                          <div className="col-4">
-                            <span>Shipping Address:</span>
-                          </div>
-                          <div className="col-8 align-self-center">
-                            {
-                              address
-                              ? <>
-                                <span>{address.fullname}</span><br />
-                                <span>{address.streetAddress1}, {address.city}, {address.state}</span><br />
-                                <span>Phone# {address.phone}</span>
-                              </>
-                              : 
-                              <span>Same as Billing Address</span>
-                            }
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </Li>
-                </>
-              }
+              <OrderSaleForm
+                formData={formData}
+                errors={errors} 
+                onInputChange={onInputChange}
+                customer={customer}
+                address={address}
+              />
             </Ul>
           </Card>
-          <form>
-            <OrderSaleForm
-              formSubmit={formSubmit}
-              formReset={formReset}
-              buttonDisabled={buttonDisabled}
-              formData={formData}
-              errors={errors} 
-              onInputChange={onInputChange}
-              order={order}
-              itemIndex={itemIndex}
-              setItemIndex={setItemIndex}
-            />
-          </form>
+          <OrderSaleItemUpdate />
+          <Card width="col" title="Action">
+            <Ul>
+              <SubmitOrReset
+                buttonName={'Save'}
+                buttonDisabled={buttonDisabled}
+                formSubmit={formSubmit}
+                formReset={formReset}
+              />
+            </Ul>
+          </Card>
+          
         </Container>
       </>
     }
