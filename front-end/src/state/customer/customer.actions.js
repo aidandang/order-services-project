@@ -5,7 +5,7 @@ export const copyCustomerToById = customer => ({
   payload: customer
 })
 
-export const setCustomerComp = comp => ({
+export const setCustomerComp = currComp => ({
   type: CustomerActionTypes.SET_CUSTOMER_COMPONENT,
-  payload: comp
+  payload: currComp
 })

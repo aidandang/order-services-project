@@ -8,13 +8,11 @@ import { Li } from '../tag/tag.component';
 import { useForm } from '../hook/use-form';
 import SubmitOrReset from '../submit-or-reset/submit-or-reset.component';
 import BrandForm from './brand-form.component';
-import AlertMesg from '../alert-mesg/alert-mesg.component';
 
 // redux
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { selectBrandData } from '../../state/brand/brand.selectors';
-import { selectAlertMessage } from '../../state/alert/alert.selectors';
 import { patchReq } from '../../state/api/api.requests';
 import { BrandActionTypes } from '../../state/brand/brand.types';
 
@@ -38,7 +36,6 @@ const BrandEdit = ({
   brand,
   data,
   patchReq,
-  alertMessage,
   setAction
 }) => {
 
@@ -59,7 +56,7 @@ const BrandEdit = ({
     const fetchSuccess = BrandActionTypes.BRAND_FETCH_SUCCESS;
     const updatedBrand = { ...formData }
 
-    patchReq(`/brands/${updatedBrand._id}`, fetchSuccess, updatedBrand, setSuccess, 'brand-edit');
+    patchReq(`/brands/${updatedBrand._id}`, fetchSuccess, updatedBrand, setSuccess, 'brand');
   }
 
   const formReset = () => {
@@ -77,9 +74,6 @@ const BrandEdit = ({
 
   // main component
   return <>
-
-    { alertMessage && alertMessage.component === 'brand-edit' && <AlertMesg/> }
-
     <form>
       <Li>
         <div className="row">
@@ -116,7 +110,6 @@ const BrandEdit = ({
 }
 
 const mapStateToProps = createStructuredSelector({
-  alertMessage: selectAlertMessage,
   data: selectBrandData
 })
 

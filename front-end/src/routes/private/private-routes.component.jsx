@@ -28,7 +28,7 @@ const PrivateRoutes = () => {
               <Navbar currentRoute={currentRoute} />
             </header>
             <main>
-              <div className="row p-0 m-0 px-2 pt-4 pb-5">
+              <div className="row p-0 m-0 px-2 py-4">
                 <div className="col">
                   <Switch>
                     <Route path="/app/product" render={() => <ProductPage />} />

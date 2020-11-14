@@ -1,31 +1,20 @@
 import React from 'react';
 
+// dependencies
+import { Link, useLocation } from 'react-router-dom';
+
 // components
 import { Li } from '../tag/tag.component';
 
-// redux
-import { connect, batch } from 'react-redux';
-import { setProductComp } from '../../state/product/product.actions'; 
-import { copyProductToById } from '../../state/product/product.actions';
-
 const ProductCard = ({
-  product,
-  setProductComp,
-  copyProductToById
+  product
 }) => {
 
-  const handleOnClick = (e, product) => {
-    e.preventDefault();
-    
-    batch(() => {
-      copyProductToById(product)
-      setProductComp('product-info')
-    })
-  }
+  const location = useLocation();
 
   return <>
     <Li>
-      <div className="row li-link-cs" onClick={e => handleOnClick(e, product)}> 
+      <div className="row"> 
         <div className="col-10">
           <div className="row mt-2">
             <div className="col-3 d-none d-lg-block">
@@ -67,6 +56,15 @@ const ProductCard = ({
               {product.desc}
             </div>
           </div>
+          <div className="row mb-2">
+            <div className="col-3 d-none d-lg-block">
+            </div>
+            <div className="col-lg-9">
+              <Link to={`${location.pathname}/${product._id}`} className="a-link-cs">
+                More Details
+              </Link>
+            </div>
+          </div>
         </div>
         <div className="col-2 text-center">
           <img 
@@ -76,12 +74,12 @@ const ProductCard = ({
         </div>
       </div>
     </Li>
+    <Li>
+      <Link to={`${location.pathname}/${product._id}/edit`} className="a-link-cs">
+        Update Information
+      </Link>
+    </Li>
   </>
 }
 
-const mapDispatchToProps = dispatch => ({
-  setProductComp: comp => dispatch(setProductComp(comp)),
-  copyProductToById: product => dispatch(copyProductToById(product))
-})
-
-export default connect(null, mapDispatchToProps)(ProductCard);
+export default ProductCard;

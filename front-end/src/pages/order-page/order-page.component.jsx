@@ -1,57 +1,42 @@
 import React from 'react';
 
 // dependencies
-import queryString from 'query-string';
-import { useLocation } from 'react-router-dom';
+import { Switch, Route } from 'react-router-dom';
 
 // components
 import Title from '../../components/title/title.component';
-import Order from '../../components/order/order.component';
-import OrderAdd from '../../components/order/order-add.component';
-import OrderInfo from '../../components/order/order-info.component';
-import OrderItem from '../../components/order/order-item.component';
-import OrderCost from '../../components/order/order-cost.component';
-import OrderReceiving from '../../components/order/order-receiving.component';
-import OrderSale from '../../components/order/order-sale.component';
+import Breadcrumb from '../../components/breadcrumb/breadcrumb.component';
+import routes from '../../routes/private/order.routes';
 
 // initial values
-const titles = [
-  {
-    comp: undefined,
-    name: 'Order List',
-    message: 'Search for orders(s) by order number, data and items.'
-  },
-  {
-    comp: 'add',
-    name: 'Add Order',
-    message: 'Create a new order by selecting information to fill in.'
-  },
-]
+const title = {
+  name: 'Order',
+  message: 'Search for orders(s) by order number, data and items.'
+}
 
 // main component
 const OrderPage = () => {
 
-  const location = useLocation();
-  const queryStr = queryString.parse(location.search);
-
-  const { comp, select } = queryStr;
-
-  const title = titles.find(item => item.comp === comp);
-
   return <>
-
     <Title title={title} />
-    { comp === undefined && <Order /> }
-    {
-      comp === 'add' && <>
-        { select === undefined && <OrderAdd /> }
-        { select === 'order-info' && <OrderInfo /> }
-        { select === 'order-item' && <OrderItem /> }
-        { select === 'order-cost' && <OrderCost /> }
-        { select === 'order-receiving' && <OrderReceiving /> }
-        { select === 'order-sale' && <OrderSale /> }
-      </>
-    }
+    
+    <Switch>
+      { 
+        routes.map(({ path, Component }, index) => (
+          <Route
+            exact
+            path={path}
+            key={index}
+            render={props => {
+              return <>
+                <Breadcrumb routes={routes} message={title.message} {...props} />
+                <Component {...props} />
+              </>
+            }}
+          />
+        ))
+      }
+    </Switch>
   </>
 }
 

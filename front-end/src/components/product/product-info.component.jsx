@@ -1,100 +1,80 @@
 import React from 'react';
 
+// dependecies
+import { Link, useLocation } from 'react-router-dom';
+
 // components
-import { Container, Card, Ul, Li } from '../tag/tag.component';
+import withProductData from '../api/withProductData';
+import { Card, Ul, Li } from '../tag/tag.component';
 import ProductColor from './product-color.component';
 
-// redux
-import { connect } from 'react-redux';
-import { createStructuredSelector } from 'reselect';
-import { selectProductData } from '../../state/product/product.selectors'; 
-import { setProductComp } from '../../state/product/product.actions'; 
-
 const ProductInfo = ({ 
-  data,
-  setProductComp
+  data
 }) => {
 
+  const location = useLocation();
   const { byId } = data;
 
-  const goBack = () => {
-    setProductComp('')
-  }
-
   return <> 
-    <Container width="col" goBack={goBack}>
-      <div className="row">
-        <div className="col-xl-8 add-style-col">
-          <Card width="col" title="Product Style">
-            <Ul>
-              <Li>
-                <div className="row mt-1">
-                  <div className="col-4"><span className="font-weight-bold">Product Name:</span></div>
-                  <div className="col-8">{byId.name}</div>
+    <div className="row">
+      <div className="col-xl-8">
+        <Card width="col" title="Product Style">
+          <Ul>
+            <Li>
+              <div className="row mt-1">
+                <div className="col-4"><span className="font-weight-bold">Product Name:</span></div>
+                <div className="col-8">{byId.name}</div>
+              </div>
+              <div className="row mt-1">
+                <div className="col-4"><span className="font-weight-bold">Brand:</span></div>
+                <div className="col-8">{byId.brand.preferredName}</div>
+              </div>
+              <div className="row mt-1">
+                <div className="col-4"><span className="font-weight-bold">Style Code:</span></div>
+                <div className="col-8">{byId.styleCode}</div>
+              </div>
+              <div className="row mt-1">
+                <div className="col-4"><span className="font-weight-bold">Website:</span></div>
+                <div className="col-8"><a href={byId.url} className="a-link-cs">{byId.url}</a></div>
+              </div>
+              <div className="row mt-1">
+                <div className="col-4"><span className="font-weight-bold">Description:</span></div>
+                <div className="col-8">{byId.desc}</div>
+              </div>
+            </Li>
+            <Li>
+              <div className="row">
+                <div className="col-4 mt-1">
+                  <span className="font-weight-bold">Sample Image:</span>
                 </div>
-                <div className="row mt-1">
-                  <div className="col-4"><span className="font-weight-bold">Brand:</span></div>
-                  <div className="col-8">{byId.brand.preferredName}</div>
+                <div className="col-8">
+                  <img 
+                    className="product-img my-2" 
+                    src={byId.styleImage} alt={byId.name} 
+                  />
                 </div>
-                <div className="row mt-1">
-                  <div className="col-4"><span className="font-weight-bold">Style Code:</span></div>
-                  <div className="col-8">{byId.styleCode}</div>
+              </div>
+            </Li>
+            <Li>
+              <div className="row">
+                <div className="col">
+                  <Link
+                    to={`${location.pathname}/edit`}
+                    className="a-link-cs"
+                  >
+                    Edit Product Style
+                  </Link>
                 </div>
-                <div className="row mt-1">
-                  <div className="col-4"><span className="font-weight-bold">Website:</span></div>
-                  <div className="col-8"><a href={byId.url} className="a-link-cs">{byId.url}</a></div>
-                </div>
-                <div className="row mt-1">
-                  <div className="col-4"><span className="font-weight-bold">Description:</span></div>
-                  <div className="col-8">{byId.desc}</div>
-                </div>
-              </Li>
-              <Li>
-                <div className="row">
-                  <div className="col-4 mt-1">
-                    <span className="font-weight-bold">Sample Image:</span>
-                  </div>
-                  <div className="col-8">
-                    <img 
-                      className="product-img my-2" 
-                      src={byId.styleImage} alt={byId.name} 
-                    />
-                  </div>
-                </div>
-              </Li>
-              <Li>
-                <div className="row">
-                  <div className="col">
-                    <a
-                      href="/"
-                      className="a-link-cs"
-                      onClick={e => {
-                        e.preventDefault();
-                        setProductComp('product-edit')
-                      }}
-                    >
-                      Update Information
-                    </a>
-                  </div>
-                </div>
-              </Li>
-            </Ul>
-          </Card>
-        </div>
-        <div className="col-xl-4 add-color-col">
-          <ProductColor />
-        </div>
+              </div>
+            </Li>
+          </Ul>
+        </Card>
       </div>
-    </Container>
+      <div className="col-xl-4">
+        <ProductColor />
+      </div>
+    </div>
   </>
 }
 
-const mapStateToProps = createStructuredSelector({
-  data: selectProductData
-})
-
-const mapDispatchToProps = dispatch => ({
-  setProductComp: comp => dispatch(setProductComp(comp))
-})
-
-export default connect(mapStateToProps, mapDispatchToProps)(ProductInfo);
+export default withProductData(ProductInfo);

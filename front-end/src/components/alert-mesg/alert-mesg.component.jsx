@@ -19,7 +19,7 @@ const AlertMesg = ({ alertMessage, clearAlertMessage }) => {
   }, [])
 
   return <>
-    <div className='row mt-4'>
+    <div className='row'>
       <div className='col'>
         <div className={`alert alert-${alertMessage.color} d-flex justify-content-between`}>
           <span>{alertMessage.message}</span>

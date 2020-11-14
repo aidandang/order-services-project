@@ -4,11 +4,9 @@ import { OrderActionTypes } from './order.types';
 const INITIAL_STATE = {
   data: {},
   editing: {
-    isSelectingProduct: false,
-    isSelectingCustomer: false,
     item: {},
     items: [],
-    sale: {}
+    billing: {}
   }
 }
 
@@ -34,23 +32,20 @@ function removeItemInArray(array, index) {
   return newArray
 }
 
-// function convertAccountNumberToString(array) {
-//   return array.map(item => ({
-//       ...item,
-//       qty: String(item.qty),
-//       price: acctToStr(item.price),
-//       saleTax: acctToStr(item.saleTax),
-//       localCharge: acctToStr(item.localCharge),
-//       shippingCost: acctToStr(item.shippingCost)
-//   })) 
-// }
-
 const orderReducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
     case OrderActionTypes.ORDER_FETCH_SUCCESS:
       return {
         ...state,
         data: { ...state.data, ...action.payload }
+      }
+    case OrderActionTypes.SET_ORDER_COMPONENT:
+      return {
+        ...state,
+        comp: {
+          ...state.comp,
+          currComp: action.payload
+        }
       }
     case OrderActionTypes.SAVE_ORDER_INFO:
       return {
@@ -67,27 +62,6 @@ const orderReducer = (state = INITIAL_STATE, action) => {
           ...state.editing,
           items: addItemToArray(state.editing.items, action),
           item: {}
-        }
-      }
-    case OrderActionTypes.SELECT_PRODUCT_TO_ORDER:
-      return {
-        ...state,
-        editing: {
-          ...state.editing,
-          item: {
-            ...state.editing.item,
-            product: action.payload.product,
-            color: action.payload.color
-          },
-          isSelectingProduct: false
-        }
-      }
-    case OrderActionTypes.SET_IS_SELECTING_PRODUCT:
-      return {
-        ...state,
-        editing: {
-          ...state.editing,
-          isSelectingProduct: action.payload
         }
       }
     case OrderActionTypes.UPDATE_ORDER_ITEM:
@@ -107,6 +81,26 @@ const orderReducer = (state = INITIAL_STATE, action) => {
           items: removeItemInArray(state.editing.items, action.payload)
         }
       }
+    case OrderActionTypes.SELECT_PRODUCT_TO_ORDER:
+      return {
+        ...state,
+        editing: {
+          ...state.editing,
+          item: {
+            ...state.editing.item,
+            product: action.payload.product,
+            color: action.payload.color
+          }
+        }
+      }
+    case OrderActionTypes.COPY_ORDER_ITEM_TO_EDIT:
+      return {
+        ...state,
+        editing: {
+          ...state.editing,
+          item: action.payload
+        }
+      }
     case OrderActionTypes.SAVE_ORDER_COST:
       return {
         ...state,
@@ -123,33 +117,31 @@ const orderReducer = (state = INITIAL_STATE, action) => {
           receiving: action.payload
         }
       }
-    case OrderActionTypes.SAVE_ORDER_SALE:
-      return {
-        ...state,
-        editing: { 
-          ...state.editing,
-          sale: action.payload
-        }
-      }
-    case OrderActionTypes.SET_IS_SELECTING_CUSTOMER:
-      return {
-        ...state,
-        editing: {
-          ...state.editing,
-          isSelectingCustomer: action.payload
-        }
-      }
     case OrderActionTypes.SELECT_CUSTOMER_TO_ORDER:
       return {
         ...state,
         editing: {
           ...state.editing,
-          sale: {
-            ...state.editing.sale,
+          billing: {
+            ...state.editing.billing,
             customer: { ...action.payload }
-          },
-          isSelectingCustomer: false
+          }
         }
+      }
+    case OrderActionTypes.SAVE_ORDER_SALE:
+      return {
+        ...state,
+        editing: { 
+          ...state.editing,
+          billing: { 
+            ...state.editing.billing, ...action.payload
+          }
+        }
+      }
+    case OrderActionTypes.RESET_ORDER_EDITING:
+      return {
+        ...state,
+        editing: INITIAL_STATE.editing
       }
     default:
       return state;

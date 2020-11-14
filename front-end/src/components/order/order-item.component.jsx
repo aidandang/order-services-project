@@ -1,146 +1,185 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 
 // dependencies
-import * as Yup from "yup";
-import { useLocation, Redirect, useHistory } from 'react-router-dom'; 
-import queryString from 'query-string';
+import { Link, useLocation, useHistory } from 'react-router-dom';
 
 // components
-import { Container, Card, Ul } from '../tag/tag.component';
-import { useForm } from '../hook/use-form';
-import SubmitOrReset from '../submit-or-reset/submit-or-reset.component';
-import OrderItemForm from './order-item-form.component';
-import Product from '../product/product.component';
+import { strToAcct } from '../utils/strToAcct';
+import { acctToStr } from '../utils/acctToStr';
+import { integerStrToNum } from '../utils/helpers';
 
 // redux
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import { saveOrderItem, updateOrderItem } from '../../state/order/order.actions';
+import { removeOrderItem, copyOrderItemToEdit } from '../../state/order/order.actions';
 import { selectOrderEditing } from '../../state/order/order.selectors';
 
-// initial form state
-const formSchema = Yup.object().shape({
-  product: Yup
-    .object(),
-  color: Yup
-    .object(),
-  size: Yup
-    .string(),
-  qty: Yup
-    .string()
-    .required(),
-  price: Yup
-    .string()
-    .required(),
-  note: Yup
-    .string()
-})
-
-const formState = {
-  product: null,
-  color: null,
-  size: "",
-  qty: "",
-  price: "",
-  salePrice: "",
-  weight: "",
-  shippingPrice: "",
-  note: ""
-}
-
-// main component
 const OrderItem = ({
   order,
-  saveOrderItem,
-  updateOrderItem
+  removeOrderItem,
+  copyOrderItemToEdit
 }) => {
 
   const location = useLocation();
   const history = useHistory();
-  const queryStr = queryString.parse(location.search);
-  const { index, comp } = queryStr;
 
-  const { items, item, isSelectingProduct } = order;
+  const { items, cost } = order;
 
-  let obj = null
+  let shippingCost = ""
+  let saleTax = ""
 
-  if (index && items[index]) {
-    obj = { ...items[index] }
-  } else if (Object.keys(item).length > 0) {
-    obj = { ...item }
+  if (cost) {
+    shippingCost = cost.shippingCost
+    saleTax = cost.saleTax
   }
 
-  const [redirect, setRedirect] = useState(false)
+  let sum = 0;
 
-  const [
-    formData,
-    errors, 
-    onInputChange, 
-    buttonDisabled,
-    setValues
-  ] = useForm(formState, formState, formSchema);
+  const subTotalCalc = () => (qty, price) => {
+    const value = strToAcct(price) * integerStrToNum(qty);
+    sum = sum + value;
+    return acctToStr(value);
+  }
+  
+  const subTotal = subTotalCalc();
 
-  const formSubmit = () => {
-    if (index && items[index]) {
-      updateOrderItem(formData, Number(index))
-    } else {
-      saveOrderItem(formData);
-    }
-
-    setRedirect(true);
+  const total = (sum, shippingCost, saleTax) => {
+    return acctToStr(sum + strToAcct(shippingCost, saleTax))
   }
 
-  const formReset = () => {
-    setValues(formState);
+  const editOrderItem = (item, index) => {
+    item.index = index.toString()
+    copyOrderItemToEdit(item);
+
+    history.push(`${location.pathname}/update-order-item`)
   }
 
-  const goBack = () => {
-    history.push(`${location.pathname}?comp=${comp}`)
+  const addOrderItem = () => {
+    copyOrderItemToEdit({});
+    
+    history.push(`${location.pathname}/update-order-item`)
   }
-
-  useEffect(() => {
-    if (obj) setValues(prevState => ({
-      ...prevState, ...obj
-    }))
-    // eslint-disable-next-line
-  }, [isSelectingProduct])
 
   return <>
-
-    {
-      redirect && <Redirect to={`${location.pathname}?comp=${comp}`} />
-    }
-
-    { 
-      isSelectingProduct 
-      ? <>
-        <Product />
-      </>
-      : <>
-        <Container width="col" goBack={goBack}>
-          <Card width="col" title="Item Information">
-            <Ul>
-              <form onSubmit={formSubmit}>
-                <OrderItemForm
-                  formData={formData}
-                  errors={errors} 
-                  onInputChange={onInputChange}
-                />
-                {
-                  formData.product && formData.color &&
-                  <SubmitOrReset
-                    buttonName={'Save'}
-                    buttonDisabled={buttonDisabled}
-                    formSubmit={formSubmit}
-                    formReset={formReset}
-                  />
-                }
-              </form>
-            </Ul>
-          </Card>
-        </Container>
-      </>
-    }
+    {/* Item Table */}
+    <div className="row mb-2">
+      <div className="col">
+        <div className="table-responsive">
+          <table className="table table-hover">
+            <thead>
+              <tr>
+                <th scope="col">Style#</th>
+                <th scope="col">Item/Description</th>
+                <th scope="col" className="text-right">Qty</th>
+                <th scope="col" className="text-right">Price</th>
+                <th scope="col" className="text-right">Amount</th>
+                <th scope="col" className="text-right"></th>
+              </tr>
+            </thead>
+            <tbody>
+              {items.length > 0 &&
+                items.map((item, index) => 
+                  <tr 
+                    key={index} 
+                    className="table-row-no-link-cs span-link-cs"
+                    onClick={e => {
+                      editOrderItem(item, index);
+                    }}
+                  >
+                    <td>{item.product.styleCode}</td>
+                    <td>{`${item.product.name}/Color:${item.color.color}/Size:${item.size}${item.note && `/${item.note}`}`}</td>
+                    <td className="text-right">{item.qty}</td>
+                    <td className="text-right">{item.price}</td>
+                    <th scope="row" className="text-right">
+                      {subTotal(item.qty, item.price)}
+                    </th>
+                    <td 
+                      className="text-right"
+                    >
+                      <span 
+                        className="span-link-cs text-danger"
+                        onClick={e => {
+                          e.stopPropagation();
+                          removeOrderItem(index)
+                        }}
+                      >
+                        {/* eslint-disable-next-line */}
+                        &#10134;
+                      </span>
+                    </td>
+                  </tr>
+                ) 
+              }
+              {
+                Object.keys(items).length > 0 && <>
+                  <tr className="table-row-no-link-cs">
+                    <td colSpan="6" className="text-left">
+                      <Link 
+                        to={`${location.pathname}/update-order-cost`}
+                        className="a-link-cs"
+                      >
+                        Update Cost
+                      </Link>
+                    </td>
+                  </tr>
+                  <tr className="table-row-no-link-cs">
+                    <td className="text-right"></td>
+                    <td className="text-right"></td>
+                    <td colSpan="2" className="text-right">Subtotal</td>
+                    <td className="text-right">{acctToStr(sum)}</td>
+                    <td className="text-right"></td>
+                  </tr>
+                  <tr className="table-row-no-link-cs">
+                    <td className="text-right"></td>
+                    <td className="text-right"></td>
+                    <td colSpan="2" className="text-right">
+                      Local Sale Tax
+                    </td>
+                    <td className="text-right">{saleTax.length > 0 ? saleTax : '.00'}</td>
+                    <td className="text-right"></td>
+                  </tr>
+                  <tr className="table-row-no-link-cs">
+                    <td className="text-right"></td>
+                    <td className="text-right"></td>
+                    <td colSpan="2" className="text-right">
+                      Local Shipping
+                    </td>
+                    <td className="text-right">{shippingCost.length > 0 ? shippingCost : '.00'}</td>
+                    <td className="text-right"></td>
+                  </tr>
+                  <tr className="table-row-no-link-cs">
+                    <td className="text-right"></td>
+                    <td className="text-right"></td>
+                    <th scope="row" colSpan="2" className="text-right">Total</th>
+                    <th scope="row" className="text-right">
+                      {total(sum, shippingCost, saleTax)}
+                    </th>
+                    <td className="text-right"></td>
+                  </tr>
+                </>
+              }
+            
+              <tr className="table-row-no-link-cs">
+                <td colSpan="6">
+                  <Link
+                    to={`${location.pathname}/update-order-item`}
+                    className="a-link-cs"
+                    onClick={e => {
+                      e.preventDefault();
+                      addOrderItem()
+                    }}
+                  >
+                    Add Item
+                  </Link>
+                </td>
+              </tr>
+                
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    {/* End of Item Table */}
   </>
 }
 
@@ -149,8 +188,8 @@ const mapStateToProps = createStructuredSelector({
 })
 
 const mapDispatchToProps = dispatch => ({
-  saveOrderItem: payload => dispatch(saveOrderItem(payload)),
-  updateOrderItem: (item, index) => dispatch(updateOrderItem(item, index))
+  removeOrderItem: index => dispatch(removeOrderItem(index)),
+  copyOrderItemToEdit: item => dispatch(copyOrderItemToEdit(item))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(OrderItem);

@@ -7,7 +7,9 @@ const SubmitOrReset = ({
   buttonName,
   buttonDisabled,
   formSubmit,
-  formReset
+  formReset,
+  goBack,
+  props
 }) => {
   return <>
     <Li>      
@@ -16,7 +18,7 @@ const SubmitOrReset = ({
           <Button
             onClick={e => {
               e.preventDefault();
-              formSubmit()
+              formSubmit(props)
             }}
             disabled={buttonDisabled}
           >
