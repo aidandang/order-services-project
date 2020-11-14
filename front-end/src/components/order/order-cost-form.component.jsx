@@ -33,18 +33,6 @@ const OrderCostForm = ({
         onChange={onInputChange}
       />
     </Li>
-    <Li>
-      <TextInput
-        label="Total (*)" 
-        name="totalCost"
-        id="currencyMask-order-cost-form-totalCost"
-        errors={errors}
-        size="col-xl-6"
-        smallText="Total cost of the order."
-        value={formData.totalCost}
-        onChange={onInputChange}
-      />
-    </Li>
   </>
 }
 

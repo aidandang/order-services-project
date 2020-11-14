@@ -2,19 +2,26 @@ import React from 'react';
 
 // dependencies
 import moment from 'moment';
-import { Link, useLocation } from 'react-router-dom';
+import { useLocation, Link } from 'react-router-dom';
 
 // components
 import { Card, Ul, Li } from '../tag/tag.component';
 
-const PreviewOrderInfo = ({ 
-  info 
+// redux
+import { connect } from 'react-redux';
+import { createStructuredSelector} from 'reselect';
+import { selectOrderEditing } from '../../state/order/order.selectors';
+
+const OrderMerchant = ({ 
+  order
 }) => {
 
-  const location = useLocation();
+  const location = useLocation()
+
+  const { info } = order
 
   return <>
-    <Card width="col" title="Order Information">
+    <Card width="col" title="Merchant's Order">
       <Ul>
         {
           info && <>
@@ -80,26 +87,20 @@ const PreviewOrderInfo = ({
           </>
         }
         <Li>
-          <div className="row">
-            <div className="col">
-              <Link 
-                to={{
-                  pathname: location.pathname,
-                  search: `${location.search}&select=order-info`,
-                  state: {
-                    from: location.pathname + location.search
-                  }
-                }}
-                className="a-link-cs"
-              >
-                Update Information
-              </Link>
-            </div>
-          </div> 
+          <Link
+            to={`${location.pathname}/update-order-merchant`}
+            className="a-link-cs"
+          >
+            Update Merchant's Order
+          </Link>
         </Li> 
       </Ul>
     </Card>  
   </>
 }
 
-export default PreviewOrderInfo;
+const mapStateToProps = createStructuredSelector({
+  order: selectOrderEditing
+})
+
+export default connect(mapStateToProps)(OrderMerchant);

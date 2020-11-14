@@ -8,6 +8,7 @@ const SubmitOrReset = ({
   buttonDisabled,
   formSubmit,
   formReset,
+  goBack,
   props
 }) => {
   return <>

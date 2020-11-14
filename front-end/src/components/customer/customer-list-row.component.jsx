@@ -1,23 +1,19 @@
 import React from 'react';
 
-// redux
-import { connect, batch } from 'react-redux';
-import { setCustomerComp } from '../../state/customer/customer.actions';
-import { copyCustomerToById } from '../../state/customer/customer.actions';
+// dependencies
+import { useLocation, useHistory } from 'react-router-dom';
 
 const CustomerListRow = ({
-  customer,
-  setCustomerComp,
-  copyCustomerToById
+  customer
 }) => {
+
+  const location = useLocation();
+  const history = useHistory();
 
   const handleOnClick = (e, customer) => {
     e.preventDefault();
     
-    batch(() => {
-      copyCustomerToById(customer)
-      setCustomerComp('customer-info')
-    })
+    history.push(`${location.pathname}/${customer._id}`)
   }
 
   return <>
@@ -39,9 +35,4 @@ const CustomerListRow = ({
   </>
 }
 
-const mapDispatchToProps = dispatch => ({
-  setCustomerComp: comp => dispatch(setCustomerComp(comp)),
-  copyCustomerToById: customer => dispatch(copyCustomerToById(customer))
-})
-
-export default connect(null, mapDispatchToProps)(CustomerListRow);
+export default CustomerListRow;

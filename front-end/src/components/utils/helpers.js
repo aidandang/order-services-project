@@ -88,3 +88,8 @@ export const integerMask = (value, limit) => {
   // if all other conditions then return null to prevent any action events.
   return undefined;
 }
+
+export const integerStrToNum = (str) => {
+  const s = str.split(',').join('');
+  return Number(s);
+}

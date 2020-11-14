@@ -1,12 +1,11 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 // dependencies
 import * as Yup from "yup";
-import { useLocation, Redirect, useHistory } from 'react-router-dom'; 
-import queryString from 'query-string';
+import { useLocation, useHistory } from 'react-router-dom'; 
 
 // components
-import { Container, Card, Ul } from '../tag/tag.component';
+import { Card, Ul } from '../tag/tag.component';
 import { useForm } from '../hook/use-form';
 import SubmitOrReset from '../submit-or-reset/submit-or-reset.component';
 import OrderCostForm from './order-cost-form.component';
@@ -22,16 +21,12 @@ const formSchema = Yup.object().shape({
   shippingCost: Yup
     .string(),
   saleTax: Yup
-    .string(),
-  totalCost: Yup
     .string()
-    .required()
 })
 
 const formState = {
   shippingCost: "",
-  saleTax: "",
-  totalCost: ""
+  saleTax: ""
 }
 
 // main component
@@ -42,9 +37,6 @@ const OrderCost = ({
 
   const location = useLocation();
   const history = useHistory();
-  const queryStr = queryString.parse(location.search);
-  const { comp } = queryStr;
-  const [redirect, setRedirect] = useState(false)
 
   const { cost } = order;
   let orderEditing = null;
@@ -69,44 +61,33 @@ const OrderCost = ({
   const formSubmit = () => {
     const obj = { ...formData }
     
-    saveOrderCost(obj)
-    setRedirect(true);
+    saveOrderCost(obj);
+    const pathname = location.pathname.split('/update-order-cost')[0]
+    history.push(pathname);
   }
 
   const formReset = () => {
     setValues(formState);
   }
 
-  const goBack = () => {
-    history.push(`${location.pathname}?comp=${comp}`)
-  }
-
   return <>
-
-    {
-      redirect && <Redirect to={`${location.pathname}?comp=${comp}`} />
-    }
-    
-    <Container width="col" goBack={goBack}>
-      <Card width="col" title="Local Costs">
-        <Ul>
-          <form onSubmit={formSubmit}>
-            <OrderCostForm
-              formData={formData}
-              errors={errors} 
-              onInputChange={onInputChange}
-            />
-            <SubmitOrReset
-              buttonName={'Save'}
-              buttonDisabled={buttonDisabled}
-              formSubmit={formSubmit}
-              formReset={formReset}
-            />
-          </form>
-        </Ul>
-      </Card>
-    </Container>
-  
+    <Card width="col" title="Local Costs">
+      <Ul>
+        <form onSubmit={formSubmit}>
+          <OrderCostForm
+            formData={formData}
+            errors={errors} 
+            onInputChange={onInputChange}
+          />
+          <SubmitOrReset
+            buttonName={'Save'}
+            buttonDisabled={buttonDisabled}
+            formSubmit={formSubmit}
+            formReset={formReset}
+          />
+        </form>
+      </Ul>
+    </Card>
   </>
 }
 

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 // dependencies
-import { useLocation } from 'react-router-dom';
+import { useLocation, useHistory } from 'react-router-dom';
 
 // components
 import { Card, Ul, Li, SelectInput } from '../tag/tag.component';
@@ -20,7 +20,8 @@ const ProductColor = ({
   selectProductToOrder
 }) => {
 
-  const location = useLocation()
+  const location = useLocation();
+  const history = useHistory();
 
   const colors = data.byId.colors;
   const { byId } = data;
@@ -53,12 +54,13 @@ const ProductColor = ({
   const colorTemp = colors.find(item => item._id === color._id);
 
   const handleSelectColorToOrder = () => {
-    if (location.search) {
-      selectProductToOrder({
-        product: byId,
-        color: colorTemp
-      })
-    } 
+    selectProductToOrder({
+      product: byId,
+      color: colorTemp
+    })
+
+    const pathname = location.pathname.split('/select-product')[0]
+    history.push(pathname)
   }
 
   return <>

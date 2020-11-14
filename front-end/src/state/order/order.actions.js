@@ -18,19 +18,19 @@ export const updateOrderItem = (item, index) => ({
   }
 })
 
+export const removeOrderItem = index => ({
+  type: OrderActionTypes.REMOVE_ORDER_ITEM,
+  payload: index
+})
+
 export const selectProductToOrder = payload => ({
   type: OrderActionTypes.SELECT_PRODUCT_TO_ORDER,
   payload
 })
 
-export const setIsSelectingProduct = payload => ({
-  type: OrderActionTypes.SET_IS_SELECTING_PRODUCT,
+export const copyOrderItemToEdit = payload => ({
+  type: OrderActionTypes.COPY_ORDER_ITEM_TO_EDIT,
   payload
-})
-
-export const removeOrderItem = index => ({
-  type: OrderActionTypes.REMOVE_ORDER_ITEM,
-  payload: index
 })
 
 export const saveOrderCost = payload => ({
@@ -43,17 +43,16 @@ export const saveOrderReceiving = payload => ({
   payload
 })
 
+export const selectCustomerToOrder = customer => ({
+  type: OrderActionTypes.SELECT_CUSTOMER_TO_ORDER,
+  payload: customer
+})
+
 export const saveOrderSale = payload => ({
   type: OrderActionTypes.SAVE_ORDER_SALE,
   payload
 })
 
-export const setIsSelectingCustomer = payload => ({
-  type: OrderActionTypes.SET_IS_SELECTING_CUSTOMER,
-  payload
-})
-
-export const selectCustomerToOrder = customer => ({
-  type: OrderActionTypes.SELECT_CUSTOMER_TO_ORDER,
-  payload: customer
+export const resetOrderEditing = () => ({
+  type: OrderActionTypes.RESET_ORDER_EDITING
 })

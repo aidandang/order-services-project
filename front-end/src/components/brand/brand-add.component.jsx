@@ -8,12 +8,9 @@ import { Li } from '../tag/tag.component';
 import { useForm } from '../hook/use-form';
 import SubmitOrReset from '../submit-or-reset/submit-or-reset.component';
 import BrandForm from './brand-form.component';
-import AlertMesg from '../alert-mesg/alert-mesg.component';
 
 // redux
 import { connect } from 'react-redux';
-import { createStructuredSelector } from 'reselect';
-import { selectAlertMessage } from '../../state/alert/alert.selectors';
 import { postReq } from '../../state/api/api.requests';
 import { BrandActionTypes } from '../../state/brand/brand.types';
 
@@ -54,7 +51,7 @@ const BrandAdd = ({
     const fetchSuccess = BrandActionTypes.BRAND_FETCH_SUCCESS;
     const newBrand = { ...formData}
 
-    postReq('/brands', fetchSuccess, newBrand, setSuccess, 'brand-add');
+    postReq('/brands', fetchSuccess, newBrand, setSuccess, 'brand');
   }
 
   const formReset = () => {
@@ -72,9 +69,6 @@ const BrandAdd = ({
 
   // main component
   return <>
-
-    { alertMessage && alertMessage.component === 'brand-add' && <AlertMesg/> }
-
     <form onSubmit={formSubmit}>
       <Li>
         <div className="row">
@@ -109,10 +103,6 @@ const BrandAdd = ({
   </>
 }
 
-const mapStateToProps = createStructuredSelector({
-  alertMessage: selectAlertMessage
-})
-
 const mapDispatchToProps = dispatch => ({
   postReq: (
     pathname, 
@@ -129,4 +119,4 @@ const mapDispatchToProps = dispatch => ({
   ))
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(BrandAdd);
+export default connect(null, mapDispatchToProps)(BrandAdd);

@@ -2,17 +2,22 @@ import React from 'react';
 
 // dependencies
 import queryString from 'query-string';
+import { useLocation, useHistory } from 'react-router-dom';
 
 // components
+import { Card, Ul } from '../tag/tag.component';
 import withProductData from '../api/withProductData';
 import PaginationBar from '../pagination-bar/pagination-bar.component';
 import ProductCard from './product-card.component';
 
 const ProductCards = ({ 
-  data,
-  queryObj,
-  setQueryObj
+  data
 }) => {
+
+  const location = useLocation();
+  const history = useHistory();
+
+  const obj = queryString.parse(location.search)
 
   const { allIds } = data;
 
@@ -20,29 +25,25 @@ const ProductCards = ({
   const onPageChange = (e, page) => {
     e.preventDefault();
 
-    const obj = queryString.parse(queryObj.str);
     let queryStr = null;
 
     if (obj.page) {
       obj.page = page;
       queryStr = '?' + queryString.stringify(obj);
     } else {
-      queryStr = queryObj.str ? `${queryObj.str}&page=${page}` : `?page=${page}`
+      queryStr = location.search ? `${location.search}&page=${page}` : `?page=${page}`
     }
     
-    setQueryObj(prevState => ({
-      ...prevState,
-      str: queryStr,
-      page
-    }))
+    history.push(`${location.pathname}${queryStr}`)
   }
 
   return <>
+
     <PaginationBar  
       numberOfPages={data.info.pages}
       limit={5}
       onPageChange={onPageChange}
-      page={queryObj.page}
+      page={obj.page}
     />
 
     {/* product cards */}
@@ -50,20 +51,14 @@ const ProductCards = ({
       {
         allIds.map(product => 
           <div key={product._id} className="col-12">
-            <div className="card my-3">
-              <div className="card-header bg-card-cs">
-                <div className="row">
-                  <div className="col font-weight-bold">
-                    {product.name}
-                  </div>
-                </div>
-              </div>
-              <ul className="list-group list-group-flush"> 
+            <Card width="col" title={product.name}>
+              <Ul>  
                 <ProductCard product={product} />
-              </ul>
-            </div>
+              </Ul>
+            </Card>
           </div>
-      )}
+        )
+      }
     </div> 
     {/* <!-- end of product cards --> */}
 
@@ -71,7 +66,7 @@ const ProductCards = ({
       numberOfPages={data.info.pages}
       limit={5}
       onPageChange={onPageChange}
-      page={queryObj.page}
+      page={obj.page}
     />
   </>
 }

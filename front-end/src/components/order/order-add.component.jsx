@@ -1,80 +1,97 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
 // dependencies
-import { useLocation, useHistory } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 
 // components
-import { Container, Card, Ul } from '../tag/tag.component';
-import PreviewOrderInfo from './preview-order-info.component';
-import PreviewOrderItem from './preview-order-item.component';
-import PreviewOrderSale from './preview-order-sale.component';
-import PreviewOrderReceiving from './preview-order-receiving.component'
+import { Card, Ul } from '../tag/tag.component';
+import OrderMerchant from './order-merchant.component';
+import OrderItem from './order-item.component';
+import OrderReceiving from './order-receiving.component';
+import OrderCustomer from './order-customer.component';
+import OrderSale from './order-sale.component';
+import AlertMesg from '../alert-mesg/alert-mesg.component';
 import SubmitOrReset from '../submit-or-reset/submit-or-reset.component';
 
 // redux
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { selectOrderEditing } from '../../state/order/order.selectors';
+import { OrderActionTypes } from '../../state/order/order.types';
+import { selectAlertMessage } from '../../state/alert/alert.selectors';
+import { postReq } from '../../state/api/api.requests';
+import { resetOrderEditing } from '../../state/order/order.actions';
 
 const OrderAdd = ({
-  order
+  order,
+  postReq,
+  resetOrderEditing,
+  alertMessage
 }) => {
 
   const history = useHistory();
   const location = useLocation();
 
-  const { info, items, receiving, sale } = order;
+  const { info, billing } = order;
+
+  const [success, setSuccess] = useState(false);
 
   const formSubmit = () => {
+
+    const newOrder = { ...order };
+    delete newOrder.item;
+
+    const fetchSuccess = OrderActionTypes.ORDER_FETCH_SUCCESS;
+    postReq('/orders', fetchSuccess, newOrder, setSuccess, 'product-add')
   }
 
   const formReset = () => {
-
+    resetOrderEditing()
   }
 
-  const goBack = () => {
-    history.push(`${location.pathname}`)
-  }
+  useEffect(() => {
+    const pathname = location.pathname.split('/add')[0];
+
+    if (success) history.push(pathname)
+    // eslint-disable-next-line
+  }, [success])
 
   return <>
-    <Container width="col" goBack={goBack}>
-      <form>
-        <div className="row">
-          <div className="col-12">
-            <PreviewOrderInfo info={info} />
-          </div>
-          {
-            info &&
-            <div className="col-12">
-              <PreviewOrderItem items={items} />
-            </div>
-          }
-          <div className="col-12">
-            <PreviewOrderReceiving receiving={receiving} />
-          </div>
-          <div className="col-12">
-            <PreviewOrderSale sale={sale} />
-          </div>
-          <div className="col-12">
-            <Card title="Action">
-              <Ul>
-                <SubmitOrReset
-                  buttonName={'Submit'}
-                  buttonDisabled={true}
-                  formSubmit={formSubmit}
-                  formReset={formReset}
-                />   
-              </Ul>
-            </Card>
-          </div>
-        </div>
-      </form>
-    </Container>
+
+    { alertMessage && alertMessage.component === 'order-add' && <AlertMesg/> }
+
+    <OrderMerchant />
+    <OrderItem />
+    <OrderReceiving />
+    <OrderCustomer />
+    <OrderSale />
+    {
+      info && billing.customer &&
+      <Card width="col" title="Place Order">
+        <Ul>
+          <SubmitOrReset 
+            buttonName={'Submit'}
+            buttonDisabled={false}
+            formSubmit={formSubmit}
+            formReset={formReset}
+          />
+        </Ul>
+      </Card>
+    }
+    
   </>
 }
 
 const mapStateToProps = createStructuredSelector({
-  order: selectOrderEditing
+  order: selectOrderEditing,
+  alertMessage: selectAlertMessage
 })
 
-export default connect(mapStateToProps)(OrderAdd);
+const mapDispatchToProps = dispatch => ({
+  postReq: (pathname, fetchSuccess, reqBody, setSuccess, component) => dispatch(
+    postReq(pathname, fetchSuccess, reqBody, setSuccess, component)
+  ),
+  resetOrderEditing: () => dispatch(resetOrderEditing())
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(OrderAdd);

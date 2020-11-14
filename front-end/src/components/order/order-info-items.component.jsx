@@ -13,7 +13,7 @@ import { createStructuredSelector } from 'reselect';
 import { removeOrderItem } from '../../state/order/order.actions';
 import { selectOrderEditing } from '../../state/order/order.selectors';
 
-const PreviewOrderItem = ({
+const OrderInfoItems = ({
   order,
   removeOrderItem
 }) => {
@@ -189,4 +189,4 @@ const mapDispatchToProps = dispatch => ({
   removeOrderItem: index => dispatch(removeOrderItem(index))
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(PreviewOrderItem);
+export default connect(mapStateToProps, mapDispatchToProps)(OrderInfoItems);

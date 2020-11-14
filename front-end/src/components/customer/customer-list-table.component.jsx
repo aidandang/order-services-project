@@ -2,6 +2,7 @@ import React from 'react';
 
 // dependencies
 import queryString from 'query-string';
+import { useLocation, useHistory } from 'react-router-dom';
 
 // components
 import withCustomerData from '../api/withCustomerData';
@@ -10,10 +11,13 @@ import CustomerListRow from './customer-list-row.component';
 
 const CustomerListTable = ({ 
   data,
-  queryObj,
-  setQueryObj,
-  setComp
+  queryObj
 }) => {
+
+  const location = useLocation();
+  const history = useHistory();
+
+  const obj = queryString.parse(location.search);
 
   const { allIds } = data;
 
@@ -21,21 +25,17 @@ const CustomerListTable = ({
   const onPageChange = (e, page) => {
     e.preventDefault();
 
-    const obj = queryString.parse(queryObj.str);
+    
     let queryStr = null;
 
     if (obj.page) {
       obj.page = page;
       queryStr = '?' + queryString.stringify(obj);
     } else {
-      queryStr = queryObj.str ? `${queryObj.str}&page=${page}` : `?page=${page}`
+      queryStr = location.search ? `${location.search}&page=${page}` : `?page=${page}`
     }
     
-    setQueryObj(prevState => ({
-      ...prevState,
-      str: queryStr,
-      page
-    }))
+    history.push(`${location.pathname}${queryStr}`)
   }
 
   return <>
@@ -43,11 +43,11 @@ const CustomerListTable = ({
       numberOfPages={data.info.pages}
       limit={5}
       onPageChange={onPageChange}
-      page={queryObj.page}
+      page={obj.page}
     />
 
     {/* customer table */}
-    <div className="row mt-3">
+    <div className="row mt-3 mb-2">
       <div className="col">
         <div className="table-responsive-sm">
           <table className="table table-hover">
@@ -62,7 +62,7 @@ const CustomerListTable = ({
             </thead>
             <tbody>
               {allIds.map(customer => 
-                <CustomerListRow key={customer._id} setComp={setComp} customer={customer} />
+                <CustomerListRow key={customer._id} customer={customer} />
               )}
             </tbody>
           </table>
@@ -75,7 +75,7 @@ const CustomerListTable = ({
       numberOfPages={data.info.pages}
       limit={5}
       onPageChange={onPageChange}
-      page={queryObj.page}
+      page={obj.page}
     />
   </>
 }

@@ -36,82 +36,80 @@ const PaginationBar = ({
   }
 
   return <>
-    <div className="row mt-3">
-      <div className="col d-flex justify-content-center">
-        <nav aria-label="Page navigation example">
-          <ul className="pagination">
-            {activeItem === 1 
-              ? 
-                <li className="page-item disabled">
-                  <Link 
-                    className="page-link a-pagination-cs" 
-                    to="#" 
-                    aria-label="Previous"
-                    tabIndex="-1"
-                    aria-disabled="true"
-                  >
-                    <span aria-hidden="true">&laquo;</span>
-                    <span className="sr-only">Previous</span>
-                  </Link>
-                </li>
-              :
-                <li className="page-item">
-                  <Link 
-                    className="page-link a-pagination-cs" 
-                    to="/"
-                    aria-label="Previous"
-                    onClick={e => onPageChange(e, activeItem - 1)}
-                  >
-                    <span aria-hidden="true">&laquo;</span>
-                    <span className="sr-only">Previous</span>
-                  </Link>
-                </li>
-            }
-            
-            {currItems.map(item =>
-              <li key={uuid()} className={`page-item ${item === activeItem && "active"}`}>
-                <Link 
-                  className="page-link a-pagination-cs" 
-                  to="/"
-                  onClick={e => onPageChange(e, item)}
-                >
-                  {item}
-                </Link>
-              </li>
-            )}
-            
-            {activeItem === numberOfPages 
-              ?
-                <li className="page-item disabled">
-                  <Link 
-                    className="page-link a-pagination-cs" 
-                    to="#"
-                    aria-label="Next"
-                    tabIndex="-1"
-                    aria-disabled="true"
-                  >
-                    <span aria-hidden="true">&raquo;</span>
-                    <span className="sr-only">Next</span>
-                  </Link>
-                </li>
-              :
-                <li className="page-item">
-                  <Link 
-                    className="page-link a-pagination-cs" 
-                    to="/"
-                    aria-label="Next"
-                    onClick={e => onPageChange(e, activeItem + 1)}
+    
+    <nav aria-label="Page navigation example" className="mb-4">
+      <ul className="pagination">
+        {activeItem === 1 
+          ? 
+            <li className="page-item disabled">
+              <Link 
+                className="page-link a-pagination-cs" 
+                to="#" 
+                aria-label="Previous"
+                tabIndex="-1"
+                aria-disabled="true"
+              >
+                <span aria-hidden="true">&laquo;</span>
+                <span className="sr-only">Previous</span>
+              </Link>
+            </li>
+          :
+            <li className="page-item">
+              <Link 
+                className="page-link a-pagination-cs" 
+                to="/"
+                aria-label="Previous"
+                onClick={e => onPageChange(e, activeItem - 1)}
+              >
+                <span aria-hidden="true">&laquo;</span>
+                <span className="sr-only">Previous</span>
+              </Link>
+            </li>
+        }
+        
+        {currItems.map(item =>
+          <li key={uuid()} className={`page-item ${item === activeItem && "active"}`}>
+            <Link 
+              className="page-link a-pagination-cs" 
+              to="/"
+              onClick={e => onPageChange(e, item)}
+            >
+              {item}
+            </Link>
+          </li>
+        )}
+        
+        {activeItem === numberOfPages 
+          ?
+            <li className="page-item disabled">
+              <Link 
+                className="page-link a-pagination-cs" 
+                to="#"
+                aria-label="Next"
+                tabIndex="-1"
+                aria-disabled="true"
+              >
+                <span aria-hidden="true">&raquo;</span>
+                <span className="sr-only">Next</span>
+              </Link>
+            </li>
+          :
+            <li className="page-item">
+              <Link 
+                className="page-link a-pagination-cs" 
+                to="/"
+                aria-label="Next"
+                onClick={e => onPageChange(e, activeItem + 1)}
 
-                  >
-                    <span aria-hidden="true">&raquo;</span>
-                    <span className="sr-only">Next</span>
-                  </Link>
-                </li>
-            }
-          </ul>
-        </nav>
-      </div>
-    </div>
+              >
+                <span aria-hidden="true">&raquo;</span>
+                <span className="sr-only">Next</span>
+              </Link>
+            </li>
+        }
+      </ul>
+    </nav>
+    
   </>
 }
 
