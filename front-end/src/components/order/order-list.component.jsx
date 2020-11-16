@@ -11,11 +11,6 @@ import OrderSearchForm from './order-search-form.component';
 import OrderListTable from './order-list-table.component';
 import { convertSearchFormToQueryString } from '../utils/convert-search-form-to-query-string';
 
-// redux
-import { connect } from 'react-redux';
-import { createStructuredSelector } from 'reselect';
-import { selectOrderComp } from '../../state/order/order.selectors';
-
 // initial values
 const formSchema = Yup.object().shape({
   search: Yup
@@ -26,7 +21,7 @@ const formState = {
 }
 
 // main component
-const Order = () => {
+const OrderList = () => {
 
   const location = useLocation();
   const history = useHistory();
@@ -79,8 +74,4 @@ const Order = () => {
   </>
 }
 
-const mapStateToProps = createStructuredSelector({
-  comp: selectOrderComp
-})
-
-export default connect(mapStateToProps)(Order);
+export default OrderList;

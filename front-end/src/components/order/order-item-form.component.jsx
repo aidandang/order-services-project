@@ -1,19 +1,24 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
 // dependencies
 import * as Yup from "yup";
-import { Link, useLocation, useHistory } from 'react-router-dom';
+import { Link, useLocation, useHistory, useParams, Redirect } from 'react-router-dom';
 
 // components
 import { Card, Ul, Li, TextInput } from '../tag/tag.component';
 import { useForm } from '../hook/use-form';
 import SubmitOrReset from '../submit-or-reset/submit-or-reset.component';
+import AlertMesg from '../alert-mesg/alert-mesg.component';
+import { integerStrToNum } from '../utils/helpers';
 
 // redux
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import { saveOrderItem, updateOrderItem } from '../../state/order/order.actions';
-import { selectOrderEditing } from '../../state/order/order.selectors';
+import { selectOrderData, selectOrderItem } from '../../state/order/order.selectors';
+import { patchReq } from '../../state/api/api.requests';
+import { OrderActionTypes } from '../../state/order/order.types';
+import { selectAlertMessage } from '../../state/alert/alert.selectors';
+import { strToAcct } from '../utils/strToAcct';
 
 // initial form state
 const formSchema = Yup.object().shape({
@@ -47,15 +52,20 @@ const formState = {
 
 // main component
 const OrderItemForm = ({
-  order,
-  saveOrderItem,
-  updateOrderItem
+  data,
+  item,
+  patchReq,
+  alertMessage
 }) => {
 
+  const params = useParams();
   const location = useLocation();
   const history = useHistory();
 
-  const { item } = order;
+  const { byId } = data;
+  const { orderId } = params;
+
+  const [success, setSuccess] = useState(false)
 
   const [
     formData,
@@ -63,22 +73,38 @@ const OrderItemForm = ({
     onInputChange, 
     buttonDisabled,
     setValues
-  ] = useForm(formState, formState, formSchema);
+  ] = useForm(Object.keys(item).length > 0 ? item : formState, formState, formSchema);
 
   const { product, color } = formData;
 
   const formSubmit = () => {
-    const obj = { ...formData }
-    delete obj.index;
 
-    if (item.index) {
-      updateOrderItem(obj, Number(item.index))
+    const fetchSuccess = OrderActionTypes.ORDER_FETCH_SUCCESS;
+
+    const obj = { ...formData };
+
+    const qty = integerStrToNum(obj.qty);
+    obj.qty = qty;
+    const price = strToAcct(obj.price);
+    obj.price = price;
+
+    let updateItems = null
+
+    if (obj._id) {
+      updateItems = byId.items.map(item => {
+        if (item._id !== obj._id) {
+          return item
+        }
+        return {
+          ...item,
+          ...obj
+        }
+      })
     } else {
-      saveOrderItem(obj);
+      updateItems = [ ...byId.items, obj ]
     }
 
-    const pathname = location.pathname.split('/update-order-item')[0]
-    history.push(pathname)
+    patchReq(`/orders/${orderId}`, fetchSuccess, { items: updateItems }, setSuccess, 'order-item-form')
   }
 
   const formReset = () => {
@@ -86,14 +112,23 @@ const OrderItemForm = ({
   }
 
   useEffect(() => {
-    if (Object.keys(item).length > 0) setValues(prevState => ({
-      ...prevState, ...item
-    }))
+    if (success) {
+      history.push(`${location.pathname.split('/update-order-item')[0]}`)
+    } else {
+      if (location.state) setValues(prevState => ({
+        ...prevState, ...location.state
+      }))
+    }
     // eslint-disable-next-line
-  }, [])
+  }, [success])
 
   return <>
-    <Card width="col" title={`${item.index ? 'Edit Item' : 'Add Item'}`}>
+
+    { orderId && !byId && <Redirect to={`${location.pathname.split('/update-order-item')[0]}`} /> }
+
+    { alertMessage && alertMessage.component === 'order-item-form' && <AlertMesg /> }
+
+    <Card width="col" title={`${formData.index ? 'Edit Item' : 'Add Item'}`}>
       <Ul>
         <Li>
           <div className="row">
@@ -199,12 +234,15 @@ const OrderItemForm = ({
 }
 
 const mapStateToProps = createStructuredSelector({
-  order: selectOrderEditing
+  data: selectOrderData,
+  item: selectOrderItem,
+  alertMessage: selectAlertMessage
 })
 
 const mapDispatchToProps = dispatch => ({
-  saveOrderItem: payload => dispatch(saveOrderItem(payload)),
-  updateOrderItem: (item, index) => dispatch(updateOrderItem(item, index))
+  patchReq: (pathname, fetchSuccess, reqBody, setSuccess, component) => dispatch(
+    patchReq(pathname, fetchSuccess, reqBody, setSuccess, component)
+  )
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(OrderItemForm);

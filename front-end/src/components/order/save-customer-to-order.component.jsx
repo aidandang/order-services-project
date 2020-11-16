@@ -1,33 +1,75 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
 // dependencies
-import { useLocation, useHistory } from 'react-router-dom';
+import { useLocation, Redirect, useParams } from 'react-router-dom';
 
 // redux
 import { connect } from 'react-redux';
-import { selectCustomerToOrder } from '../../state/order/order.actions';
+import { createStructuredSelector } from 'reselect';
+import { selectOrderData } from '../../state/order/order.selectors';
+import { postReq, patchReq } from '../../state/api/api.requests'; 
+import { OrderActionTypes } from '../../state/order/order.types';
 
 const SaveCustomerToOrder = ({
-  byId,
-  selectCustomerToOrder
+  data,
+  customer,
+  postReq,
+  patchReq
 }) => {
 
   const location = useLocation();
-  const history = useHistory();
+  const params = useParams();
+
+  const { byId } = data;
+
+  const { orderId } = params;
+
+  const [success, setSuccess] = useState(false)
 
   useEffect(() => {
-    selectCustomerToOrder(byId);
+    const fetchSuccess = OrderActionTypes.ORDER_FETCH_SUCCESS;
 
-    const pathname = location.pathname.split('/select-customer')[0];
-    history.push(pathname);
+    if (orderId) {
+      let updateOrder = {}
+      updateOrder.customer = { ...customer }
+      patchReq(`/orders/${orderId}`, fetchSuccess, updateOrder, setSuccess, 'order-edit');
+    } else {
+      let newOrder = {
+        customer
+      }
+      postReq('/orders', fetchSuccess, newOrder, setSuccess, 'order-add')
+    }
     // eslint-disable-next-line
   }, [])
 
-  return <></>
+  let pathname = ""
+
+  if (success) {
+    if (orderId) {
+      pathname = location.pathname.split('/select-customer')[0]
+    } else {
+      pathname = location.pathname.split('/add')[0] + '/' + byId._id;
+    }
+  }
+
+  return <>
+    {
+      success && <Redirect to={pathname} />
+    }
+  </>
 }
 
-const mapDispatchToProps = dispatch => ({
-  selectCustomerToOrder: customer => dispatch(selectCustomerToOrder(customer))
+const mapStateToProps = createStructuredSelector({
+  data: selectOrderData
 })
 
-export default connect(null, mapDispatchToProps)(SaveCustomerToOrder);
+const mapDispatchToProps = dispatch => ({
+  postReq: (pathname, fetchSuccess, reqBody, setSuccess, component) => dispatch(
+    postReq(pathname, fetchSuccess, reqBody, setSuccess, component)
+  ),
+  patchReq: (pathname, fetchSuccess, reqBody, setSuccess, component) => dispatch(
+    patchReq(pathname, fetchSuccess, reqBody, setSuccess, component)
+  )
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(SaveCustomerToOrder);

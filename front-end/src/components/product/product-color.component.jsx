@@ -13,11 +13,9 @@ import ProductColorRemove from './product-color-remove.component';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { selectProductData } from '../../state/product/product.selectors';
-import { selectProductToOrder } from '../../state/order/order.actions';
 
 const ProductColor = ({
-  data,
-  selectProductToOrder
+  data
 }) => {
 
   const location = useLocation();
@@ -54,13 +52,8 @@ const ProductColor = ({
   const colorTemp = colors.find(item => item._id === color._id);
 
   const handleSelectColorToOrder = () => {
-    selectProductToOrder({
-      product: byId,
-      color: colorTemp
-    })
-
     const pathname = location.pathname.split('/select-product')[0]
-    history.push(pathname)
+    history.push(pathname, { product: byId, color: colorTemp})
   }
 
   return <>
@@ -94,7 +87,7 @@ const ProductColor = ({
                 <div className="row">
                   <div className="col">
                     <img 
-                      className={`product-img my-2 ${location.search && 'span-link-cs'}`} 
+                      className={`product-img my-2 ${location.pathname.includes('/select-product') && 'span-link-cs'}`} 
                       src={colorTemp.image} 
                       alt={colorTemp.name}
                       onClick={e => {
@@ -159,8 +152,4 @@ const mapStateToProps = createStructuredSelector({
   data: selectProductData
 })
 
-const mapDispatchToProps = dispatch => ({
-  selectProductToOrder: payload => dispatch(selectProductToOrder(payload))
-})
-
-export default connect(mapStateToProps, mapDispatchToProps)(ProductColor);
+export default connect(mapStateToProps)(ProductColor);

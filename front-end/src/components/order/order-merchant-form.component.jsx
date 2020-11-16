@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
 // dependencies
 import * as Yup from "yup";
-import { useHistory, useLocation } from 'react-router-dom';
+import { useHistory, useLocation, useParams, Redirect } from 'react-router-dom';
 
 // components
 import { Card, Ul, Li, TextInput, SelectInput, DateInput } from '../tag/tag.component';
@@ -13,9 +13,10 @@ import Merchant from '../merchant/merchant.component';
 // redux
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import { saveOrderInfo } from '../../state/order/order.actions';
+import { OrderActionTypes } from '../../state/order/order.types';
+import { patchReq } from '../../state/api/api.requests';
 import { selectMerchantData } from '../../state/merchant/merchant.selectors';
-import { selectOrderEditing } from '../../state/order/order.selectors';
+import { selectOrderData } from '../../state/order/order.selectors';
 
 // inital values
 const formSchema = Yup.object().shape({
@@ -41,25 +42,29 @@ const formState = {
 }
 
 const OrderMerchantForm = ({
-  order,
-  merchantData,
-  saveOrderInfo
+  data,
+  patchReq,
+  merchantData
 }) => {
 
   const location = useLocation();
   const history = useHistory();
+  const params = useParams();
 
-  const { info } = order;
+  const [success, setSuccess] = useState(false)
+
+  const { orderId } = params;
+  const { byId } = data;
 
   let orderEditing = null;
 
-  if (info) {
+  if (byId && byId.info) {
     orderEditing = {
       ...formState,
-      merchant: info.merchant._id,
-      orderNumber: info.orderNumber,
-      orderDate: info.orderDate,
-      orderType: info.orderType
+      merchant: byId.info.merchant._id,
+      orderNumber: byId.info.orderNumber,
+      orderDate: byId.info.orderDate,
+      orderType: byId.info.orderType
     }
   }
 
@@ -76,6 +81,7 @@ const OrderMerchantForm = ({
   ] = useForm(orderEditing ? orderEditing : formState, formState, formSchema);
 
   const formSubmit = () => {
+    const fetchSuccess = OrderActionTypes.ORDER_FETCH_SUCCESS;
     
     const merchantObj = merchantData.allIds.find(item => item._id === formData.merchant)
 
@@ -84,17 +90,23 @@ const OrderMerchantForm = ({
       merchant: merchantObj,
     }
 
-    saveOrderInfo(obj);
-
-    const pathname = location.pathname.split('/update-order-merchant')[0]
-    history.push(pathname)
+    patchReq(`/orders/${orderId}`, fetchSuccess, { info: obj }, setSuccess, 'order-merchant-form')
   }
 
   const formReset = () => {
     setValues(formState);
   }
 
+  useEffect(() => {
+    const pathname = location.pathname.split('/update-order-merchant')[0]
+    if (success) history.push(pathname)
+    // eslint-disable-next-line
+  }, [success])
+
   return <>
+
+    { orderId && !byId && <Redirect to={`${location.pathname.split('/update-order-merchant')[0]}`} /> }
+
     <div className="row">
       <div className="col-12 col-xl-8">
         <Card width="col" title="Merchant's Order">
@@ -141,7 +153,7 @@ const OrderMerchantForm = ({
             </Li>
             <Li>
               <SelectInput
-                label="Order Type" 
+                label="Order Type (*)" 
                 name="orderType"
                 errors={errors}
                 size="col-xl-6"
@@ -179,12 +191,14 @@ const OrderMerchantForm = ({
 }
 
 const mapStateToProps = createStructuredSelector({
-  order: selectOrderEditing,
+  data: selectOrderData,
   merchantData: selectMerchantData
 })
 
 const mapDispatchToProps = dispatch => ({
-  saveOrderInfo: payload => dispatch(saveOrderInfo(payload))
+  patchReq: (pathname, fetchSuccess, reqBody, setSuccess, component) => dispatch(
+    patchReq(pathname, fetchSuccess, reqBody, setSuccess, component)
+  )
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(OrderMerchantForm);

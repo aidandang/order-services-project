@@ -10,21 +10,21 @@ import { Card, Ul, Li } from '../tag/tag.component';
 // redux
 import { connect } from 'react-redux';
 import { createStructuredSelector} from 'reselect';
-import { selectOrderEditing } from '../../state/order/order.selectors';
+import { selectOrderData } from '../../state/order/order.selectors';
 
 const OrderMerchant = ({ 
-  order
+  data
 }) => {
 
   const location = useLocation()
 
-  const { info } = order
+  const { byId } = data
 
   return <>
     <Card width="col" title="Merchant's Order">
       <Ul>
         {
-          info && <>
+          byId.info && <>
             <Li>
               <div className="row">
                 <div className="col">
@@ -33,7 +33,7 @@ const OrderMerchant = ({
                       <span>Order Number:</span>
                     </div>
                     <div className="col-8">
-                      <span>{info.orderNumber}</span>
+                      <span>{byId.info.orderNumber}</span>
                     </div>
                   </div>
                   <div className="row">
@@ -41,7 +41,7 @@ const OrderMerchant = ({
                       <span>Order Date:</span>
                     </div>
                     <div className="col-8">
-                      <span>{moment(info.orderDate).format('MMM DD, YYYY')}</span>
+                      <span>{moment(byId.info.orderDate).format('MMM DD, YYYY')}</span>
                     </div>
                   </div>
                   <div className="row">
@@ -49,7 +49,7 @@ const OrderMerchant = ({
                       <span>Order Type:</span>
                     </div>
                     <div className="col-8">
-                      <span>{info.orderType}</span>
+                      <span>{byId.info.orderType}</span>
                     </div>
                   </div>
                 </div>
@@ -63,7 +63,7 @@ const OrderMerchant = ({
                       <span>Merchant:</span>
                     </div>
                     <div className="col-8">
-                      <span>{info.merchant.name}</span>
+                      <span>{byId.info.merchant.name}</span>
                     </div>
                   </div>
                   <div className="row">
@@ -72,12 +72,12 @@ const OrderMerchant = ({
                     </div>
                     <div className="col-8">
                       <a 
-                        href={info.merchant.url}
+                        href={byId.info.merchant.url}
                         className="a-link-cs"
                         target="_blank"
                         rel="noopener noreferrer"
                       >
-                        {info.merchant.url}
+                        {byId.info.merchant.url}
                       </a>
                     </div>
                   </div>
@@ -100,7 +100,7 @@ const OrderMerchant = ({
 }
 
 const mapStateToProps = createStructuredSelector({
-  order: selectOrderEditing
+  data: selectOrderData
 })
 
 export default connect(mapStateToProps)(OrderMerchant);

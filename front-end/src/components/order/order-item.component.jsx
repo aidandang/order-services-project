@@ -6,37 +6,36 @@ import { Link, useLocation, useHistory } from 'react-router-dom';
 // components
 import { strToAcct } from '../utils/strToAcct';
 import { acctToStr } from '../utils/acctToStr';
-import { integerStrToNum } from '../utils/helpers';
 
 // redux
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import { removeOrderItem, copyOrderItemToEdit } from '../../state/order/order.actions';
-import { selectOrderEditing } from '../../state/order/order.selectors';
+import { selectOrderData } from '../../state/order/order.selectors';
+import { copyOrderItemToEdit } from '../../state/order/order.actions';
+import { integerMask } from '../utils/helpers';
 
 const OrderItem = ({
-  order,
-  removeOrderItem,
+  data,
   copyOrderItemToEdit
 }) => {
 
   const location = useLocation();
   const history = useHistory();
 
-  const { items, cost } = order;
+  const { byId } = data;
 
   let shippingCost = ""
   let saleTax = ""
 
-  if (cost) {
-    shippingCost = cost.shippingCost
-    saleTax = cost.saleTax
+  if (byId && byId.cost) {
+    shippingCost = byId.cost.shippingCost
+    saleTax = byId.cost.saleTax
   }
 
   let sum = 0;
 
   const subTotalCalc = () => (qty, price) => {
-    const value = strToAcct(price) * integerStrToNum(qty);
+    const value = price * qty;
     sum = sum + value;
     return acctToStr(value);
   }
@@ -47,16 +46,20 @@ const OrderItem = ({
     return acctToStr(sum + strToAcct(shippingCost, saleTax))
   }
 
-  const editOrderItem = (item, index) => {
-    item.index = index.toString()
-    copyOrderItemToEdit(item);
+  const editOrderItem = (item) => {
+    const obj = { ...item }
 
+    const price = acctToStr(obj.price);
+    obj.price = price;
+    const qty = integerMask(obj.qty.toString())
+    obj.qty = qty;
+
+    copyOrderItemToEdit(obj)
     history.push(`${location.pathname}/update-order-item`)
   }
 
   const addOrderItem = () => {
-    copyOrderItemToEdit({});
-    
+    copyOrderItemToEdit({})
     history.push(`${location.pathname}/update-order-item`)
   }
 
@@ -73,12 +76,11 @@ const OrderItem = ({
                 <th scope="col" className="text-right">Qty</th>
                 <th scope="col" className="text-right">Price</th>
                 <th scope="col" className="text-right">Amount</th>
-                <th scope="col" className="text-right"></th>
               </tr>
             </thead>
             <tbody>
-              {items.length > 0 &&
-                items.map((item, index) => 
+              {byId && byId.items.length > 0 &&
+                byId.items.map((item, index) => 
                   <tr 
                     key={index} 
                     className="table-row-no-link-cs span-link-cs"
@@ -88,30 +90,16 @@ const OrderItem = ({
                   >
                     <td>{item.product.styleCode}</td>
                     <td>{`${item.product.name}/Color:${item.color.color}/Size:${item.size}${item.note && `/${item.note}`}`}</td>
-                    <td className="text-right">{item.qty}</td>
-                    <td className="text-right">{item.price}</td>
+                    <td className="text-right">{integerMask(item.qty.toString())}</td>
+                    <td className="text-right">{acctToStr(item.price)}</td>
                     <th scope="row" className="text-right">
                       {subTotal(item.qty, item.price)}
                     </th>
-                    <td 
-                      className="text-right"
-                    >
-                      <span 
-                        className="span-link-cs text-danger"
-                        onClick={e => {
-                          e.stopPropagation();
-                          removeOrderItem(index)
-                        }}
-                      >
-                        {/* eslint-disable-next-line */}
-                        &#10134;
-                      </span>
-                    </td>
                   </tr>
                 ) 
               }
               {
-                Object.keys(items).length > 0 && <>
+                byId && byId.items.length > 0 && <>
                   <tr className="table-row-no-link-cs">
                     <td colSpan="6" className="text-left">
                       <Link 
@@ -127,34 +115,24 @@ const OrderItem = ({
                     <td className="text-right"></td>
                     <td colSpan="2" className="text-right">Subtotal</td>
                     <td className="text-right">{acctToStr(sum)}</td>
-                    <td className="text-right"></td>
                   </tr>
                   <tr className="table-row-no-link-cs">
                     <td className="text-right"></td>
                     <td className="text-right"></td>
-                    <td colSpan="2" className="text-right">
-                      Local Sale Tax
-                    </td>
+                    <td colSpan="2" className="text-right">Local Sale Tax</td>
                     <td className="text-right">{saleTax.length > 0 ? saleTax : '.00'}</td>
-                    <td className="text-right"></td>
                   </tr>
                   <tr className="table-row-no-link-cs">
                     <td className="text-right"></td>
                     <td className="text-right"></td>
-                    <td colSpan="2" className="text-right">
-                      Local Shipping
-                    </td>
+                    <td colSpan="2" className="text-right">Local Shipping</td>
                     <td className="text-right">{shippingCost.length > 0 ? shippingCost : '.00'}</td>
-                    <td className="text-right"></td>
                   </tr>
                   <tr className="table-row-no-link-cs">
                     <td className="text-right"></td>
                     <td className="text-right"></td>
                     <th scope="row" colSpan="2" className="text-right">Total</th>
-                    <th scope="row" className="text-right">
-                      {total(sum, shippingCost, saleTax)}
-                    </th>
-                    <td className="text-right"></td>
+                    <th scope="row" className="text-right">{total(sum, shippingCost, saleTax)}</th>
                   </tr>
                 </>
               }
@@ -164,9 +142,9 @@ const OrderItem = ({
                   <Link
                     to={`${location.pathname}/update-order-item`}
                     className="a-link-cs"
-                    onClick={e => {
+                    onClick={e => { 
                       e.preventDefault();
-                      addOrderItem()
+                      addOrderItem();
                     }}
                   >
                     Add Item
@@ -184,12 +162,11 @@ const OrderItem = ({
 }
 
 const mapStateToProps = createStructuredSelector({
-  order: selectOrderEditing
+  data: selectOrderData
 })
 
 const mapDispatchToProps = dispatch => ({
-  removeOrderItem: index => dispatch(removeOrderItem(index)),
-  copyOrderItemToEdit: item => dispatch(copyOrderItemToEdit(item))
+  copyOrderItemToEdit: payload => dispatch(copyOrderItemToEdit(payload))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(OrderItem);

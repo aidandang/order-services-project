@@ -3,11 +3,7 @@ import { OrderActionTypes } from './order.types';
 
 const INITIAL_STATE = {
   data: {},
-  editing: {
-    item: {},
-    items: [],
-    billing: {}
-  }
+  item: {}
 }
 
 function addItemToArray(array, action) {
@@ -96,10 +92,7 @@ const orderReducer = (state = INITIAL_STATE, action) => {
     case OrderActionTypes.COPY_ORDER_ITEM_TO_EDIT:
       return {
         ...state,
-        editing: {
-          ...state.editing,
-          item: action.payload
-        }
+        item: action.payload
       }
     case OrderActionTypes.SAVE_ORDER_COST:
       return {
@@ -142,6 +135,11 @@ const orderReducer = (state = INITIAL_STATE, action) => {
       return {
         ...state,
         editing: INITIAL_STATE.editing
+      }
+    case OrderActionTypes.SET_ORDER_EDITING:
+      return {
+        ...state,
+        editing: action.payload
       }
     default:
       return state;

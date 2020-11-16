@@ -10,8 +10,7 @@ import PaginationBar from '../pagination-bar/pagination-bar.component';
 import CustomerListRow from './customer-list-row.component';
 
 const CustomerListTable = ({ 
-  data,
-  queryObj
+  data
 }) => {
 
   const location = useLocation();
@@ -25,7 +24,6 @@ const CustomerListTable = ({
   const onPageChange = (e, page) => {
     e.preventDefault();
 
-    
     let queryStr = null;
 
     if (obj.page) {

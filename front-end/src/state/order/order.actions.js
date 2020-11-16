@@ -56,3 +56,8 @@ export const saveOrderSale = payload => ({
 export const resetOrderEditing = () => ({
   type: OrderActionTypes.RESET_ORDER_EDITING
 })
+
+export const setOrderEditing = order => ({
+  type: OrderActionTypes.SET_ORDER_EDITING,
+  payload: order
+})
