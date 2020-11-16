@@ -19,7 +19,7 @@ const CustomerInfo = ({
 
   return <>
     {
-      save ? <SaveCustomerToOrder byId={byId} />
+      save ? <SaveCustomerToOrder customer={byId} />
       : <>
         <Card width="col" title="Customer Information">
           <Ul>

@@ -8,7 +8,7 @@ const { orderAggregate } = require('../utils/aggregation');
 exports.createOrder = catchAsync(async (req, res, next) => {
   const newOrder = await Order.create(req.body);
   res.status(201).json({
-    status: 'POST_SUCCESS',
+    status: 'success',
     byId: newOrder
   });
 });

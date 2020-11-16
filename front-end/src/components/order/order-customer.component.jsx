@@ -9,26 +9,26 @@ import { Card, Ul, Li } from '../tag/tag.component';
 // redux
 import { connect } from 'react-redux';
 import { createStructuredSelector} from 'reselect';
-import { selectOrderEditing } from '../../state/order/order.selectors';
+import { selectOrderData } from '../../state/order/order.selectors';
 
 const OrderCustomer = ({ 
-  order 
+  data 
 }) => {
 
   const location = useLocation();
-  const { billing } = order;
+  const { byId } = data;
 
   let address = null
 
-  if (billing.customer) {
-    address = billing.customer.shippingInfo.find(item => item._id === billing.customer.shippingAddress)
+  if (byId && byId.customer) {
+    address = byId.customer.shippingInfo.find(item => item._id === byId.customer.shippingAddress)
   }
 
   return <>
     <Card width="col" title="Customer Information">
       <Ul>
         {
-          billing.customer && <>
+          byId && byId.customer && <>
             <Li>
               <div className="row">
                 <div className="col">
@@ -37,7 +37,7 @@ const OrderCustomer = ({
                       <span>Nickname:</span>
                     </div>
                     <div className="col-8">
-                      <span>{billing.customer.nickname}</span>
+                      <span>{byId.customer.nickname}</span>
                     </div>
                   </div>
                   <div className="row">
@@ -45,17 +45,17 @@ const OrderCustomer = ({
                       <span>Account Number:</span>
                     </div>
                     <div className="col-8">
-                      <span>{billing.customer.account}</span>
+                      <span>{byId.customer.account}</span>
                     </div>
                   </div>
                   <div className="row">
                     <div className="col-4">
-                      <span>Billing Address:</span>
+                      <span>Address:</span>
                     </div>
                     <div className="col-8">
-                      <span>{billing.customer.fullname}</span><br />
-                      <span>{billing.customer.streetAddress1}, {billing.customer.city}, {billing.customer.state}</span><br />
-                      <span>Phone# {billing.customer.phone}</span>
+                      <span>{byId.customer.fullname}</span><br />
+                      <span>{byId.customer.streetAddress1}, {byId.customer.city}, {byId.customer.state}</span><br />
+                      <span>Phone# {byId.customer.phone}</span>
                     </div>
                   </div>
                 </div>
@@ -77,7 +77,7 @@ const OrderCustomer = ({
                           <span>Phone# {address.phone}</span>
                         </>
                         : 
-                        <span>Same as Billing Address</span>
+                        <span>Same as Address</span>
                       }
                     </div>
                   </div>
@@ -91,7 +91,7 @@ const OrderCustomer = ({
             to={`${location.pathname}/select-customer`}
             className="a-link-cs"
           >
-            {`${billing.customer ? 'Reselect Customer' : 'Select Customer'}`}
+            {`${byId && byId.customer ? 'Reselect Customer' : 'Select Customer'}`}
           </Link>
         </Li> 
       </Ul>
@@ -100,7 +100,7 @@ const OrderCustomer = ({
 }
 
 const mapStateToProps = createStructuredSelector({
-  order: selectOrderEditing
+  data: selectOrderData
 })
 
 export default connect(mapStateToProps)(OrderCustomer);

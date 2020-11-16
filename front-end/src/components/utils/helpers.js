@@ -51,7 +51,8 @@ export const currencyMask = (value, limit) => {
   return undefined;
 }
 
-export const integerMask = (value, limit) => {
+export const integerMask = (value, limit = 10) => {
+ 
   let str = value;
   // remove (,) from the string
   str = str.split(',').join('');
