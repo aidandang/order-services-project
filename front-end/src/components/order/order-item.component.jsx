@@ -4,15 +4,14 @@ import React from 'react';
 import { Link, useLocation, useHistory } from 'react-router-dom';
 
 // components
-import { strToAcct } from '../utils/strToAcct';
 import { acctToStr } from '../utils/acctToStr';
+import { integerMask } from '../utils/helpers';
 
 // redux
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { selectOrderData } from '../../state/order/order.selectors';
 import { copyOrderItemToEdit } from '../../state/order/order.actions';
-import { integerMask } from '../utils/helpers';
 
 const OrderItem = ({
   data,
@@ -24,8 +23,8 @@ const OrderItem = ({
 
   const { byId } = data;
 
-  let shippingCost = ""
-  let saleTax = ""
+  let shippingCost = 0
+  let saleTax = 0
 
   if (byId && byId.cost) {
     shippingCost = byId.cost.shippingCost
@@ -43,7 +42,7 @@ const OrderItem = ({
   const subTotal = subTotalCalc();
 
   const total = (sum, shippingCost, saleTax) => {
-    return acctToStr(sum + strToAcct(shippingCost, saleTax))
+    return acctToStr(sum + shippingCost + saleTax)
   }
 
   const editOrderItem = (item) => {
@@ -85,7 +84,7 @@ const OrderItem = ({
                     key={index} 
                     className="table-row-no-link-cs span-link-cs"
                     onClick={e => {
-                      editOrderItem(item, index);
+                      editOrderItem(item);
                     }}
                   >
                     <td>{item.product.styleCode}</td>
@@ -120,13 +119,13 @@ const OrderItem = ({
                     <td className="text-right"></td>
                     <td className="text-right"></td>
                     <td colSpan="2" className="text-right">Local Sale Tax</td>
-                    <td className="text-right">{saleTax.length > 0 ? saleTax : '.00'}</td>
+                    <td className="text-right">{saleTax > 0 ? acctToStr(saleTax) : '.00'}</td>
                   </tr>
                   <tr className="table-row-no-link-cs">
                     <td className="text-right"></td>
                     <td className="text-right"></td>
                     <td colSpan="2" className="text-right">Local Shipping</td>
-                    <td className="text-right">{shippingCost.length > 0 ? shippingCost : '.00'}</td>
+                    <td className="text-right">{shippingCost > 0 ? acctToStr(shippingCost) : '.00'}</td>
                   </tr>
                   <tr className="table-row-no-link-cs">
                     <td className="text-right"></td>

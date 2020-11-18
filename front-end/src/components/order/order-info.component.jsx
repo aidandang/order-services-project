@@ -17,11 +17,11 @@ const OrderInfo = ({
   return <>
     {
       byId && <>
-        <OrderCustomer />
         <OrderMerchant />
         <OrderItem />
-        {/* <OrderReceiving />
-        <OrderSale /> */}
+        <OrderReceiving />
+        <OrderCustomer />
+        <OrderSale />
       </>
     }
   </>

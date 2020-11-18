@@ -4,30 +4,29 @@ import React from 'react';
 import { useLocation, useHistory } from 'react-router-dom';
 
 // components
-import { strToAcct } from '../utils/strToAcct';
 import { acctToStr } from '../utils/acctToStr';
-import { integerStrToNum } from '../utils/helpers';
+import { integerMask } from '../utils/helpers';
 
 // redux
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import { selectOrderEditing } from '../../state/order/order.selectors';
+import { selectOrderData } from '../../state/order/order.selectors';
 import { copyOrderItemToEdit } from '../../state/order/order.actions';
 
 const OrderSale = ({ 
-  order,
+  data,
   copyOrderItemToEdit 
 }) => {
 
   const location = useLocation();
   const history = useHistory();
 
-  const { items } = order;
+  const { byId } = data;
 
   let sum = 0;
 
   const subTotalCalc = () => (qty, salePrice, shippingPrice) => {
-    const value = strToAcct(salePrice, shippingPrice) * integerStrToNum(qty);
+    const value = (salePrice + shippingPrice) * qty;
     sum = sum + value;
     return acctToStr(value);
   }
@@ -49,10 +48,19 @@ const OrderSale = ({
     }
   }
 
-  const editOrderItem = (item, index) => {
-    item.index = index.toString()
-    copyOrderItemToEdit(item);
+  const editOrderItem = (item) => {
+    const obj = { ...item }
 
+    const salePrice = obj.salePrice > 0 ? acctToStr(obj.salePrice) : '';
+    obj.salePrice = salePrice;
+    const shippingPrice = obj.shippingPrice > 0 ? acctToStr(obj.shippingPrice) : '';
+    obj.shippingPrice = shippingPrice;
+    const weight = obj.weight > 0 ? acctToStr(obj.weight) : '';
+    obj.weight = weight;
+
+    obj.int = '';
+
+    copyOrderItemToEdit(obj)
     history.push(`${location.pathname}/update-sale-price`)
   }
 
@@ -74,22 +82,22 @@ const OrderSale = ({
               </tr>
             </thead>
             <tbody>
-              {items.length > 0 &&
-                items.map((item, index) => 
+              {byId && byId.items.length > 0 &&
+                byId.items.map((item, index) => 
                   <tr 
                     key={index} 
                     className="table-row-no-link-cs span-link-cs"
                     onClick={e => {
-                      editOrderItem(item, index);
+                      editOrderItem(item);
                     }}
                   >
                     <td>{item.product.styleCode}</td>
                     <td>{`${item.product.name}/Color:${item.color.color}/Size:${item.size}${item.note && `/${item.note}`}`}</td>
-                    <td className="text-right">{item.qty}</td>
-                    <td className="text-right">{item.price}</td>
-                    <td className="text-right">{percentageCalc(strToAcct(item.salePrice), strToAcct(item.price))}</td>
-                    <td className="text-right">{item.salePrice.length > 0 ? item.salePrice : '.00'}</td>
-                    <td className="text-right">{item.shippingPrice.length > 0 ? item.shippingPrice : '.00'}</td>
+                    <td className="text-right">{integerMask(item.qty.toString())}</td>
+                    <td className="text-right">{acctToStr(item.price)}</td>
+                    <td className="text-right">{percentageCalc(item.salePrice, item.price)}</td>
+                    <td className="text-right">{item.salePrice > 0 ? acctToStr(item.salePrice) : '.00'}</td>
+                    <td className="text-right">{item.shippingPrice > 0 ? acctToStr(item.shippingPrice) : '.00'}</td>
                     <th scope="row" className="text-right">
                       {subTotal(item.qty, item.salePrice, item.shippingPrice)}
                     </th>
@@ -114,11 +122,11 @@ const OrderSale = ({
 }
 
 const mapStateToProps = createStructuredSelector({
-  order: selectOrderEditing
+  data: selectOrderData
 })
 
 const mapDispatchToProps = dispatch => ({
-  copyOrderItemToEdit: item => dispatch(copyOrderItemToEdit(item))
+  copyOrderItemToEdit: payload => dispatch(copyOrderItemToEdit(payload))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(OrderSale);

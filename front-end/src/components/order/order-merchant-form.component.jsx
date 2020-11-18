@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 
 // dependencies
 import * as Yup from "yup";
+import moment from 'moment';
 import { useHistory, useLocation, useParams, Redirect } from 'react-router-dom';
 
 // components
@@ -51,6 +52,10 @@ const OrderMerchantForm = ({
   const history = useHistory();
   const params = useParams();
 
+  // back to parent's route when update was success 
+  // or history's action was POP leaded to no byId
+  const parentRoute = location.pathname.split('/update-order-merchant')[0];
+
   const [success, setSuccess] = useState(false)
 
   const { orderId } = params;
@@ -60,10 +65,9 @@ const OrderMerchantForm = ({
 
   if (byId && byId.info) {
     orderEditing = {
-      ...formState,
       merchant: byId.info.merchant._id,
       orderNumber: byId.info.orderNumber,
-      orderDate: byId.info.orderDate,
+      orderDate: moment(byId.info.orderDate).format('yyyy-MM-DD'),
       orderType: byId.info.orderType
     }
   }
@@ -98,95 +102,96 @@ const OrderMerchantForm = ({
   }
 
   useEffect(() => {
-    const pathname = location.pathname.split('/update-order-merchant')[0]
-    if (success) history.push(pathname)
-    // eslint-disable-next-line
-  }, [success])
+    if (success) history.push(parentRoute)
+  }, [success, history, parentRoute])
 
   return <>
-
-    { orderId && !byId && <Redirect to={`${location.pathname.split('/update-order-merchant')[0]}`} /> }
-
-    <div className="row">
-      <div className="col-12 col-xl-8">
-        <Card width="col" title="Merchant's Order">
-          <Ul>
-            <Li>
-              <SelectInput
-                label="Merchant (*)" 
-                name="merchant"
-                errors={errors}
-                size="col-xl-6"
-                smallText="Select a merchant, add new if there is no merchant."
-                defaultValue=""
-                defaultText="..."
-                value={formData.merchant ? formData.merchant : ""}
-                onChange={onInputChange}
-                data={merchants}
-                valueKey="_id"
-                textKey="name"
-              />
-            </Li>
-            <Li>
-              <div className="row">
-                <div className="col-xl-6">
-                  <TextInput
-                    label="Order Number (*)" 
-                    name="orderNumber"
-                    errors={errors}
-                    smallText="Order number is required."
-                    value={formData.orderNumber}
-                    onChange={onInputChange}
-                  />
+    { 
+      orderId && !byId 
+      ? 
+      <Redirect to={parentRoute} />
+      : 
+      <div className="row">
+        <div className="col-12 col-xl-8">
+          <Card width="col" title="Merchant's Order">
+            <Ul>
+              <Li>
+                <SelectInput
+                  label="Merchant (*)" 
+                  name="merchant"
+                  errors={errors}
+                  size="col-xl-6"
+                  smallText="Select a merchant, add new if there is no merchant."
+                  defaultValue=""
+                  defaultText="..."
+                  value={formData.merchant ? formData.merchant : ""}
+                  onChange={onInputChange}
+                  data={merchants}
+                  valueKey="_id"
+                  textKey="name"
+                />
+              </Li>
+              <Li>
+                <div className="row">
+                  <div className="col-xl-6">
+                    <TextInput
+                      label="Order Number (*)" 
+                      name="orderNumber"
+                      errors={errors}
+                      smallText="Order number is required."
+                      value={formData.orderNumber}
+                      onChange={onInputChange}
+                    />
+                  </div>
+                  <div className="col-xl-6">
+                    <DateInput
+                      label="Order Date (*)" 
+                      name="orderDate"
+                      errors={errors}
+                      smallText="Order date is required."
+                      value={formData.orderDate}
+                      onChange={onInputChange}
+                    />
+                  </div>
                 </div>
-                <div className="col-xl-6">
-                  <DateInput
-                    label="Order Date (*)" 
-                    name="orderDate"
-                    errors={errors}
-                    smallText="Order date is required."
-                    value={formData.orderDate}
-                    onChange={onInputChange}
-                  />
-                </div>
-              </div>
-            </Li>
-            <Li>
-              <SelectInput
-                label="Order Type (*)" 
-                name="orderType"
-                errors={errors}
-                size="col-xl-6"
-                smallText="Online or walk-in."
-                defaultValue=""
-                defaultText="Choose..."
-                value={formData.orderType ? formData.orderType : ""}
-                onChange={onInputChange}
-                data={[{ type: 'Online'}, { type: 'Walk-in'}]}
-                valueKey="type"
-                textKey="type" 
+              </Li>
+              <Li>
+                <SelectInput
+                  label="Order Type (*)" 
+                  name="orderType"
+                  errors={errors}
+                  size="col-xl-6"
+                  smallText="Online or walk-in."
+                  defaultValue=""
+                  defaultText="Choose..."
+                  value={formData.orderType ? formData.orderType : ""}
+                  onChange={onInputChange}
+                  data={[{ type: 'Online'}, { type: 'Walk-in'}]}
+                  valueKey="type"
+                  textKey="type" 
+                />
+              </Li>
+              <SubmitOrReset
+                buttonName={'Save'}
+                buttonDisabled={buttonDisabled}
+                formSubmit={formSubmit}
+                formReset={formReset}
               />
-            </Li>
-            <SubmitOrReset
-              buttonName={'Save'}
-              buttonDisabled={buttonDisabled}
-              formSubmit={formSubmit}
-              formReset={formReset}
-            />
-          </Ul>
-        </Card>
+            </Ul>
+          </Card>
+        </div>
+        <div className="col-12 col-xl-4">
+          <Card width="col" title="Update Merchants">
+            <Ul>
+              <Merchant
+                pathname={'/merchants'}
+                component={'merchant'}
+              />
+            </Ul>
+          </Card>
+        </div>
       </div>
-      <div className="col-12 col-xl-4">
-        <Card width="col" title="Update Merchants">
-          <Ul>
-            <Merchant
-              pathname={'/merchants'}
-              component={'merchant'}
-            />
-          </Ul>
-        </Card>
-      </div>
-    </div>
+    }
   </>
 }
 
