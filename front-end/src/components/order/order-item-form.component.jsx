@@ -10,6 +10,7 @@ import { useForm } from '../hook/use-form';
 import SubmitOrReset from '../submit-or-reset/submit-or-reset.component';
 import AlertMesg from '../alert-mesg/alert-mesg.component';
 import { integerStrToNum } from '../utils/helpers';
+import { strToAcct } from '../utils/strToAcct';
 
 // redux
 import { connect } from 'react-redux';
@@ -18,7 +19,6 @@ import { selectOrderData, selectOrderItem } from '../../state/order/order.select
 import { patchReq } from '../../state/api/api.requests';
 import { OrderActionTypes } from '../../state/order/order.types';
 import { selectAlertMessage } from '../../state/alert/alert.selectors';
-import { strToAcct } from '../utils/strToAcct';
 
 // initial form state
 const formSchema = Yup.object().shape({
@@ -44,9 +44,6 @@ const formState = {
   size: "",
   qty: "",
   price: "",
-  salePrice: "",
-  weight: "",
-  shippingPrice: "",
   note: ""
 }
 
@@ -64,6 +61,10 @@ const OrderItemForm = ({
 
   const { byId } = data;
   const { orderId } = params;
+
+  // back to parent's route when update was success 
+  // or history's action was POP leaded to no byId
+  const parentRoute = location.pathname.split('/update-order-item')[0];
 
   const [success, setSuccess] = useState(false)
 
@@ -113,7 +114,7 @@ const OrderItemForm = ({
 
   useEffect(() => {
     if (success) {
-      history.push(`${location.pathname.split('/update-order-item')[0]}`)
+      history.push(parentRoute)
     } else {
       if (location.state) setValues(prevState => ({
         ...prevState, ...location.state
@@ -124,112 +125,116 @@ const OrderItemForm = ({
 
   return <>
 
-    { orderId && !byId && <Redirect to={`${location.pathname.split('/update-order-item')[0]}`} /> }
-
     { alertMessage && alertMessage.component === 'order-item-form' && <AlertMesg /> }
 
-    <Card width="col" title={`${formData.index ? 'Edit Item' : 'Add Item'}`}>
-      <Ul>
-        <Li>
-          <div className="row">
-            <div className="col-12">
-              <Link 
-                to={`${location.pathname}/select-product`} 
-                className="a-link-cs"
-              >
-                {formData.product ? 'Reselect Product' : 'Select Product'}
-              </Link>
+    { 
+      orderId && !byId 
+      ? 
+      <Redirect to={parentRoute} /> 
+      :
+      <Card width="col" title={`${formData.index ? 'Edit Item' : 'Add Item'}`}>
+        <Ul>
+          <Li>
+            <div className="row">
+              <div className="col-12">
+                <Link 
+                  to={`${location.pathname}/select-product`} 
+                  className="a-link-cs"
+                >
+                  {formData.product ? 'Reselect Product' : 'Select Product'}
+                </Link>
+              </div>
             </div>
-          </div>
-        </Li>
-        {
-          formData.product && <>
-            <Li>
-              <div className="row">
-                <div className="col-4 align-self-center"><span className="font-weight-bold">Name:</span></div>
-                <div className="col-8">{product.name}</div>
-              </div>
-            </Li>
-            <Li>
-              <div className="row">
-                <div className="col-4 align-self-center"><span className="font-weight-bold">Brand:</span></div>
-                <div className="col-8">{product.brand.name}</div>
-              </div>
-            </Li>
-            <Li>
-              <div className="row">
-                <div className="col-4 align-self-center"><span className="font-weight-bold">Style No:</span></div>
-                <div className="col-8">{product.styleCode}</div>
-              </div>
-            </Li>
-            <Li>
-              <div className="row">
-                <div className="col-4 align-self-center"><span className="font-weight-bold">Color:</span></div>
-                <div className="col-8">{color.color}</div>
-              </div>
-            </Li>
-            <Li>
-              <div className="row">
-                <div className="col-4 align-self-center"><span className="font-weight-bold">Description:</span></div>
-                <div className="col-8">{product.desc}</div>
-              </div>
-            </Li>
-            <Li>
-              <div className="row">
-                <div className="col-xl-4">
-                  <TextInput
-                    label="Size (*)" 
-                    name="size"
-                    errors={errors}
-                    smallText="Size of the product."
-                    value={formData.size}
-                    onChange={onInputChange}
-                  />
+          </Li>
+          {
+            formData.product && <>
+              <Li>
+                <div className="row">
+                  <div className="col-4 align-self-center"><span className="font-weight-bold">Name:</span></div>
+                  <div className="col-8">{product.name}</div>
                 </div>
-                <div className="col-xl-4">
-                  <TextInput
-                    label="Qty (*)" 
-                    name="qty"
-                    id="integerMask-order-item-form-qty"
-                    errors={errors}
-                    smallText="Qty of the item."
-                    value={formData.qty}
-                    onChange={onInputChange}
-                  />
+              </Li>
+              <Li>
+                <div className="row">
+                  <div className="col-4 align-self-center"><span className="font-weight-bold">Brand:</span></div>
+                  <div className="col-8">{product.brand.name}</div>
                 </div>
-                <div className="col-xl-4">
-                  <TextInput
-                    label="Price (*)" 
-                    name="price"
-                    id="currencyMask-order-item-form-price"
-                    errors={errors}
-                    smallText="Price per unit."
-                    value={formData.price}
-                    onChange={onInputChange}
-                  />
+              </Li>
+              <Li>
+                <div className="row">
+                  <div className="col-4 align-self-center"><span className="font-weight-bold">Style No:</span></div>
+                  <div className="col-8">{product.styleCode}</div>
                 </div>
-              </div>
-            </Li>
-            <Li>
-              <TextInput
-                label="Note" 
-                name="note"
-                errors={errors}
-                smallText="Additional note to the item."
-                value={formData.note}
-                onChange={onInputChange}
+              </Li>
+              <Li>
+                <div className="row">
+                  <div className="col-4 align-self-center"><span className="font-weight-bold">Color:</span></div>
+                  <div className="col-8">{color.color}</div>
+                </div>
+              </Li>
+              <Li>
+                <div className="row">
+                  <div className="col-4 align-self-center"><span className="font-weight-bold">Description:</span></div>
+                  <div className="col-8">{product.desc}</div>
+                </div>
+              </Li>
+              <Li>
+                <div className="row">
+                  <div className="col-xl-4">
+                    <TextInput
+                      label="Size (*)" 
+                      name="size"
+                      errors={errors}
+                      smallText="Size of the product."
+                      value={formData.size}
+                      onChange={onInputChange}
+                    />
+                  </div>
+                  <div className="col-xl-4">
+                    <TextInput
+                      label="Qty (*)" 
+                      name="qty"
+                      id="integerMask-order-item-form-qty"
+                      errors={errors}
+                      smallText="Qty of the item."
+                      value={formData.qty}
+                      onChange={onInputChange}
+                    />
+                  </div>
+                  <div className="col-xl-4">
+                    <TextInput
+                      label="Price (*)" 
+                      name="price"
+                      id="currencyMask-order-item-form-price"
+                      errors={errors}
+                      smallText="Price per unit."
+                      value={formData.price}
+                      onChange={onInputChange}
+                    />
+                  </div>
+                </div>
+              </Li>
+              <Li>
+                <TextInput
+                  label="Note" 
+                  name="note"
+                  errors={errors}
+                  smallText="Additional note to the item."
+                  value={formData.note}
+                  onChange={onInputChange}
+                />
+              </Li>
+              <SubmitOrReset
+                buttonName={'Save'}
+                buttonDisabled={buttonDisabled}
+                formSubmit={formSubmit}
+                formReset={formReset}
               />
-            </Li>
-            <SubmitOrReset
-              buttonName={'Save'}
-              buttonDisabled={buttonDisabled}
-              formSubmit={formSubmit}
-              formReset={formReset}
-            />
-          </>
-        }
-      </Ul>
-    </Card>
+            </>
+          }
+        </Ul>
+      </Card>
+    }
   </>
 }
 

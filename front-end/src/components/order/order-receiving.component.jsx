@@ -10,13 +10,13 @@ import { Card, Ul, Li } from '../tag/tag.component';
 // redux
 import { connect } from 'react-redux';
 import { createStructuredSelector} from 'reselect';
-import { selectOrderEditing } from '../../state/order/order.selectors';
+import { selectOrderData } from '../../state/order/order.selectors';
 
 const OrderReceiving = ({ 
-  order
+  data
 }) => {
 
-  const { receiving } = order
+  const { byId } = data;
 
   const location = useLocation();
 
@@ -24,7 +24,7 @@ const OrderReceiving = ({
     <Card width="col" title="Receiving Information">
       <Ul>
         {
-          receiving && <>
+          byId && byId.receiving && <>
             <Li>
               <div className="row">
                 <div className="col">
@@ -33,7 +33,7 @@ const OrderReceiving = ({
                       <span>Status:</span>
                     </div>
                     <div className="col-8">
-                      <span>{receiving.status}</span>
+                      <span>{byId.receiving.status}</span>
                     </div>
                   </div>
                   <div className="row">
@@ -41,7 +41,7 @@ const OrderReceiving = ({
                       <span>Tracking Number:</span>
                     </div>
                     <div className="col-8">
-                      <span>{receiving.tracking.length > 0 ? receiving.tracking : 'Not Available'}</span>
+                      <span>{byId.receiving.tracking.length > 0 ? byId.receiving.tracking : 'Not Available'}</span>
                     </div>
                   </div>
                   <div className="row">
@@ -49,7 +49,7 @@ const OrderReceiving = ({
                       <span>Received Date:</span>
                     </div>
                     <div className="col-8">
-                      <span>{receiving.recvDate.length > 0 ? moment(receiving.recvDate).format('MMM DD, YYYY') : 'Not Available'}</span>
+                      <span>{byId.receiving.recvDate.length > 0 ? moment(byId.receiving.recvDate).format('MMM DD, YYYY') : 'Not Available'}</span>
                     </div>
                   </div>
                   <div className="row">
@@ -57,7 +57,7 @@ const OrderReceiving = ({
                       <span>Warehouse:</span>
                     </div>
                     <div className="col-8">
-                      <span>{receiving.warehouse.name}</span>
+                      <span>{byId.receiving.warehouse.name}</span>
                     </div>
                   </div>
                 </div>
@@ -83,7 +83,7 @@ const OrderReceiving = ({
 }
 
 const mapStateToProps = createStructuredSelector({
-  order: selectOrderEditing
+  data: selectOrderData
 })
 
 export default connect(mapStateToProps)(OrderReceiving);

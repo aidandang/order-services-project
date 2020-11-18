@@ -12,7 +12,7 @@ const convertStrToNum = str => {
 
   let number = 0;
   
-  if (str === undefined || !typeof stringValue) return number;
+  if (str === undefined || !typeof stringValue || str === '') return number;
 
   str = String(str);
 

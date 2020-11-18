@@ -54,7 +54,7 @@ const itemSchema = new Schema({
   },
   shippingPrice: {
     type: Number,
-    defaul: 0
+    default: 0
   },
   note: {
     type: String
@@ -86,13 +86,6 @@ const receivingSchema = new Schema({
   warehouse: {
     type: Object,
     require: true
-  }
-})
-
-const billingSchema = new Schema({
-  customer: {
-    type: Object,
-    required: true
   }
 })
 
